@@ -1281,7 +1281,7 @@ public class AchourNativePlayerView extends FrameLayout {
 
                 // Fallback: check Media tracks if current video track is not yet selected
                 try {
-                    Media m = vlcMediaPlayer.getMedia();
+                    IMedia m = vlcMediaPlayer.getMedia();
                     if (m != null) {
                         int tCount = m.getTrackCount();
                         for (int i = 0; i < tCount; i++) {
