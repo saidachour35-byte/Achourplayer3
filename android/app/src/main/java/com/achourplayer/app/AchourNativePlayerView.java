@@ -714,7 +714,8 @@ if (vlcPendingPlay && vlcOutputReady) {
     }
 }
                 }
-
+                    
+}
                 @Override
                 public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
                     if (usingLibVlc && vlcMediaPlayer != null && vlcViewsAttached && width > 0 && height > 0) {
