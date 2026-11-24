@@ -1,5 +1,6 @@
 // @ts-nocheck
 /**
+ * Achour Player Root Component
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */

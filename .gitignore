@@ -14,3 +14,4 @@ android/local.properties
 android/app/src/main/assets/public/
 *.apk
 *.aab
+public/assets/aistudio/

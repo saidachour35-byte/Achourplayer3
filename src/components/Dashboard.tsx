@@ -1,5 +1,5 @@
 // @ts-nocheck
-// Original path: src/components/Dashboard.tsx
+// Achour Player Dashboard (src/components/Dashboard.tsx)
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
