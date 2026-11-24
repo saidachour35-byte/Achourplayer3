@@ -1968,13 +1968,19 @@ private void releaseVlcPlayer() {
                 if (readyNow) {
                     vlcSurfaceReady = true;
                     vlcPendingPlay = false;
-                    attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight());
-                    try {
-                        vlcMediaPlayer.play();
-                    } catch (Exception ignored) {
-                    }
-                    mainHandler.postDelayed(vlcRevealTextureRunnable, 1100L);
-                } else if (vlcTextureView != null) {
+                    if (attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight())) {
+    vlcPendingPlay = false;
+    try {
+        vlcMediaPlayer.play();
+        mainHandler.postDelayed(vlcRevealTextureRunnable, 1100L);
+    } catch (Exception e) {
+        Log.e("AchourVLC", "Failed to start initial VLC playback", e);
+    }
+} else {
+    vlcPendingPlay = true;
+    mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
+    mainHandler.postDelayed(vlcSurfaceFallbackPlayRunnable, 200L);
+}
                     vlcTextureView.requestLayout();
                     mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
                     mainHandler.postDelayed(vlcSurfaceFallbackPlayRunnable, 180L);
