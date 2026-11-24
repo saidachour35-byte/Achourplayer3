@@ -493,6 +493,18 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
   const rawActiveStreamUrl = activeVod.url || activeVod.stream_url || currentEpisode?.stream_url || currentEpisode?.url || currentEpisode?.direct_source || streamUrl;
 
   const isNativeActive = isNativeApp() && typeof window !== 'undefined' && !!(window as any).AchourNative;
+  const selectedPlayerName = String(settings?.selectedPlayer || '');
+  const resolvedNativeEngine: 'libvlc' | 'exoplayer' =
+    !settings?.useExternalPlayer && /libvlc|vlc/i.test(selectedPlayerName)
+      ? 'libvlc'
+      : 'exoplayer';
+
+  const liveBarLogoUrl = String(activeVod.stream_icon || activeVod.logo || activeVod.cover || '').trim();
+  const vodBarPosterUrl = String(activeVod.stream_icon || activeVod.cover || activeVod.logo || '').trim();
+  const [failedLogoUrl, setFailedLogoUrl] = useState<string>('');
+  useEffect(() => {
+    setFailedLogoUrl('');
+  }, [activeVodIdStr, liveBarLogoUrl, vodBarPosterUrl]);
 
   useEffect(() => {
     if (typeof document === 'undefined' || isNativeActive) return;
@@ -878,6 +890,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
           JSON.stringify({
             title: displayTitle,
             isLive,
+            engine: resolvedNativeEngine,
             autoPlay: !shouldHoldForPrompt,
             startPositionMs: startPositionSec > 0 ? Math.round(startPositionSec * 1000) : 0,
             subtitles: !isLive && externalSubtitles.length > 0 ? externalSubtitles : undefined,
@@ -1353,7 +1366,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
         }
       };
     }
-  }, [activeStreamUrl, resolvedEpisodeIndex, vodId, isLive]);
+  }, [activeStreamUrl, resolvedEpisodeIndex, vodId, isLive, resolvedNativeEngine]);
 
   // Forward subtitle style customization to native Android Media3 player when active
   useEffect(() => {
@@ -2717,22 +2730,23 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
 
                     {/* 3. Channel Logo */}
                     <div
-                      className={`bg-white/95 border border-white/25 flex items-center justify-center overflow-hidden shrink-0 shadow-md ${
+                      className={`bg-zinc-900/90 border border-white/20 flex items-center justify-center overflow-hidden shrink-0 shadow-md ${
                         isLiveCompact
                           ? 'w-9 h-9 sm:w-12 sm:h-12 rounded-xl p-1'
                           : 'w-13 h-13 sm:w-20 sm:h-20 rounded-2xl p-1.5 sm:p-2'
                       }`}
                     >
-                      {(activeVod.stream_icon || activeVod.logo || activeVod.cover) ? (
+                      {liveBarLogoUrl && failedLogoUrl !== liveBarLogoUrl ? (
                         <img
-                          src={activeVod.stream_icon || activeVod.logo || activeVod.cover}
+                          key={`${activeVodIdStr}__${liveBarLogoUrl}`}
+                          src={liveBarLogoUrl}
                           alt=""
                           referrerPolicy="no-referrer"
                           className="w-full h-full object-contain"
-                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          onError={() => setFailedLogoUrl(liveBarLogoUrl)}
                         />
                       ) : (
-                        <Tv className={isLiveCompact ? 'w-5 h-5 sm:w-6 sm:h-6 text-black' : 'w-7 h-7 sm:w-10 sm:h-10 text-black'} />
+                        <Tv className={isLiveCompact ? 'w-5 h-5 sm:w-6 sm:h-6 text-zinc-200' : 'w-7 h-7 sm:w-10 sm:h-10 text-zinc-200'} />
                       )}
                     </div>
 
@@ -2839,13 +2853,14 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                 <div className="flex items-center gap-3 min-w-0">
                   {/* 1. Movie / Series Poster */}
                   <div className="w-11 h-14 rounded-xl border border-white/20 bg-black/60 overflow-hidden shrink-0 shadow-md flex items-center justify-center">
-                    {(activeVod.stream_icon || activeVod.cover || activeVod.logo) ? (
+                    {vodBarPosterUrl && failedLogoUrl !== vodBarPosterUrl ? (
                       <img
-                        src={activeVod.stream_icon || activeVod.cover || activeVod.logo}
+                        key={`${vodId}__${vodBarPosterUrl}`}
+                        src={vodBarPosterUrl}
                         alt=""
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-cover"
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        onError={() => setFailedLogoUrl(vodBarPosterUrl)}
                       />
                     ) : (
                       <Tv className="w-5 h-5 text-zinc-400" />

@@ -774,6 +774,7 @@ public class AchourNativeBridge {
     private boolean isPackageInstalledInternal(String packageName) {
         if (packageName == null || packageName.trim().isEmpty()) return false;
         String pkg = packageName.trim();
+        if ("__achour_native_system__".equals(pkg)) return true;
         try {
             PackageManager pm = activity.getPackageManager();
             if (pm == null) return false;
@@ -875,8 +876,7 @@ public class AchourNativeBridge {
         }
     }
 
-    private Intent buildResolvableIntentForPackage(
-            PackageManager pm,
+    private List<Intent> buildExternalPlayerCandidateIntents(
             Uri streamUri,
             String primaryMime,
             String pkg,
@@ -889,45 +889,39 @@ public class AchourNativeBridge {
     ) {
         List<Intent> candidates = new ArrayList<>();
 
-        // 1. Standard ACTION_VIEW with detected MIME
-        Intent i1 = new Intent(Intent.ACTION_VIEW);
-        i1.setDataAndType(streamUri, primaryMime);
-        i1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (pkg != null && !pkg.isEmpty()) i1.setPackage(pkg);
-        applyExternalPlayerExtras(i1, pkg, title, isLive, positionMs, headersArray, userAgent, referer);
-        candidates.add(i1);
+        // 1. Standard ACTION_VIEW with generic video/* MIME (most widely accepted across external Android/Fire TV players)
+        Intent iVideo = new Intent(Intent.ACTION_VIEW);
+        iVideo.setDataAndType(streamUri, "video/*");
+        iVideo.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (pkg != null && !pkg.isEmpty()) iVideo.setPackage(pkg);
+        applyExternalPlayerExtras(iVideo, pkg, title, isLive, positionMs, headersArray, userAgent, referer);
+        candidates.add(iVideo);
 
-        // 2. Fallback to generic video/* MIME if HLS-specific MIME didn't resolve
-        if (!"video/*".equalsIgnoreCase(primaryMime)) {
-            Intent i2 = new Intent(Intent.ACTION_VIEW);
-            i2.setDataAndType(streamUri, "video/*");
-            i2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            if (pkg != null && !pkg.isEmpty()) i2.setPackage(pkg);
-            applyExternalPlayerExtras(i2, pkg, title, isLive, positionMs, headersArray, userAgent, referer);
-            candidates.add(i2);
+        // 2. Standard ACTION_VIEW with detected MIME (e.g. HLS)
+        if (primaryMime != null && !primaryMime.isEmpty() && !"video/*".equalsIgnoreCase(primaryMime)) {
+            Intent iMime = new Intent(Intent.ACTION_VIEW);
+            iMime.setDataAndType(streamUri, primaryMime);
+            iMime.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (pkg != null && !pkg.isEmpty()) iMime.setPackage(pkg);
+            applyExternalPlayerExtras(iMime, pkg, title, isLive, positionMs, headersArray, userAgent, referer);
+            candidates.add(iMime);
         }
 
         // 3. Fallback URI-only ACTION_VIEW (handles schemes/players rejecting explicit MIME filters)
-        Intent i3 = new Intent(Intent.ACTION_VIEW, streamUri);
-        i3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (pkg != null && !pkg.isEmpty()) i3.setPackage(pkg);
-        applyExternalPlayerExtras(i3, pkg, title, isLive, positionMs, headersArray, userAgent, referer);
-        candidates.add(i3);
+        Intent iUri = new Intent(Intent.ACTION_VIEW, streamUri);
+        iUri.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (pkg != null && !pkg.isEmpty()) iUri.setPackage(pkg);
+        applyExternalPlayerExtras(iUri, pkg, title, isLive, positionMs, headersArray, userAgent, referer);
+        candidates.add(iUri);
 
-        // 4. Explicit known activity components if implicit resolution didn't match on certain Fire OS builds
-        if ("org.videolan.vlc".equals(pkg)) {
-            String[] vlcActivities = new String[]{
-                    "org.videolan.vlc.gui.video.VideoPlayerActivity",
-                    "org.videolan.vlc.StartActivity"
-            };
-            for (String act : vlcActivities) {
-                Intent ci = new Intent(Intent.ACTION_VIEW);
-                ci.setComponent(new ComponentName(pkg, act));
-                ci.setDataAndType(streamUri, "video/*");
-                ci.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                applyExternalPlayerExtras(ci, pkg, title, isLive, positionMs, headersArray, userAgent, referer);
-                candidates.add(ci);
-            }
+        // 4. Exported activity entry fallbacks for Fire OS
+        if (pkg != null && pkg.startsWith("org.videolan.vlc")) {
+            Intent ci = new Intent(Intent.ACTION_VIEW);
+            ci.setComponent(new ComponentName(pkg, "org.videolan.vlc.StartActivity"));
+            ci.setDataAndType(streamUri, "video/*");
+            ci.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            applyExternalPlayerExtras(ci, pkg, title, isLive, positionMs, headersArray, userAgent, referer);
+            candidates.add(ci);
         } else if (pkg != null && pkg.startsWith("com.mxtech.videoplayer")) {
             String[] mxActivities = new String[]{
                     pkg + ".ActivityScreen",
@@ -943,6 +937,11 @@ public class AchourNativeBridge {
             }
         }
 
+        return candidates;
+    }
+
+    private Intent pickFirstResolvableIntent(PackageManager pm, List<Intent> candidates) {
+        if (pm == null || candidates == null) return null;
         for (Intent cand : candidates) {
             try {
                 if (cand.resolveActivity(pm) != null) {
@@ -951,8 +950,51 @@ public class AchourNativeBridge {
             } catch (Exception ignored) {
             }
         }
-
         return null;
+    }
+
+    private String tryStartExternalCandidatesSynchronously(List<Intent> intents) {
+        if (intents == null || intents.isEmpty()) {
+            return "not_installed";
+        }
+        final CountDownLatch startLatch = new CountDownLatch(1);
+        final String[] outcome = new String[]{"not_installed"};
+
+        Runnable runner = () -> {
+            try {
+                boolean sawSecurityOrLaunchError = false;
+                for (Intent cand : intents) {
+                    try {
+                        activity.startActivity(cand);
+                        outcome[0] = "ok";
+                        return;
+                    } catch (ActivityNotFoundException ignored) {
+                        // Try next MIME / URI candidate
+                    } catch (SecurityException secEx) {
+                        sawSecurityOrLaunchError = true;
+                    } catch (Exception ex) {
+                        sawSecurityOrLaunchError = true;
+                        outcome[0] = "err:" + (ex.getMessage() != null ? ex.getMessage() : ex.getClass().getSimpleName());
+                    }
+                }
+                if (sawSecurityOrLaunchError && "not_installed".equals(outcome[0])) {
+                    outcome[0] = "err:Activity could not be started";
+                }
+            } finally {
+                startLatch.countDown();
+            }
+        };
+
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            runner.run();
+        } else {
+            mainHandler.post(runner);
+            try {
+                startLatch.await(1500L, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException ignored) {
+            }
+        }
+        return outcome[0];
     }
 
     private void stopInternalPlayersForExternalLaunchSynchronously() {
@@ -1027,22 +1069,6 @@ public class AchourNativeBridge {
                 return result.toString();
             }
 
-            String resolvedPkg = "";
-            if (!candidatePackages.isEmpty()) {
-                for (String pkg : candidatePackages) {
-                    if (isPackageInstalledInternal(pkg)) {
-                        resolvedPkg = pkg;
-                        break;
-                    }
-                }
-                if (resolvedPkg.isEmpty()) {
-                    result.put("ok", false);
-                    result.put("reason", "not_installed");
-                    result.put("resolvedPackage", primaryPkg);
-                    return result.toString();
-                }
-            }
-
             String title = params.optString("title", "Achour Player");
             String requestedMime = params.optString("mimeType", "");
             boolean isLive = params.optBoolean("isLive", false);
@@ -1085,78 +1111,125 @@ public class AchourNativeBridge {
             Uri streamUri = Uri.parse(streamUrl);
             String primaryMime = detectStreamMimeType(streamUrl, requestedMime);
 
-            Intent launchIntent = buildResolvableIntentForPackage(
-                    pm,
-                    streamUri,
-                    primaryMime,
-                    resolvedPkg,
-                    title,
-                    isLive,
-                    positionMs,
-                    headersArray,
-                    ua,
-                    referer
-            );
-
-            if (launchIntent == null) {
-                externalPlayerLaunchPending = false;
-                result.put("ok", false);
-                result.put("reason", resolvedPkg.isEmpty() ? "launch_failed" : "not_installed");
-                result.put("resolvedPackage", resolvedPkg.isEmpty() ? primaryPkg : resolvedPkg);
-                result.put("errorMessage", "No resolvable video activity for external player");
-                return result.toString();
-            }
-
-            // Free hardware ExoPlayer codecs & AudioFocus before switching to external Activity
+            // Free hardware ExoPlayer/LibVLC codecs & AudioFocus before switching to external Activity
             stopInternalPlayersForExternalLaunchSynchronously();
 
-            final Intent finalIntent = launchIntent;
-            final CountDownLatch startLatch = new CountDownLatch(1);
-            final String[] startErr = new String[]{null};
-
-            if (Looper.myLooper() == Looper.getMainLooper()) {
-                try {
-                    activity.startActivity(finalIntent);
-                } catch (Exception ex) {
-                    startErr[0] = ex.getMessage() != null ? ex.getMessage() : ex.getClass().getSimpleName();
+            if ("__achour_native_system__".equals(primaryPkg)) {
+                JSONObject nativeOpts = new JSONObject();
+                nativeOpts.put("title", (title != null && !title.trim().isEmpty()) ? title.trim() : "Achour TV");
+                nativeOpts.put("isLive", isLive);
+                if (!isLive && positionMs > 0L) {
+                    nativeOpts.put("startPositionMs", positionMs);
                 }
-                startLatch.countDown();
-            } else {
-                mainHandler.post(() -> {
-                    try {
-                        activity.startActivity(finalIntent);
-                    } catch (Exception ex) {
-                        startErr[0] = ex.getMessage() != null ? ex.getMessage() : ex.getClass().getSimpleName();
-                    } finally {
-                        startLatch.countDown();
-                    }
-                });
-                try {
-                    startLatch.await(1200L, TimeUnit.MILLISECONDS);
-                } catch (InterruptedException ignored) {
+                JSONObject nativeHeaders = new JSONObject();
+                for (int i = 0; i + 1 < headerPairs.size(); i += 2) {
+                    nativeHeaders.put(headerPairs.get(i), headerPairs.get(i + 1));
                 }
-            }
+                nativeOpts.put("headers", nativeHeaders);
 
-            if (startErr[0] != null) {
+                Intent sysIntent = new Intent(activity, NativePlayerActivity.class);
+                sysIntent.putExtra(NativePlayerActivity.EXTRA_URL, streamUrl);
+                sysIntent.putExtra(NativePlayerActivity.EXTRA_OPTIONS, nativeOpts.toString());
+
+                List<Intent> sysList = new ArrayList<>();
+                sysList.add(sysIntent);
+                String sysOutcome = tryStartExternalCandidatesSynchronously(sysList);
+                if ("ok".equals(sysOutcome)) {
+                    result.put("ok", true);
+                    result.put("resolvedPackage", "__achour_native_system__");
+                    return result.toString();
+                }
+
                 externalPlayerLaunchPending = false;
                 result.put("ok", false);
                 result.put("reason", "launch_failed");
-                result.put("resolvedPackage", resolvedPkg.isEmpty() ? primaryPkg : resolvedPkg);
-                result.put("errorMessage", startErr[0]);
+                result.put("resolvedPackage", "__achour_native_system__");
+                result.put("errorMessage", sysOutcome.startsWith("err:")
+                        ? sysOutcome.substring(4)
+                        : "Failed to start Fire TV system player");
                 return result.toString();
             }
 
-            result.put("ok", true);
-            result.put("resolvedPackage", resolvedPkg);
-            return result.toString();
-        } catch (ActivityNotFoundException anf) {
-            externalPlayerLaunchPending = false;
-            try {
-                result.put("ok", false);
-                result.put("reason", "not_installed");
-                result.put("errorMessage", anf.getMessage());
-            } catch (Exception ignored) {
+            // Order packages with visibly-installed ones first, then still attempt unlisted packages directly
+            // (Android 11+ <queries> may hide custom packages from getPackageInfo while setPackage() startActivity still works).
+            List<String> orderedPackages = new ArrayList<>();
+            for (String pkg : candidatePackages) {
+                if (isPackageInstalledInternal(pkg)) {
+                    orderedPackages.add(pkg);
+                }
             }
+            for (String pkg : candidatePackages) {
+                if (!orderedPackages.contains(pkg)) {
+                    orderedPackages.add(pkg);
+                }
+            }
+
+            if (!orderedPackages.isEmpty()) {
+                String lastOutcome = "not_installed";
+                for (String pkg : orderedPackages) {
+                    List<Intent> rawCandidates = buildExternalPlayerCandidateIntents(
+                            streamUri, primaryMime, pkg, title, isLive, positionMs, headersArray, ua, referer
+                    );
+                    Intent resolvable = pickFirstResolvableIntent(pm, rawCandidates);
+                    List<Intent> toTry = new ArrayList<>();
+                    if (resolvable != null) {
+                        toTry.add(resolvable);
+                    }
+                    for (Intent rc : rawCandidates) {
+                        if (rc != resolvable) {
+                            toTry.add(rc);
+                        }
+                    }
+
+                    String outcome = tryStartExternalCandidatesSynchronously(toTry);
+                    if ("ok".equals(outcome)) {
+                        result.put("ok", true);
+                        result.put("resolvedPackage", pkg);
+                        return result.toString();
+                    }
+                    lastOutcome = outcome;
+                }
+
+                externalPlayerLaunchPending = false;
+                if (lastOutcome.startsWith("err:")) {
+                    result.put("ok", false);
+                    result.put("reason", "launch_failed");
+                    result.put("resolvedPackage", primaryPkg);
+                    result.put("errorMessage", lastOutcome.substring(4));
+                } else {
+                    result.put("ok", false);
+                    result.put("reason", "not_installed");
+                    result.put("resolvedPackage", primaryPkg);
+                    result.put("errorMessage", "External player package is not installed on this device");
+                }
+                return result.toString();
+            }
+
+            // No package specified (e.g., System Picker or custom player added without package ID):
+            // open Android's system chooser with all compatible installed video player apps.
+            List<Intent> genericCandidates = buildExternalPlayerCandidateIntents(
+                    streamUri, primaryMime, "", title, isLive, positionMs, headersArray, ua, referer
+            );
+            List<Intent> chooserIntents = new ArrayList<>();
+            for (Intent baseIntent : genericCandidates) {
+                Intent chooser = Intent.createChooser(baseIntent, title != null && !title.isEmpty() ? title : "Open with");
+                chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                chooserIntents.add(chooser);
+            }
+            chooserIntents.addAll(genericCandidates);
+
+            String chooserOutcome = tryStartExternalCandidatesSynchronously(chooserIntents);
+            if ("ok".equals(chooserOutcome)) {
+                result.put("ok", true);
+                result.put("resolvedPackage", "");
+                return result.toString();
+            }
+
+            externalPlayerLaunchPending = false;
+            result.put("ok", false);
+            result.put("reason", chooserOutcome.startsWith("err:") ? "launch_failed" : "not_installed");
+            result.put("resolvedPackage", "");
+            result.put("errorMessage", chooserOutcome.startsWith("err:") ? chooserOutcome.substring(4) : "No compatible external video player installed");
             return result.toString();
         } catch (Exception e) {
             externalPlayerLaunchPending = false;

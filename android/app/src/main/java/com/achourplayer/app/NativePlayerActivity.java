@@ -67,6 +67,7 @@ public class NativePlayerActivity extends AppCompatActivity {
     private String currentUrl = "";
     private String currentTitle = "Achour TV";
     private boolean isLiveStream = false;
+    private long startPositionMs = 0L;
     private int retryCount = 0;
     private boolean retryScheduled = false;
     private long liveBufferingStartedAtMs = 0L;
@@ -141,6 +142,7 @@ public class NativePlayerActivity extends AppCompatActivity {
 
             currentTitle = options.optString("title", currentTitle);
             isLiveStream = options.optBoolean("isLive", false);
+            startPositionMs = Math.max(0L, options.optLong("startPositionMs", 0L));
 
             JSONObject headerObject = options.optJSONObject("headers");
             if (headerObject != null) {
@@ -227,6 +229,7 @@ public class NativePlayerActivity extends AppCompatActivity {
 
         player.setAudioAttributes(audioAttributes, true);
         playerView.setPlayer(player);
+        playerView.requestFocus();
 
         if (isLiveStream) {
             player.addAnalyticsListener(new AnalyticsListener() {
@@ -347,15 +350,29 @@ public class NativePlayerActivity extends AppCompatActivity {
         MediaItem item = mediaItem.setMediaMetadata(metadata).build();
 
         if (isHlsStream && hlsMediaSourceFactory != null) {
-            player.setMediaSource(
-                    hlsMediaSourceFactory.createMediaSource(item),
-                    true
-            );
+            if (!isLiveStream && startPositionMs > 0L) {
+                player.setMediaSource(
+                        hlsMediaSourceFactory.createMediaSource(item),
+                        startPositionMs
+                );
+            } else {
+                player.setMediaSource(
+                        hlsMediaSourceFactory.createMediaSource(item),
+                        true
+                );
+            }
         } else {
-            player.setMediaSource(
-                    mediaSourceFactory.createMediaSource(item),
-                    true
-            );
+            if (!isLiveStream && startPositionMs > 0L) {
+                player.setMediaSource(
+                        mediaSourceFactory.createMediaSource(item),
+                        startPositionMs
+                );
+            } else {
+                player.setMediaSource(
+                        mediaSourceFactory.createMediaSource(item),
+                        true
+                );
+            }
         }
         player.prepare();
         player.play();

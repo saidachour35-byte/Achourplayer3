@@ -65,6 +65,49 @@ export const EXTERNAL_PLAYER_PROFILES: ExternalPlayerProfile[] = [
     fireTvCompatible: true,
     aliases: ['is.xyz.mpv'],
   },
+  {
+    id: 'Vimu Media Player',
+    name: 'Vimu Player',
+    packageName: 'net.gtvbox.videoplayer',
+    fireTvCompatible: true,
+    aliases: ['Vimu', 'Vimu Player', 'net.gtvbox.videoplayer'],
+  },
+  {
+    id: 'Kodi',
+    name: 'Kodi',
+    packageName: 'org.xbmc.kodi',
+    fireTvCompatible: true,
+    aliases: ['Kodi', 'org.xbmc.kodi'],
+  },
+  {
+    id: 'KMPlayer',
+    name: 'KMPlayer',
+    packageName: 'com.kmplayer',
+    fallbackPackages: ['com.kmplayer.pro'],
+    fireTvCompatible: true,
+    aliases: ['KMPlayer', 'com.kmplayer', 'com.kmplayer.pro'],
+  },
+  {
+    id: 'Wuffy Player',
+    name: 'Wuffy Player',
+    packageName: 'co.wuffy.player',
+    fireTvCompatible: true,
+    aliases: ['Wuffy', 'Wuffy Media Player', 'co.wuffy.player'],
+  },
+  {
+    id: 'Fire TV System Player',
+    name: 'Fire TV System Player',
+    packageName: '__achour_native_system__',
+    fireTvCompatible: true,
+    aliases: ['Fire TV Player', 'Amazon Fire TV Player', 'Fire OS Player', '__achour_native_system__'],
+  },
+  {
+    id: 'System Player Chooser',
+    name: 'System Chooser (Any App)',
+    packageName: '',
+    fireTvCompatible: true,
+    aliases: ['system', 'System Chooser', 'Android Chooser'],
+  },
 ];
 
 export const DEFAULT_PLAYERS = EXTERNAL_PLAYER_PROFILES;
@@ -129,6 +172,25 @@ export function removeCustomPlayerPackage(playerName: string): void {
   }
 }
 
+const EXTRA_KNOWN_PACKAGE_ALIASES: Array<{ keywords: string[]; packageName: string; fallbackPackages?: string[] }> = [
+  { keywords: ['vlc'], packageName: 'org.videolan.vlc', fallbackPackages: ['org.videolan.vlc.betav7neon', 'org.videolan.vlc.debug'] },
+  { keywords: ['mx player', 'mxplayer', 'mx pro'], packageName: 'com.mxtech.videoplayer.ad', fallbackPackages: ['com.mxtech.videoplayer.pro'] },
+  { keywords: ['vimu'], packageName: 'net.gtvbox.videoplayer' },
+  { keywords: ['kodi', 'xbmc'], packageName: 'org.xbmc.kodi' },
+  { keywords: ['kmplayer', 'km player'], packageName: 'com.kmplayer', fallbackPackages: ['com.kmplayer.pro'] },
+  { keywords: ['wuffy'], packageName: 'co.wuffy.player' },
+  { keywords: ['nova'], packageName: 'org.courville.nova' },
+  { keywords: ['just player', 'justplayer'], packageName: 'com.brouken.player' },
+  { keywords: ['mpv'], packageName: 'is.xyz.mpv' },
+  { keywords: ['playerxtreme', 'player xtreme'], packageName: 'xyz.playerxtreme.media' },
+  { keywords: ['bsplayer', 'bs player'], packageName: 'com.bsplayer.bspandroid.free', fallbackPackages: ['com.bsplayer.bspandroid.full'] },
+  { keywords: ['nplayer'], packageName: 'com.newin.nplayer.pro' },
+  { keywords: ['archos'], packageName: 'com.archos.mediacenter.video', fallbackPackages: ['com.archos.mediacenter.videofree'] },
+  { keywords: ['wiseplay'], packageName: 'com.wiseplay' },
+  { keywords: ['bubbleupnp'], packageName: 'com.bubblesoft.android.bubbleupnp' },
+  { keywords: ['tivimate'], packageName: 'com.tivimate.player' },
+];
+
 export function resolveExternalPlayerProfile(playerName: string): ExternalPlayerProfile {
   const target = String(playerName || '').trim();
   const lower = target.toLowerCase();
@@ -137,7 +199,7 @@ export function resolveExternalPlayerProfile(playerName: string): ExternalPlayer
     if (
       profile.id.toLowerCase() === lower ||
       profile.name.toLowerCase() === lower ||
-      profile.packageName.toLowerCase() === lower ||
+      (profile.packageName && profile.packageName.toLowerCase() === lower) ||
       profile.fallbackPackages?.some((fp) => fp.toLowerCase() === lower) ||
       profile.aliases.some((alias) => alias.toLowerCase() === lower)
     ) {
@@ -147,22 +209,24 @@ export function resolveExternalPlayerProfile(playerName: string): ExternalPlayer
 
   const savedPkg = getCustomPlayerPackage(target);
   const looksLikePackage = /^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)+$/.test(target);
-  const pkg = savedPkg || (looksLikePackage ? target : '');
+  let pkg = savedPkg || (looksLikePackage ? target : '');
+  let fallbackPackages: string[] | undefined;
 
-  if (lower.includes('kodi')) {
-    return {
-      id: target || 'Kodi',
-      name: target || 'Kodi',
-      packageName: pkg || 'org.xbmc.kodi',
-      fireTvCompatible: true,
-      aliases: ['Kodi', 'org.xbmc.kodi'],
-    };
+  if (!pkg) {
+    const matchedAlias = EXTRA_KNOWN_PACKAGE_ALIASES.find((entry) =>
+      entry.keywords.some((kw) => lower.includes(kw))
+    );
+    if (matchedAlias) {
+      pkg = matchedAlias.packageName;
+      fallbackPackages = matchedAlias.fallbackPackages;
+    }
   }
 
   return {
     id: target || 'External Player',
     name: target || 'External Player',
     packageName: pkg,
+    fallbackPackages,
     fireTvCompatible: true,
     aliases: target ? [target] : [],
   };
@@ -175,6 +239,10 @@ export async function probeExternalPlayerInstalled(
   const native = typeof window !== 'undefined' ? (window as any).AchourNative : null;
   if (!isNativeApp() || !native) {
     return { installed: 'unknown', resolvedPackage: packageName };
+  }
+
+  if (packageName === '__achour_native_system__') {
+    return { installed: true, resolvedPackage: '__achour_native_system__' };
   }
 
   const candidates = [packageName, ...(fallbackPackages || [])]

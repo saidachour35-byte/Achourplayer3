@@ -92,21 +92,14 @@ type SettingsSubView =
   | 'live-bar-size'
   | 'seek-step';
 
-export const DEFAULT_PLAYERS = [
+export const DEFAULT_PLAYERS = Array.from(new Set([
   'LibVLC (محرك VLC المدمج الداخلي)',
   'Achour Player (مدمج - Native)',
-  'VLC for Android',
-  'VLC Media Player',
-  'MX Player Pro',
   'ExoPlayer',
-  'MPV Player',
-  'Nova Player',
-  'Nova Video Player',
-  'Just Player',
   'IJK Player',
-  'PotPlayer',
-  'KMPlayer'
-];
+  'MPV Player',
+  ...EXTERNAL_PLAYER_PROFILES.map((p) => p.id),
+]));
 
 // Isolated clock preview so main Settings never re-renders every 1 second
 const SettingsTimePreview = React.memo(({
@@ -727,7 +720,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
     const name = newPlayerName.trim();
     const pkg = newPlayerPackage.trim();
     if (!name) return;
-    if (allPlayers.includes(name)) {
+    if (allPlayers.some((p) => p.toLowerCase() === name.toLowerCase())) {
       setError(t('player_already_exists'));
       return;
     }
@@ -735,9 +728,12 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
       saveCustomPlayerPackage(name, pkg);
     }
     const updatedPlayers = [...(settings.externalPlayers || []), name];
-    updateSetting('externalPlayers', updatedPlayers);
-    updateSetting('useExternalPlayer', true);
-    updateSetting('selectedPlayer', name);
+    onUpdateSettings(prev => ({
+      ...prev,
+      externalPlayers: updatedPlayers,
+      useExternalPlayer: true,
+      selectedPlayer: name,
+    }));
     setNewPlayerName('');
     setNewPlayerPackage('');
     setError('');
@@ -746,12 +742,14 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
   const handleDeletePlayer = (e: React.MouseEvent, playerName: string) => {
     e.stopPropagation();
     removeCustomPlayerPackage(playerName);
-    const updated = allPlayers.filter(p => p !== playerName);
-    updateSetting('externalPlayers', updated);
-    if (settings.selectedPlayer === playerName) {
-      updateSetting('selectedPlayer', updated[0] || DEFAULT_PLAYERS[0]);
-      updateSetting('useExternalPlayer', false);
-    }
+    const updatedCustom = (settings.externalPlayers || []).filter(p => p !== playerName);
+    onUpdateSettings(prev => ({
+      ...prev,
+      externalPlayers: updatedCustom,
+      ...(prev.selectedPlayer === playerName
+        ? { selectedPlayer: 'ExoPlayer', useExternalPlayer: false }
+        : {}),
+    }));
   };
 
   const handleSelectBackground = (bgId: string) => {
@@ -1327,7 +1325,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
           <div className={`flex items-center gap-2 bg-white/[0.04] p-1 rounded-2xl border border-white/10 ${isRtl ? 'flex-row-reverse' : ''}`}>
             {[
               { id: 'internal', label: t('players_tab_internal') },
-              { id: 'external', label: t('players_tab_external') },
+              { id: 'external', label: t('players_tab_external', { count: externalApps.length }) },
               { id: 'custom', label: t('players_tab_custom', { count: customList.length }) },
             ].map((tab) => (
               <button
@@ -1381,6 +1379,12 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                     (settings.selectedPlayer === p.id || Boolean(p.aliases?.includes(settings.selectedPlayer)));
                   const installStatus = externalInstallMap[p.id];
                   const showFireTvWarn = !p.fireTvCompatible;
+                  const displayName =
+                    p.id === 'Fire TV System Player'
+                      ? (isRtl ? 'مشغل Fire TV / النظام المدمج' : 'Fire TV System Player')
+                      : p.id === 'System Player Chooser'
+                      ? (isRtl ? 'قائمة النظام (أي مشغّل مثبت)' : p.name)
+                      : p.name;
                   return (
                     <button
                       key={p.id}
@@ -1395,11 +1399,15 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                       } ${isRtl ? 'text-right' : 'text-left'}`}
                     >
                       <div className="flex items-start justify-between gap-2 w-full">
-                        <span className="text-sm sm:text-base font-medium text-white leading-snug">{p.name}</span>
+                        <span className="text-sm sm:text-base font-medium text-white leading-snug">{displayName}</span>
                         {isActive && <Check className="text-gold shrink-0" size={16} />}
                       </div>
                       <div className="mt-1.5 space-y-1">
-                        <span className="text-[11px] font-mono text-zinc-400 truncate block">{p.packageName}</span>
+                        <span className="text-[11px] font-mono text-zinc-400 truncate block">
+                          {p.packageName === '__achour_native_system__'
+                            ? (isRtl ? 'مدمج في النظام (بدون تحميل)' : 'Built-in OS / Fire TV Activity')
+                            : p.packageName || (isRtl ? 'اختيار من تطبيقات الجهاز' : 'Android / Fire TV Picker')}
+                        </span>
                         <div className="flex flex-wrap items-center gap-1">
                           {installStatus === true && (
                             <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold">
@@ -1470,8 +1478,8 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                           data-tv-focusable="true"
                           tabIndex={0}
                           onClick={() => {
-                            updateSetting('useExternalPlayer', true);
-                            handlePlayerSelect(name);
+                            onUpdateSettings(prev => ({ ...prev, useExternalPlayer: true, selectedPlayer: name }));
+                            setSubView('main');
                           }}
                           className={`p-3 rounded-2xl border flex items-center justify-between cursor-pointer ${
                             isActive ? 'border-gold bg-gold/15' : 'border-white/10 bg-white/[0.04] hover:bg-white/[0.09]'

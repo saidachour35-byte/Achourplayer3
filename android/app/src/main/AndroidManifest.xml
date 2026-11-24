@@ -15,7 +15,19 @@
         </intent>
         <intent>
             <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="rtsp" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="rtmp" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
             <data android:mimeType="video/*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:mimeType="*/*" />
         </intent>
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -35,6 +47,18 @@
         <package android:name="is.xyz.mpv" />
         <package android:name="org.xbmc.kodi" />
         <package android:name="net.gtvbox.videoplayer" />
+        <package android:name="com.kmplayer" />
+        <package android:name="com.kmplayer.pro" />
+        <package android:name="co.wuffy.player" />
+        <package android:name="com.wiseplay" />
+        <package android:name="com.bsplayer.bspandroid.free" />
+        <package android:name="com.bsplayer.bspandroid.full" />
+        <package android:name="com.newin.nplayer.pro" />
+        <package android:name="com.archos.mediacenter.video" />
+        <package android:name="com.archos.mediacenter.videofree" />
+        <package android:name="com.bubblesoft.android.bubbleupnp" />
+        <package android:name="xyz.playerxtreme.media" />
+        <package android:name="com.tivimate.player" />
     </queries>
 
     <application

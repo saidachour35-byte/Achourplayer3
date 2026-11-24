@@ -524,6 +524,11 @@ const LiveMiniEpgCard: React.FC<{
   isRtl: boolean;
 }> = React.memo(({ selectedChannel, findProgramsForChannel, language, timeFormat, isRtl }) => {
   const [now, setNow] = useState(() => new Date());
+  const [failedIconUrl, setFailedIconUrl] = useState<string>('');
+  const channelIconUrl = String(selectedChannel?.stream_icon || selectedChannel?.logo || '').trim();
+  useEffect(() => {
+    setFailedIconUrl('');
+  }, [selectedChannel?.stream_id, channelIconUrl]);
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 15000);
     return () => clearInterval(t);
@@ -567,13 +572,14 @@ const LiveMiniEpgCard: React.FC<{
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-2 pb-1.5">
         <div className="flex items-center gap-2 min-w-0">
-          {selectedChannel.stream_icon && (
+          {channelIconUrl && failedIconUrl !== channelIconUrl && (
             <img
-              src={selectedChannel.stream_icon}
+              key={`${selectedChannel.stream_id || ''}__${channelIconUrl}`}
+              src={channelIconUrl}
               alt=""
               referrerPolicy="no-referrer"
               className="w-6 h-6 rounded-lg object-contain bg-transparent shrink-0"
-              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              onError={() => setFailedIconUrl(channelIconUrl)}
             />
           )}
           <span className="text-xs font-bold text-white truncate">{selectedChannel.name}</span>
@@ -1719,6 +1725,16 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
           finalUrl = `${baseHost}/live/${encodeURIComponent(activePlaylist.username)}/${encodeURIComponent(activePlaylist.password)}/${cleanId}.ts`;
         }
       }
+    }
+
+    if (finalUrl.includes('/api/proxy?')) {
+      try {
+        const parsedProxy = new URL(finalUrl.startsWith('http') ? finalUrl : `http://localhost${finalUrl}`);
+        const unwrapped = parsedProxy.searchParams.get('url');
+        if (unwrapped && unwrapped.trim()) {
+          finalUrl = unwrapped.trim();
+        }
+      } catch {}
     }
 
     if (finalUrl.startsWith('/')) {
@@ -5154,7 +5170,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
       setIsFullscreen(true);
       setActiveVodPlayer(ch);
     }
-  }, [mediaType, settings.useExternalPlayer, settings.activePlaylistId, activePlaylist, multiViewActive, assignChannelToMultiView]);
+  }, [mediaType, settings.useExternalPlayer, settings.selectedPlayer, settings.activePlaylistId, activePlaylist, multiViewActive, assignChannelToMultiView]);
 
 
   const handleRemoveMultiViewSlot = useCallback((targetSlotId: number) => {
