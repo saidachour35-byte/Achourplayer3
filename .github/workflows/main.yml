@@ -1,0 +1,84 @@
+name: Build Android & Fire TV APKs (Achour Player)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Fire TV & Android APKs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: TypeScript Verification
+        run: npm run lint
+
+      - name: Build Web Application
+        run: npm run build
+
+      - name: Sync Capacitor Android Project
+        run: |
+          npx cap sync android
+          rm -rf android/app/src/main/assets/public/assets/aistudio
+
+      - name: Set up Java JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          accept-android-sdk-licenses: false
+          packages: ''
+
+      - name: Accept Android SDK Licenses
+        shell: bash
+        run: |
+          yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses || true
+
+      - name: Install Required Android SDK Packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          sdkmanager --sdk_root="$ANDROID_HOME" --install \
+            "platforms;android-36" \
+            "build-tools;36.0.0" \
+            "platforms;android-35" \
+            "build-tools;35.0.0" \
+            "platforms;android-34" \
+            "build-tools;34.0.0" \
+            "platform-tools"
+
+      - name: Build Fire TV & Android APKs with Gradle
+        run: |
+          cd android
+          mkdir -p app/src/debug/java app/src/release/java
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace --no-daemon
+          ./gradlew assembleRelease --stacktrace --no-daemon || true
+
+      - name: Upload Fire TV & Android APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: AchourPlayer-FireTV-APKs
+          path: |
+            android/app/build/outputs/apk/debug/*.apk
+            android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: warn

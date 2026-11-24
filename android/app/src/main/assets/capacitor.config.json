@@ -1,0 +1,23 @@
+{
+	"appId": "com.achourplayer.app",
+	"appName": "Achour Player",
+	"webDir": "dist",
+	"backgroundColor": "#020205",
+	"server": {
+		"androidScheme": "http",
+		"cleartext": true
+	},
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 0,
+			"launchAutoHide": true,
+			"backgroundColor": "#020205",
+			"showSpinner": false,
+			"splashFullScreen": true,
+			"splashImmersive": true
+		},
+		"CapacitorHttp": {
+			"enabled": true
+		}
+	}
+}

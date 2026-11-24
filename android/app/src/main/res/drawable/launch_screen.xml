@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/achour_splash_bg" />
+    <item android:drawable="@drawable/launch_glow" />
+    <item
+        android:width="144dp"
+        android:height="144dp"
+        android:drawable="@drawable/launch_logo"
+        android:gravity="center" />
+</layer-list>
