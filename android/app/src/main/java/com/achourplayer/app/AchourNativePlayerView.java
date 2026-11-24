@@ -1401,13 +1401,19 @@ if (vlcPendingPlay && vlcOutputReady) {
                     }
                 }
                 applyVlcVideoLayout();
-                if (usingLibVlc && vlcPendingPlay && vlcMediaPlayer != null) {
-                    vlcPendingPlay = false;
-                    try {
-                        vlcMediaPlayer.play();
-                    } catch (Exception ignored) {
-                    }
-                }
+                if (usingLibVlc && vlcPendingPlay && vlcMediaPlayer != null
+        && vlcTextureView != null
+        && attachVlcVoutIfAvailable(
+                vlcTextureView.getWidth(),
+                vlcTextureView.getHeight())) {
+    try {
+        vlcMediaPlayer.play();
+        vlcPendingPlay = false;
+    } catch (Exception e) {
+        vlcPendingPlay = true;
+        Log.e("AchourVLC", "Failed to start VLC after surfaces created", e);
+    }
+}
             });
         }
 
