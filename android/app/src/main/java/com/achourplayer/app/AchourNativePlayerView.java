@@ -2315,13 +2315,14 @@ private void releaseVlcPlayer() {
         if (usingLibVlc) {
             if (vlcMediaPlayer != null) {
                 if (vlcSurfaceReady) {
-                    vlcPendingPlay = false;
-                    try {
-                        vlcMediaPlayer.play();
-                    } catch (Exception ignored) {
-                    }
-                } else {
-                    vlcPendingPlay = true;
+    vlcPendingPlay = false;
+    try {
+        vlcMediaPlayer.play();
+    } catch (Exception ignored) {
+    }
+} else {
+    vlcPendingPlay = true;
+}
                 }
                 cachedIsPlaying = true;
                 startPositionTicker();
