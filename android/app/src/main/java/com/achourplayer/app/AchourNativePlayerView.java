@@ -691,7 +691,7 @@ private boolean attachVlcVoutIfAvailable(int width, int height) {
                 public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
                     vlcSurfaceReady = true;
                     if (usingLibVlc && vlcMediaPlayer != null) {
-                        attachVlcVoutIfAvailable(width, height);
+                        
                         boolean vlcOutputReady = attachVlcVoutIfAvailable(width, height);
 applyVlcVideoLayout();
 
