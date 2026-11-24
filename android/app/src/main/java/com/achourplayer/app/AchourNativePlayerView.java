@@ -241,28 +241,49 @@ public class AchourNativePlayerView extends FrameLayout {
         }
     };
 
-    private void attachVlcVoutIfAvailable(int width, int height) {
-        if (vlcMediaPlayer == null || vlcTextureView == null || !vlcTextureView.isAvailable()) {
-            return;
-        }
-        int effW = width > 0 ? width : (vlcTextureView.getWidth() > 0 ? vlcTextureView.getWidth() : getWidth());
-        int effH = height > 0 ? height : (vlcTextureView.getHeight() > 0 ? vlcTextureView.getHeight() : getHeight());
-        try {
-            IVLCVout vout = vlcMediaPlayer.getVLCVout();
-            if (!vlcViewsAttached) {
-                vout.setVideoView(vlcTextureView);
-                vout.addCallback(vlcVoutCallback);
-                if (effW > 0 && effH > 0) {
-                    vout.setWindowSize(effW, effH);
-                }
-                vout.attachViews(vlcNewVideoLayoutListener);
-                vlcViewsAttached = true;
-            } else if (effW > 0 && effH > 0) {
-                vout.setWindowSize(effW, effH);
-            }
-        } catch (Exception ignored) {
-        }
+  
+private boolean attachVlcVoutIfAvailable(int width, int height) {
+    if (vlcMediaPlayer == null || vlcTextureView == null
+            || !vlcTextureView.isAvailable()) {
+        Log.w("AchourVLC", "Video surface is not ready");
+        return false;
     }
+
+    int effW = width > 0 ? width
+            : (vlcTextureView.getWidth() > 0
+            ? vlcTextureView.getWidth() : getWidth());
+
+    int effH = height > 0 ? height
+            : (vlcTextureView.getHeight() > 0
+            ? vlcTextureView.getHeight() : getHeight());
+
+    if (effW <= 0 || effH <= 0) {
+        Log.w("AchourVLC", "Invalid video surface size");
+        return false;
+    }
+
+    try {
+        IVLCVout vout = vlcMediaPlayer.getVLCVout();
+
+        if (!vlcViewsAttached) {
+            vout.setVideoView(vlcTextureView);
+            vout.addCallback(vlcVoutCallback);
+            vout.setWindowSize(effW, effH);
+            vout.attachViews(vlcNewVideoLayoutListener);
+            vlcViewsAttached = true;
+        } else {
+            vout.setWindowSize(effW, effH);
+        }
+
+        return true;
+
+    } catch (Exception e) {
+        vlcViewsAttached = false;
+        Log.e("AchourVLC", "Failed to attach VLC video output", e);
+        return false;
+    }
+}
+
 
     private final Runnable retryRunnable = new Runnable() {
         @Override
