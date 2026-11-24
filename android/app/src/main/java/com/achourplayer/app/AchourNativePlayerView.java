@@ -774,7 +774,7 @@ if (vlcPendingPlay && vlcOutputReady) {
     }
 }
                     }
-                }
+                            });
             
             addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
                 if (!usingLibVlc) return;
