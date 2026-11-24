@@ -1981,9 +1981,7 @@ private void releaseVlcPlayer() {
     mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
     mainHandler.postDelayed(vlcSurfaceFallbackPlayRunnable, 200L);
 }
-                    vlcTextureView.requestLayout();
-                    mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-                    mainHandler.postDelayed(vlcSurfaceFallbackPlayRunnable, 180L);
+                    
                 }
             }
             return;
