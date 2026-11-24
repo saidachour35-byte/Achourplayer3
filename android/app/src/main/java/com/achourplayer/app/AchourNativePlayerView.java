@@ -753,13 +753,16 @@ if (vlcPendingPlay && vlcOutputReady) {
                         }
                     }
                     if (vlcPendingPlay && vlcMediaPlayer != null && vlcTextureView.isAvailable()) {
-                        vlcSurfaceReady = true;
-                        vlcPendingPlay = false;
-                        attachVlcVoutIfAvailable(newW, newH);
-                        try {
-                            vlcMediaPlayer.play();
-                        } catch (Exception ignored) {
-                        }
+    vlcSurfaceReady = true;
+    if (attachVlcVoutIfAvailable(newW, newH)) {
+        vlcPendingPlay = false;
+        try {
+            vlcMediaPlayer.play();
+        } catch (Exception e) {
+            Log.e("AchourVLC", "Failed to start VLC after layout change", e);
+        }
+    }
+}
                     }
                 }
             });
