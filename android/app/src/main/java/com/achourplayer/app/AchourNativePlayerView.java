@@ -231,8 +231,9 @@ public class AchourNativePlayerView extends FrameLayout {
                 vlcSurfaceReady = true;
                 vlcPendingPlay = false;
                 try {
-                    attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight());
-                    vlcMediaPlayer.play();
+                    if (attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight())) {
+    vlcMediaPlayer.play();
+}
                 } catch (Exception ignored) {
                 }
             } else if (vlcTextureView != null) {
