@@ -1534,48 +1534,61 @@ public class AchourNativePlayerView extends FrameLayout {
         }
     }
 
-    private void releaseVlcPlayer() {
-        mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
-        mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-        mainHandler.removeCallbacks(vlcRevealTextureRunnable);
-        mainHandler.removeCallbacks(vlcResRefreshRunnable);
-        vlcPendingPlay = false;
-        vlcSurfaceReady = false;
-        vlcHasVideoFrame = false;
-        vlcVideoWidth = 0;
-        vlcVideoHeight = 0;
-        if (vlcMediaPlayer != null) {
-            try {
-                vlcMediaPlayer.setEventListener(null);
-            } catch (Exception ignored) {
-            }
-            if (vlcViewsAttached) {
-                try {
-                    IVLCVout vout = vlcMediaPlayer.getVLCVout();
-                    vout.removeCallback(vlcVoutCallback);
-                    vout.detachViews();
-                } catch (Exception ignored) {
-                }
-                vlcViewsAttached = false;
-            }
-            try {
-                vlcMediaPlayer.stop();
-            } catch (Exception ignored) {
-            }
-            try {
-                vlcMediaPlayer.release();
-            } catch (Exception ignored) {
-            }
-            vlcMediaPlayer = null;
+    
+private void releaseVlcPlayer() {
+    mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
+    mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
+    mainHandler.removeCallbacks(vlcRevealTextureRunnable);
+    mainHandler.removeCallbacks(vlcResRefreshRunnable);
+
+    vlcPendingPlay = false;
+    vlcSurfaceReady = false;
+    vlcHasVideoFrame = false;
+    vlcVideoWidth = 0;
+    vlcVideoHeight = 0;
+
+    if (vlcMediaPlayer != null) {
+        try {
+            vlcMediaPlayer.setEventListener(null);
+        } catch (Exception e) {
+            Log.e("AchourVLC", "Failed to clear VLC event listener", e);
         }
-        if (libVlc != null) {
-            try {
-                libVlc.release();
-            } catch (Exception ignored) {
-            }
-            libVlc = null;
+
+        try {
+            vlcMediaPlayer.stop();
+        } catch (Exception e) {
+            Log.w("AchourVLC", "VLC stop failed during release", e);
         }
+
+        if (vlcViewsAttached) {
+            try {
+                IVLCVout vout = vlcMediaPlayer.getVLCVout();
+                vout.removeCallback(vlcVoutCallback);
+                vout.detachViews();
+            } catch (Exception e) {
+                Log.w("AchourVLC", "VLC video output detach failed", e);
+            }
+            vlcViewsAttached = false;
+        }
+
+        try {
+            vlcMediaPlayer.release();
+        } catch (Exception e) {
+            Log.e("AchourVLC", "VLC MediaPlayer release failed", e);
+        }
+        vlcMediaPlayer = null;
     }
+
+    if (libVlc != null) {
+        try {
+            libVlc.release();
+        } catch (Exception e) {
+            Log.e("AchourVLC", "LibVLC release failed", e);
+        }
+        libVlc = null;
+    }
+}
+
 
     private void buildVlcPlayer(Context context, boolean forLive, String userAgent) {
         releaseVlcPlayer();
