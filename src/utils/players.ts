@@ -27,88 +27,11 @@ export interface ExternalLaunchResult {
 
 export const CUSTOM_PLAYER_PKG_STORAGE_KEY = 'achour_custom_player_packages_v1';
 
-export const EXTERNAL_PLAYER_PROFILES: ExternalPlayerProfile[] = [
-  {
-    id: 'VLC for Android',
-    name: 'VLC for Android',
-    packageName: 'org.videolan.vlc',
-    fallbackPackages: ['org.videolan.vlc.betav7neon', 'org.videolan.vlc.debug'],
-    fireTvCompatible: true,
-    aliases: ['VLC', 'VLC Media Player', 'org.videolan.vlc'],
-  },
-  {
-    id: 'MX Player Pro',
-    name: 'MX Player',
-    packageName: 'com.mxtech.videoplayer.ad',
-    fallbackPackages: ['com.mxtech.videoplayer.pro'],
-    fireTvCompatible: true,
-    aliases: ['MX Player', 'MX Player Pro', 'com.mxtech.videoplayer.ad', 'com.mxtech.videoplayer.pro'],
-  },
-  {
-    id: 'Nova Video Player',
-    name: 'Nova Video Player',
-    packageName: 'org.courville.nova',
-    fireTvCompatible: true,
-    aliases: ['Nova Player', 'org.courville.nova'],
-  },
-  {
-    id: 'Just Player',
-    name: 'Just Player',
-    packageName: 'com.brouken.player',
-    fireTvCompatible: true,
-    aliases: ['com.brouken.player'],
-  },
-  {
-    id: 'MPV Player',
-    name: 'MPV Player',
-    packageName: 'is.xyz.mpv',
-    fireTvCompatible: true,
-    aliases: ['is.xyz.mpv'],
-  },
-  {
-    id: 'Vimu Media Player',
-    name: 'Vimu Player',
-    packageName: 'net.gtvbox.videoplayer',
-    fireTvCompatible: true,
-    aliases: ['Vimu', 'Vimu Player', 'net.gtvbox.videoplayer'],
-  },
-  {
-    id: 'Kodi',
-    name: 'Kodi',
-    packageName: 'org.xbmc.kodi',
-    fireTvCompatible: true,
-    aliases: ['Kodi', 'org.xbmc.kodi'],
-  },
-  {
-    id: 'KMPlayer',
-    name: 'KMPlayer',
-    packageName: 'com.kmplayer',
-    fallbackPackages: ['com.kmplayer.pro'],
-    fireTvCompatible: true,
-    aliases: ['KMPlayer', 'com.kmplayer', 'com.kmplayer.pro'],
-  },
-  {
-    id: 'Wuffy Player',
-    name: 'Wuffy Player',
-    packageName: 'co.wuffy.player',
-    fireTvCompatible: true,
-    aliases: ['Wuffy', 'Wuffy Media Player', 'co.wuffy.player'],
-  },
-  {
-    id: 'Fire TV System Player',
-    name: 'Fire TV System Player',
-    packageName: '__achour_native_system__',
-    fireTvCompatible: true,
-    aliases: ['Fire TV Player', 'Amazon Fire TV Player', 'Fire OS Player', '__achour_native_system__'],
-  },
-  {
-    id: 'System Player Chooser',
-    name: 'System Chooser (Any App)',
-    packageName: '',
-    fireTvCompatible: true,
-    aliases: ['system', 'System Chooser', 'Android Chooser'],
-  },
-];
+// External standalone players (such as VLC App, MX Player, Nova, Just Player, Kodi, etc.)
+// run in separate Android activities and cannot be embedded inside AchourTV's mini-player,
+// preview window, or remote control bar. Per strict criteria, all incompatible external
+// players have been removed, leaving full embedded playback to the internal engines (ExoPlayer & LibVLC).
+export const EXTERNAL_PLAYER_PROFILES: ExternalPlayerProfile[] = [];
 
 export const DEFAULT_PLAYERS = EXTERNAL_PLAYER_PROFILES;
 

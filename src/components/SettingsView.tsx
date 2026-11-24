@@ -1371,73 +1371,105 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
           )}
 
           {playersTab === 'external' && (
-            <div className="space-y-2.5">
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
-                {externalApps.map((p) => {
-                  const isActive =
-                    settings.useExternalPlayer &&
-                    (settings.selectedPlayer === p.id || Boolean(p.aliases?.includes(settings.selectedPlayer)));
-                  const installStatus = externalInstallMap[p.id];
-                  const showFireTvWarn = !p.fireTvCompatible;
-                  const displayName =
-                    p.id === 'Fire TV System Player'
-                      ? (isRtl ? 'مشغل Fire TV / النظام المدمج' : 'Fire TV System Player')
-                      : p.id === 'System Player Chooser'
-                      ? (isRtl ? 'قائمة النظام (أي مشغّل مثبت)' : p.name)
-                      : p.name;
-                  return (
-                    <button
-                      key={p.id}
-                      data-tv-focusable="true"
-                      tabIndex={0}
-                      onClick={() => {
-                        onUpdateSettings(prev => ({ ...prev, useExternalPlayer: true, selectedPlayer: p.id }));
-                        setSubView('main');
-                      }}
-                      className={`p-3.5 rounded-2xl border transition-colors flex flex-col justify-between min-h-[112px] cursor-pointer ${
-                        isActive ? 'border-gold bg-gold/15' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
-                      } ${isRtl ? 'text-right' : 'text-left'}`}
-                    >
-                      <div className="flex items-start justify-between gap-2 w-full">
-                        <span className="text-sm sm:text-base font-medium text-white leading-snug">{displayName}</span>
-                        {isActive && <Check className="text-gold shrink-0" size={16} />}
-                      </div>
-                      <div className="mt-1.5 space-y-1">
-                        <span className="text-[11px] font-mono text-zinc-400 truncate block">
-                          {p.packageName === '__achour_native_system__'
-                            ? (isRtl ? 'مدمج في النظام (بدون تحميل)' : 'Built-in OS / Fire TV Activity')
-                            : p.packageName || (isRtl ? 'اختيار من تطبيقات الجهاز' : 'Android / Fire TV Picker')}
-                        </span>
-                        <div className="flex flex-wrap items-center gap-1">
-                          {installStatus === true && (
-                            <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold">
-                              {t('installed_badge')}
+            <div className="space-y-3">
+              {externalApps.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+                    {externalApps.map((p) => {
+                      const isActive =
+                        settings.useExternalPlayer &&
+                        (settings.selectedPlayer === p.id || Boolean(p.aliases?.includes(settings.selectedPlayer)));
+                      const installStatus = externalInstallMap[p.id];
+                      const showFireTvWarn = !p.fireTvCompatible;
+                      const displayName =
+                        p.id === 'Fire TV System Player'
+                          ? (isRtl ? 'مشغل Fire TV / النظام المدمج' : 'Fire TV System Player')
+                          : p.id === 'System Player Chooser'
+                          ? (isRtl ? 'قائمة النظام (أي مشغّل مثبت)' : p.name)
+                          : p.name;
+                      return (
+                        <button
+                          key={p.id}
+                          data-tv-focusable="true"
+                          tabIndex={0}
+                          onClick={() => {
+                            onUpdateSettings(prev => ({ ...prev, useExternalPlayer: true, selectedPlayer: p.id }));
+                            setSubView('main');
+                          }}
+                          className={`p-3.5 rounded-2xl border transition-colors flex flex-col justify-between min-h-[112px] cursor-pointer ${
+                            isActive ? 'border-gold bg-gold/15' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
+                          } ${isRtl ? 'text-right' : 'text-left'}`}
+                        >
+                          <div className="flex items-start justify-between gap-2 w-full">
+                            <span className="text-sm sm:text-base font-medium text-white leading-snug">{displayName}</span>
+                            {isActive && <Check className="text-gold shrink-0" size={16} />}
+                          </div>
+                          <div className="mt-1.5 space-y-1">
+                            <span className="text-[11px] font-mono text-zinc-400 truncate block">
+                              {p.packageName === '__achour_native_system__'
+                                ? (isRtl ? 'مدمج في النظام (بدون تحميل)' : 'Built-in OS / Fire TV Activity')
+                                : p.packageName || (isRtl ? 'اختيار من تطبيقات الجهاز' : 'Android / Fire TV Picker')}
                             </span>
-                          )}
-                          {installStatus === false && (
-                            <span className="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[10px] font-bold">
-                              {t('not_installed_badge')}
-                            </span>
-                          )}
-                          {showFireTvWarn && (
-                            <span className={`px-1.5 py-0.5 rounded border text-[10px] font-bold flex items-center gap-1 ${
-                              onFireTv
-                                ? 'bg-amber-500/25 border-amber-400/60 text-amber-200'
-                                : 'bg-amber-500/15 border-amber-500/35 text-amber-300'
-                            }`}>
-                              <AlertTriangle size={10} />
-                              {t('phone_only_badge')}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="text-xs text-zinc-400 px-1">
-                {t('external_players_note')}
-              </p>
+                            <div className="flex flex-wrap items-center gap-1">
+                              <span className="px-1.5 py-0.5 rounded bg-white/10 text-zinc-300 text-[10px] font-medium">
+                                {t('standalone_app_badge')}
+                              </span>
+                              {installStatus === true && (
+                                <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold">
+                                  {t('installed_badge')}
+                                </span>
+                              )}
+                              {installStatus === false && (
+                                <span className="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[10px] font-bold">
+                                  {t('not_installed_badge')}
+                                </span>
+                              )}
+                              {showFireTvWarn && (
+                                <span className={`px-1.5 py-0.5 rounded border text-[10px] font-bold flex items-center gap-1 ${
+                                  onFireTv
+                                    ? 'bg-amber-500/25 border-amber-400/60 text-amber-200'
+                                    : 'bg-amber-500/15 border-amber-500/35 text-amber-300'
+                                }`}>
+                                  <AlertTriangle size={10} />
+                                  {t('phone_only_badge')}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 text-xs text-zinc-300 leading-relaxed">
+                    <p>{t('external_players_note')}</p>
+                  </div>
+                </>
+              ) : (
+                <div className="p-6 rounded-2xl bg-white/[0.04] border border-white/10 text-center space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-gold/15 text-gold flex items-center justify-center mx-auto">
+                    <Check size={24} />
+                  </div>
+                  <h4 className="text-base font-bold text-white">
+                    {isRtl ? 'تم حذف جميع المشغلات غير المتوافقة مع الدمج' : 'All Non-Embedded Players Removed'}
+                  </h4>
+                  <p className="text-xs text-zinc-300 max-w-xl mx-auto leading-relaxed">
+                    {isRtl
+                      ? 'تم فحص جميع المشغلات الـ11 وتأكيد أنها تفتح في نوافذ منفصلة بنظام أندرويد وتستحوذ على الشاشة بالكامل ولا تدعم الدمج داخل الشاشة المصغرة أو شريط تحكم AchourTV أو التنقل بالريموت يميناً ويساراً. تم حذفها نهائياً لتوفير بيئة تشغيل مدمجة 100%، وتتوفر المحركات المدمجة المتوافقة داخل تبويب «محركات مدمجة».'
+                      : 'All 11 external standalone players have been removed because they open in separate Android activities and do not support mini-screen embedding or remote control zapping. Fully embedded playback is available via the "Internal Engines" tab.'}
+                  </p>
+                  <button
+                    data-tv-focusable="true"
+                    tabIndex={0}
+                    onClick={() => {
+                      onUpdateSettings(prev => ({ ...prev, useExternalPlayer: false, selectedPlayer: 'ExoPlayer' }));
+                      setPlayersTab('internal');
+                    }}
+                    className="px-4 py-2 rounded-xl bg-gold text-black font-bold text-xs hover:bg-gold/90 transition-colors cursor-pointer"
+                  >
+                    {isRtl ? 'الانتقال إلى المحركات المدمجة (ExoPlayer و LibVLC)' : 'Switch to Internal Engines (ExoPlayer & LibVLC)'}
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

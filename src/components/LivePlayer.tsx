@@ -1010,7 +1010,9 @@ const MultiViewSlotPlayerComponent: React.FC<MultiViewSlotPlayerProps> = ({
       try {
         native?.hideMultiSlot?.(slotIndex);
       } catch {}
-      requestAnimationFrame(() => syncMultiViewNativeOverlay(false));
+      if (typeof document !== 'undefined' && document.querySelector('[data-multiview-container="true"]')) {
+        requestAnimationFrame(() => syncMultiViewNativeOverlay(false));
+      }
     };
   }, [isNativeActive, slotIndex]);
 
@@ -2029,7 +2031,16 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
         sessionCategoriesCache.set(sessionKey, cleanCats);
 
         setCategories(cleanCats);
-        if (mediaType !== 'favorites') {
+        if (mediaType === 'live') {
+          const firstReal = cleanCats.find(c => c.category_id !== 'favorites');
+          if (firstReal) {
+            setSelectedCategory(firstReal.category_id);
+          } else if (favoritesRef.current.length > 0) {
+            setSelectedCategory('favorites');
+          } else {
+            setSelectedCategory('');
+          }
+        } else if (mediaType !== 'favorites') {
           setSelectedCategory('__all__');
         } else if (cleanCats.length > 0) {
           setSelectedCategory(cleanCats[0].category_id);
@@ -2324,15 +2335,20 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
     }
   }, [multiViewActive]);
 
+  const wasMultiViewActiveRef = useRef(false);
+
   // Sync WebView transparency cutouts & guarantee native MultiView ExoPlayer cleanup on exit/unmount
   useEffect(() => {
     const native = typeof window !== 'undefined' ? (window as any).AchourNative : null;
     if (!isNativeApp() || !native?.showMultiSlot) return;
 
     if (!multiViewActive) {
-      try {
-        native.hideAllMultiSlots?.();
-      } catch {}
+      if (wasMultiViewActiveRef.current) {
+        wasMultiViewActiveRef.current = false;
+        try {
+          native.hideAllMultiSlots?.();
+        } catch {}
+      }
       if (!selectedChannel && !activeVodPlayer) {
         document.documentElement.classList.remove('native-player-active', 'native-player-preview');
         document.body.classList.remove('native-player-active', 'native-player-preview');
@@ -2341,6 +2357,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
       return;
     }
 
+    wasMultiViewActiveRef.current = true;
     const rafId = requestAnimationFrame(() => {
       syncMultiViewNativeOverlay(multiViewFullscreenSlot !== null);
     });
@@ -4645,7 +4662,12 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
         }
         const sortedCats = sortCategoriesBySavedOrder(fetchedCats);
         setCategories(sortedCats);
-        const firstCatId = selectedCategory || (mediaType !== 'favorites' ? '__all__' : sortedCats[0]?.category_id || '');
+        const defaultCatId = mediaType === 'live'
+          ? (sortedCats[0]?.category_id || (favoritesRef.current.length > 0 ? 'favorites' : ''))
+          : (mediaType !== 'favorites' ? '__all__' : sortedCats[0]?.category_id || '');
+        const firstCatId = (selectedCategory && (mediaType !== 'live' || selectedCategory !== '__all__'))
+          ? selectedCategory
+          : defaultCatId;
         if (firstCatId) {
           setSelectedCategory(firstCatId);
           const win = await getChannelsByCategoryWindowed(typeToLoad, firstCatId, curPlaylistId, {
@@ -4901,7 +4923,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
       return [allCat, ...specialCats, ...cleanCats];
     }
 
-    // Live TV: «الجميع» always at top, then favorites (if any), then channel categories.
+    // Live TV: Favorites (if any) at top, then channel categories (omitting «الجميع» only from Live as requested)
     if (mediaType === 'live') {
       if (favorites.length > 0) {
         const favLabel = t('favorites');
@@ -4910,15 +4932,25 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
           category_name: `⭐ ${favLabel}`,
           count: favorites.length
         };
-        return [allCat, favCat, ...cleanCats];
+        return [favCat, ...cleanCats];
       }
-      return [allCat, ...cleanCats];
+      return cleanCats;
     }
 
     return [allCat, historyCat, ...cleanCats];
   }, [categories, hiddenSet, favorites.length, mediaType, settings.language, watchHistoryCount, continueWatchingCount, selectedCategory]);
 
   visibleCategoriesRef.current = visibleCategories;
+
+  // Ensure Live TV immediately selects the first real category if selectedCategory was '__all__'
+  useEffect(() => {
+    if (mediaType === 'live' && selectedCategory === '__all__') {
+      const firstValid = visibleCategories.find(c => c.category_id !== '__all__');
+      if (firstValid) {
+        setSelectedCategory(firstValid.category_id);
+      }
+    }
+  }, [mediaType, selectedCategory, visibleCategories]);
 
   const filteredChannels = useMemo(() => {
     if (categorySearchMatches !== null && search.trim()) {

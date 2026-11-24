@@ -114,11 +114,12 @@ public class AchourNativeBridge {
     }
 
     private void ensureWebViewTransparent(ViewGroup rootView) {
-        if (transparencyConfigured) return;
-        transparencyConfigured = true;
-        try {
-            activity.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#020205")));
-        } catch (Exception ignored) {
+        if (!transparencyConfigured) {
+            transparencyConfigured = true;
+            try {
+                activity.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#020205")));
+            } catch (Exception ignored) {
+            }
         }
         if (webView != null) {
             webView.setBackgroundColor(Color.TRANSPARENT);
@@ -218,9 +219,13 @@ public class AchourNativeBridge {
         releaseAllMultiSlotsOnUiThread();
 
         ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView().findViewById(android.R.id.content);
+        ensureWebViewTransparent(rootView);
+
+        if (playerView != null && playerView.getParent() == null) {
+            destroyPlayerOnUiThread();
+        }
 
         if (playerView == null) {
-            ensureWebViewTransparent(rootView);
             playerView = new AchourNativePlayerView(activity);
 
             layoutParams = new FrameLayout.LayoutParams(pw, ph);
@@ -500,25 +505,28 @@ public class AchourNativeBridge {
         });
     }
 
-    private void destroyPlayer() {
-        mainHandler.post(() -> {
-            wasPlayingBeforePause = false;
-            hasSuspendedSingle = false;
-            suspendedSingleUrl = "";
-            if (playerView != null) {
-                ViewGroup parent = (ViewGroup) playerView.getParent();
-                if (parent != null) {
-                    parent.removeView(playerView);
-                }
-                playerView.release();
-                playerView = null;
-                layoutParams = null;
-                lastBoundX = Integer.MIN_VALUE;
-                lastBoundY = Integer.MIN_VALUE;
-                lastBoundW = Integer.MIN_VALUE;
-                lastBoundH = Integer.MIN_VALUE;
+    private void destroyPlayerOnUiThread() {
+        wasPlayingBeforePause = false;
+        hasSuspendedSingle = false;
+        suspendedSingleUrl = "";
+        suspendedSinglePosMs = 0L;
+        if (playerView != null) {
+            ViewGroup parent = (ViewGroup) playerView.getParent();
+            if (parent != null) {
+                parent.removeView(playerView);
             }
-        });
+            playerView.release();
+            playerView = null;
+            layoutParams = null;
+            lastBoundX = Integer.MIN_VALUE;
+            lastBoundY = Integer.MIN_VALUE;
+            lastBoundW = Integer.MIN_VALUE;
+            lastBoundH = Integer.MIN_VALUE;
+        }
+    }
+
+    private void destroyPlayer() {
+        mainHandler.post(this::destroyPlayerOnUiThread);
     }
 
     // Apply Android audio focus only to the selected MultiView player.
@@ -559,6 +567,18 @@ public class AchourNativeBridge {
         lastSlotH[slotIndex] = Integer.MIN_VALUE;
         multiSlotResizeModes[slotIndex] = "fill";
 
+        boolean anySlotRemaining = false;
+        for (AchourNativePlayerView mv : multiSlotViews) {
+            if (mv != null) {
+                anySlotRemaining = true;
+                break;
+            }
+        }
+        if (!anySlotRemaining) {
+            activeAudioSlotIndex = -1;
+            AchourNativePlayerView.evictMultiSlotNetworkConnections();
+        }
+
         applyMultiSlotAudioFocusOnUiThread();
     }
 
@@ -567,6 +587,7 @@ public class AchourNativeBridge {
         for (int i = 0; i < multiSlotViews.length; i++) {
             releaseMultiSlotOnUiThread(i);
         }
+        AchourNativePlayerView.evictMultiSlotNetworkConnections();
         applyMultiSlotAudioFocusOnUiThread();
     }
 
@@ -582,13 +603,14 @@ public class AchourNativeBridge {
     ) {
         if (slotIndex < 0 || slotIndex >= multiSlotViews.length) return;
 
+        // Completely tear down any single-channel player (LibVLC or ExoPlayer) so Multi View
+        // and subsequent single-channel playback never share stale TextureView/PlayerView/decoder state.
         if (playerView != null) {
-            wasPlayingBeforePause = false;
-            hasSuspendedSingle = false;
-            playerView.stopAndHide();
+            destroyPlayerOnUiThread();
         }
 
         ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView().findViewById(android.R.id.content);
+        ensureWebViewTransparent(rootView);
         AchourNativePlayerView slotView = multiSlotViews[slotIndex];
 
         if (resizeMode != null && !resizeMode.isEmpty()) {
@@ -596,7 +618,6 @@ public class AchourNativeBridge {
         }
 
         if (slotView == null) {
-            ensureWebViewTransparent(rootView);
             slotView = new AchourNativePlayerView(activity, true);
             slotView.setAudioFocusEnabled(false);
             slotView.setVolume(0.0f);

@@ -329,6 +329,23 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
         return `${w}x${h}`;
       }
     }
+    const clean = resStr.trim();
+    if (/4k|uhd|2160/i.test(clean)) return '4K';
+    if (/fhd|1080/i.test(clean)) return '1080p';
+    if (/hd|720/i.test(clean)) return '720p';
+    if (/sd|576|480/i.test(clean)) return 'SD';
+    return clean;
+  };
+
+  const inferQualityFromMedia = (item: any): string => {
+    if (!item) return '';
+    const name = String(item.name || item.title || item.stream_name || '').toUpperCase();
+    const url = String(item.url || '').toUpperCase();
+    const combined = `${name} ${url}`;
+    if (/\b(4K|UHD|2160P?)\b/i.test(combined) || combined.includes('4K') || combined.includes('UHD')) return '4K';
+    if (/\b(FHD|1080P?|FULL\s*HD)\b/i.test(combined) || combined.includes('FHD') || combined.includes('1080')) return '1080p';
+    if (/\b(HD|720P?)\b/i.test(combined) || combined.includes('HD') || combined.includes('720')) return '720p';
+    if (/\b(SD|576P?|480P?)\b/i.test(combined) || combined.includes('SD')) return 'SD';
     return '';
   };
 
@@ -920,6 +937,8 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
               const nextRes = `${parseInt(m[1], 10)}x${parseInt(m[2], 10)}`;
               setRealResolution(prev => (prev === nextRes ? prev : nextRes));
             }
+          } else if (res.trim()) {
+            setRealResolution(prev => (prev === res.trim() ? prev : res.trim()));
           }
         }
       };
@@ -2809,7 +2828,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
 
                     {/* 7. Measured Raw Video Resolution (Direct text on bar, zero box/frame/background) */}
                     {(() => {
-                      const qualityLabel = formatVideoResolution(realResolution);
+                      const qualityLabel = formatVideoResolution(realResolution) || inferQualityFromMedia(activeVodRef.current);
                       return (
                         <span
                           aria-hidden={!qualityLabel}
