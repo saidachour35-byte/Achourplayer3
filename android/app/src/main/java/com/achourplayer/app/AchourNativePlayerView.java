@@ -692,16 +692,18 @@ private boolean attachVlcVoutIfAvailable(int width, int height) {
                     vlcSurfaceReady = true;
                     if (usingLibVlc && vlcMediaPlayer != null) {
                         attachVlcVoutIfAvailable(width, height);
-                        applyVlcVideoLayout();
-                        if (vlcPendingPlay) {
-                            vlcPendingPlay = false;
-                            mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-                            try {
-                                vlcMediaPlayer.play();
-                            } catch (Exception ignored) {
-                            }
-                        }
-                    }
+                        boolean vlcOutputReady = attachVlcVoutIfAvailable(width, height);
+applyVlcVideoLayout();
+
+if (vlcPendingPlay && vlcOutputReady) {
+    vlcPendingPlay = false;
+    mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
+    try {
+        vlcMediaPlayer.play();
+    } catch (Exception e) {
+        Log.e("AchourVLC", "Failed to start VLC playback", e);
+    }
+}
                 }
 
                 @Override
