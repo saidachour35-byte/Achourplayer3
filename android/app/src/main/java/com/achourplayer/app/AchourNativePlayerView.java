@@ -2323,7 +2323,7 @@ private void releaseVlcPlayer() {
 } else {
     vlcPendingPlay = true;
 }
-                }
+                
                 cachedIsPlaying = true;
                 startPositionTicker();
             }
