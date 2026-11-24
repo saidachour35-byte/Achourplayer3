@@ -228,14 +228,23 @@ public class AchourNativePlayerView extends FrameLayout {
             if (!usingLibVlc || vlcMediaPlayer == null || !vlcPendingPlay) return;
             if (vlcTextureView != null && vlcTextureView.isAvailable()
                     && vlcTextureView.getWidth() > 0 && vlcTextureView.getHeight() > 0) {
-                vlcSurfaceReady = true;
-                vlcPendingPlay = false;
-                try {
-                    if (attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight())) {
-    vlcMediaPlayer.play();
+                
+vlcSurfaceReady = true;
+
+if (attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight())) {
+    try {
+        vlcMediaPlayer.play();
+        vlcPendingPlay = false;
+    } catch (Exception e) {
+        vlcPendingPlay = true;
+        Log.e("AchourVLC", "VLC fallback playback failed", e);
+        mainHandler.postDelayed(this, 200L);
+    }
+} else {
+    vlcPendingPlay = true;
+    mainHandler.postDelayed(this, 200L);
 }
-                } catch (Exception ignored) {
-                }
+
             } else if (vlcTextureView != null) {
                 mainHandler.postDelayed(this, 200L);
             }
