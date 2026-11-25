@@ -1613,14 +1613,32 @@ public class AchourNativePlayerView extends FrameLayout {
         args.add("--avcodec-skiploopfilter=0");
         args.add(vlcForceSoftwareDecode ? "--avcodec-hw=none" : "--avcodec-hw=any");
 
-        libVlc = new LibVLC(context.getApplicationContext(), args);
+        LibVLC createdLibVlc = null;
         try {
-            libVlc.setUserAgent("AchourPlayer", vlcActiveUserAgent);
-        } catch (Exception ignored) {
+            createdLibVlc = new LibVLC(context.getApplicationContext(), args);
+        } catch (Exception e) {
+            // Fallback if hardware/advanced options fail on certain devices/architectures
+            try {
+                ArrayList<String> safeArgs = new ArrayList<>();
+                safeArgs.add("--http-reconnect");
+                safeArgs.add("--avcodec-hw=none");
+                createdLibVlc = new LibVLC(context.getApplicationContext(), safeArgs);
+                vlcForceSoftwareDecode = true;
+            } catch (Exception ignored) {
+            }
+        }
+        libVlc = createdLibVlc;
+        if (libVlc != null) {
+            try {
+                libVlc.setUserAgent("AchourPlayer", vlcActiveUserAgent);
+            } catch (Exception ignored) {
+            }
         }
 
-        vlcMediaPlayer = new MediaPlayer(libVlc);
-        vlcMediaPlayer.setEventListener(vlcEventListener);
+        if (libVlc != null) {
+            vlcMediaPlayer = new MediaPlayer(libVlc);
+            vlcMediaPlayer.setEventListener(vlcEventListener);
+        }
 
         if (vlcTextureView != null) {
             vlcTextureView.setVisibility(View.VISIBLE);
