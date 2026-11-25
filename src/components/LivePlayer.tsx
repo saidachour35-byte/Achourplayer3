@@ -4765,26 +4765,52 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
           });
           if (filtered.length > 0) rawList = filtered;
         }
+  const sortChannelsBySavedOrder = useCallback((incomingChs: ParsedChannel[]): ParsedChannel[] => {
+    let orderKey: string;
 
-        const catsToUse = (passedCats && passedCats.length > 0) ? passedCats : categories;
+    if (mediaType === 'live') {
+      const isFavorites =
+        selectedCategory === 'favorites' ||
+        selectedCategory === 'FAVORITES_INTERNAL';
 
-        const mapped: ParsedChannel[] = rawList.map((ch: any, idx: number) => {
-          const rawStreamId = String(ch.stream_id || ch.series_id || ch.id || `${catId}-${idx}`);
-          const cleanStreamId = rawStreamId.replace(/\.(m3u8|ts|mp4|mkv|avi|flv)$/i, '');
-          const ext = ch.container_extension || (mediaType === 'live' ? 'm3u8' : 'mp4');
-          
-          let directUrl = ch.stream_url || ch.direct_source || ch.url || '';
-          if (!directUrl) {
-            if (mediaType === 'live') directUrl = `${baseStreamUrl}/live/${p.username}/${p.password}/${cleanStreamId}.${ext}`;
-            else if (mediaType === 'movie') directUrl = `${baseStreamUrl}/movie/${p.username}/${p.password}/${cleanStreamId}.${ext}`;
-            else directUrl = `${baseStreamUrl}/series/${p.username}/${p.password}/${cleanStreamId}.${ext}`;
-          }
+      const categoryKey = isFavorites
+        ? 'favorites'
+        : String(selectedCategory || '__all__');
 
-          const rawCatId = String(ch.category_id || catId || 'uncategorized');
-          const matchedCat = catsToUse.find(c => String(c.category_id) === rawCatId);
-          const rawCatName = String(ch.category_name || (matchedCat ? matchedCat.category_name : '') || '').trim();
-          const resolvedCatName = rawCatName.toLowerCase() === 'عام (general)' ? '' : rawCatName;
+      orderKey =
+        `${encodeURIComponent(effectivePlaylistId || 'default')}::live::${encodeURIComponent(categoryKey)}`;
+    } else {
+      orderKey = mediaType;
+    }
 
+    let savedOrder = settings.channelOrders?.[orderKey];
+
+    if (!savedOrder || !Array.isArray(savedOrder) || savedOrder.length === 0) {
+      try {
+        const raw = localStorage.getItem(`achour_channel_orders_${orderKey}`);
+        if (raw) savedOrder = JSON.parse(raw);
+      } catch (e) {}
+    }
+
+    if (!savedOrder || !Array.isArray(savedOrder) || savedOrder.length === 0) {
+      return incomingChs;
+    }
+
+    const orderMap = new Map<string, number>();
+    savedOrder.forEach((id, idx) => orderMap.set(String(id), idx));
+
+    return incomingChs.slice().sort((a, b) => {
+      const idxA = orderMap.has(String(a.stream_id))
+        ? orderMap.get(String(a.stream_id))!
+        : 999999;
+
+      const idxB = orderMap.has(String(b.stream_id))
+        ? orderMap.get(String(b.stream_id))!
+        : 999999;
+
+      return idxA - idxB;
+    });
+  }, [settings.channelOrders, mediaType, selectedCategory, effectivePlaylistId]);
           return {
             stream_id: cleanStreamId,
             name: String(ch.name || ch.title || 'Channel ' + (idx + 1)),
