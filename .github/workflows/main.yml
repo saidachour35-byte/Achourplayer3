@@ -1,3 +1,4 @@
+
 name: Build Android & Fire TV APKs (Achour Player)
 
 on:
@@ -9,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build Fire TV & Android APKs
+    name: Build Fire TV & Android Release APK
     runs-on: ubuntu-latest
 
     steps:
@@ -66,19 +67,15 @@ jobs:
             "build-tools;34.0.0" \
             "platform-tools"
 
-      - name: Build Fire TV & Android APKs with Gradle
+      - name: Build Release APK Only
         run: |
           cd android
-          mkdir -p app/src/debug/java app/src/release/java
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon
-          ./gradlew assembleRelease --stacktrace --no-daemon || true
+          ./gradlew assembleRelease --stacktrace --no-daemon
 
-      - name: Upload Fire TV & Android APKs
+      - name: Upload Release APK Only
         uses: actions/upload-artifact@v4
         with:
-          name: AchourPlayer-FireTV-APKs
-          path: |
-            android/app/build/outputs/apk/debug/*.apk
-            android/app/build/outputs/apk/release/*.apk
-          if-no-files-found: warn
+          name: AchourPlayer-Release
+          path: android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
