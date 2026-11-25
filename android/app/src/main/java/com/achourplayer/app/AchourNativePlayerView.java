@@ -1378,6 +1378,7 @@ public void onSurfacesDestroyed(IVLCVout vlcVout) {
         }
     });
 }
+            };
     private final IVLCVout.OnNewVideoLayoutListener vlcNewVideoLayoutListener =
             (vlcVout, width, height, visibleWidth, visibleHeight, sarNum, sarDen) -> {
                 int effW = visibleWidth > 0 ? visibleWidth : width;
