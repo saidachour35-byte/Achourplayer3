@@ -4790,6 +4790,24 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
           if (filtered.length > 0) rawList = filtered;
         }
   
+        const catsToUse = (passedCats && passedCats.length > 0) ? passedCats : categories;
+
+        const mapped: ParsedChannel[] = rawList.map((ch: any, idx: number) => {
+          const rawStreamId = String(ch.stream_id || ch.series_id || ch.id || `${catId}-${idx}`);
+          const cleanStreamId = rawStreamId.replace(/\.(m3u8|ts|mp4|mkv|avi|flv)$/i, '');
+          const ext = ch.container_extension || (mediaType === 'live' ? 'm3u8' : 'mp4');
+
+          let directUrl = ch.stream_url || ch.direct_source || ch.url || '';
+          if (!directUrl) {
+            if (mediaType === 'live') directUrl = `${baseStreamUrl}/live/${p.username}/${p.password}/${cleanStreamId}.${ext}`;
+            else if (mediaType === 'movie') directUrl = `${baseStreamUrl}/movie/${p.username}/${p.password}/${cleanStreamId}.${ext}`;
+            else directUrl = `${baseStreamUrl}/series/${p.username}/${p.password}/${cleanStreamId}.${ext}`;
+          }
+
+          const rawCatId = String(ch.category_id || catId || 'uncategorized');
+          const matchedCat = catsToUse.find(c => String(c.category_id) === rawCatId);
+          const rawCatName = String(ch.category_name || (matchedCat ? matchedCat.category_name : '') || '').trim();
+          const resolvedCatName = rawCatName.toLowerCase() === 'عام (general)' ? '' : rawCatName;
 
           return {
             stream_id: cleanStreamId,
@@ -4801,7 +4819,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
             container_extension: ext
           };
         });
-
+ 
         saveChannels(mapped, (mediaType === 'favorites' ? 'live' : mediaType) as 'live' | 'movie' | 'series', settings.activePlaylistId || 'default');
 
         setChannels(prev => {
