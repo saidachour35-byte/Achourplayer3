@@ -27,10 +27,10 @@ export interface ExternalLaunchResult {
 
 export const CUSTOM_PLAYER_PKG_STORAGE_KEY = 'achour_custom_player_packages_v1';
 
-// External standalone players (such as VLC App, MX Player, Nova, Just Player, Kodi, etc.)
+// External standalone players (such as MX Player, Nova, Just Player, Kodi, etc.)
 // run in separate Android activities and cannot be embedded inside AchourTV's mini-player,
 // preview window, or remote control bar. Per strict criteria, all incompatible external
-// players have been removed, leaving full embedded playback to the internal engines (ExoPlayer & LibVLC).
+// players have been removed, leaving full embedded playback to the internal ExoPlayer engine.
 export const EXTERNAL_PLAYER_PROFILES: ExternalPlayerProfile[] = [];
 
 export const DEFAULT_PLAYERS = EXTERNAL_PLAYER_PROFILES;
@@ -216,7 +216,7 @@ export interface LaunchExternalPlayerSessionOptions {
 export async function launchExternalPlayerSession(
   options: LaunchExternalPlayerSessionOptions
 ): Promise<ExternalLaunchResult> {
-  const profile = resolveExternalPlayerProfile(options?.playerName || 'VLC for Android');
+  const profile = resolveExternalPlayerProfile(options?.playerName || 'External Player');
   const streamUrl = String(options?.streamUrl || '').trim();
 
   if (!streamUrl) {

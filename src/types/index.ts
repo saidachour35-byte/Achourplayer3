@@ -127,6 +127,7 @@ export interface AppSettings {
 }
 
 export type FocusVisualStyle =
+  | 'frameless-glow'
   | 'lamp-halo'
   | 'double-neon'
   | 'spotlight-pillar'

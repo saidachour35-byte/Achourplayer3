@@ -603,7 +603,7 @@ public class AchourNativeBridge {
     ) {
         if (slotIndex < 0 || slotIndex >= multiSlotViews.length) return;
 
-        // Completely tear down any single-channel player (LibVLC or ExoPlayer) so Multi View
+        // Completely tear down any single-channel ExoPlayer instance so Multi View
         // and subsequent single-channel playback never share stale TextureView/PlayerView/decoder state.
         if (playerView != null) {
             destroyPlayerOnUiThread();
@@ -1132,7 +1132,7 @@ public class AchourNativeBridge {
             Uri streamUri = Uri.parse(streamUrl);
             String primaryMime = detectStreamMimeType(streamUrl, requestedMime);
 
-            // Free hardware ExoPlayer/LibVLC codecs & AudioFocus before switching to external Activity
+            // Free hardware ExoPlayer codecs & AudioFocus before switching to external Activity
             stopInternalPlayersForExternalLaunchSynchronously();
 
             if ("__achour_native_system__".equals(primaryPkg)) {

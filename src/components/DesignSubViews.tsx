@@ -80,7 +80,7 @@ const MemoIconPackCard = React.memo(({
     data-tv-focusable="true"
     tabIndex={0}
     onClick={() => onSelect(pack.id as IconPackId)}
-    className={`achour-perf-grid-item p-3.5 rounded-2xl border transition-colors duration-100 flex flex-col gap-2.5 cursor-pointer ${
+    className={`achour-perf-grid-item p-3.5 rounded-2xl border transition-none flex flex-col gap-2.5 cursor-pointer ${
       active
         ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow)]'
         : 'border-white/10 bg-white/[0.04] hover:border-gold/45'
@@ -129,7 +129,7 @@ const MemoFrameShapeCard = React.memo(({
     data-tv-focusable="true"
     tabIndex={0}
     onClick={() => onSelect(shape.id as FrameShapeId)}
-    className={`achour-perf-grid-item p-3 rounded-2xl border transition-colors duration-100 flex flex-col items-center gap-2 text-center cursor-pointer ${
+    className={`achour-perf-grid-item p-3 rounded-2xl border transition-none flex flex-col items-center gap-2 text-center cursor-pointer ${
       active
         ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow)]'
         : 'border-white/10 bg-white/[0.04] hover:border-gold/45'
@@ -245,7 +245,7 @@ export default function DesignSubViewContent({
 
     return (
       <div className="max-w-3xl mx-auto py-4 space-y-5">
-        <div className="p-5 sm:p-6 rounded-3xl bg-black/30 border border-white/15 backdrop-blur-sm space-y-6">
+        <div className="p-5 sm:p-6 rounded-3xl bg-black/35 border border-white/15 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-2xl bg-gold/20 text-gold border border-gold/30">
@@ -281,7 +281,7 @@ export default function DesignSubViewContent({
                 aria-label="Decrease Background Opacity by 1%"
                 onClick={() => setOpacityClamped(bgOpacity - 1)}
                 disabled={bgOpacity <= 0}
-                className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xl font-medium border border-white/15 transition-colors cursor-pointer flex items-center justify-center shrink-0"
+                className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xl font-medium border border-white/15 transition-none cursor-pointer flex items-center justify-center shrink-0"
               >
                 −
               </button>
@@ -313,7 +313,7 @@ export default function DesignSubViewContent({
                 aria-label="Increase Background Opacity by 1%"
                 onClick={() => setOpacityClamped(bgOpacity + 1)}
                 disabled={bgOpacity >= 100}
-                className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xl font-medium border border-white/15 transition-colors cursor-pointer flex items-center justify-center shrink-0"
+                className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xl font-medium border border-white/15 transition-none cursor-pointer flex items-center justify-center shrink-0"
               >
                 +
               </button>
@@ -334,7 +334,7 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => setOpacityClamped(62)}
-                className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-zinc-200 text-xs font-bold border border-white/15 flex items-center gap-1.5 cursor-pointer transition-colors"
+                className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-zinc-200 text-xs font-bold border border-white/15 flex items-center gap-1.5 cursor-pointer transition-none"
               >
                 <RotateCcw size={13} />
                 <span>{t('reset_default_62')}</span>
@@ -386,7 +386,7 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('iconDisplayMode', opt.mode)}
-                className={`p-4 rounded-2xl border transition-all flex flex-col gap-3 cursor-pointer ${
+                className={`p-4 rounded-2xl border transition-none flex flex-col gap-3 cursor-pointer ${
                   active
                     ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow)]'
                     : 'border-white/10 bg-white/[0.04] hover:border-gold/45'
@@ -542,7 +542,7 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('iconScale', sz)}
-                className={`py-3 rounded-2xl border text-sm font-sans font-medium uppercase cursor-pointer transition-colors ${
+                className={`py-3 rounded-2xl border text-sm font-sans font-medium uppercase cursor-pointer transition-none ${
                   cur === sz
                     ? 'achour-glossy-pill border-gold'
                     : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
@@ -580,7 +580,7 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('frameScale', sz)}
-                className={`py-3 rounded-2xl border text-sm font-sans font-medium uppercase cursor-pointer transition-colors ${
+                className={`py-3 rounded-2xl border text-sm font-sans font-medium uppercase cursor-pointer transition-none ${
                   cur === sz
                     ? 'achour-glossy-pill border-gold'
                     : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
@@ -623,7 +623,7 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('tileSpacing', sp.id)}
-                className={`py-3 px-2 rounded-2xl border text-xs sm:text-sm font-medium cursor-pointer transition-colors whitespace-nowrap ${
+                className={`py-3 px-2 rounded-2xl border text-xs sm:text-sm font-medium cursor-pointer transition-none whitespace-nowrap ${
                   cur === sp.id
                     ? 'achour-glossy-pill border-gold'
                     : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
@@ -680,7 +680,7 @@ export default function DesignSubViewContent({
                       dashboardHorizontalAlignment: cell.h,
                     })
                   }
-                  className={`py-3 px-2 rounded-2xl border text-xs sm:text-sm font-bold cursor-pointer transition-colors ${
+                  className={`py-3 px-2 rounded-2xl border text-xs sm:text-sm font-bold cursor-pointer transition-none ${
                     active
                       ? 'bg-gold/25 border-gold text-gold shadow-[0_0_16px_var(--theme-glow)]'
                       : 'bg-white/[0.04] border-white/10 text-zinc-300 hover:border-gold/45'
@@ -801,7 +801,7 @@ export default function DesignSubViewContent({
               customThemeColor: '#D4AF37',
             })
           }
-          className={`w-full p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 cursor-pointer ${
+          className={`w-full p-3.5 rounded-2xl border transition-none flex items-center justify-between gap-3 cursor-pointer ${
             activePalette.primary === '#D4AF37'
               ? 'border-gold bg-gold/15 shadow-[0_0_20px_var(--theme-glow)]'
               : 'border-white/15 bg-white/[0.04] hover:border-gold'
@@ -848,7 +848,7 @@ export default function DesignSubViewContent({
                     customThemeColor: null,
                   })
                 }
-                className={`achour-perf-grid-item p-2.5 rounded-xl border flex flex-col gap-1.5 cursor-pointer transition-colors duration-100 ${
+                className={`achour-perf-grid-item p-2.5 rounded-xl border flex flex-col gap-1.5 cursor-pointer transition-none ${
                   isSelected
                     ? 'border-gold bg-white/15 shadow-[0_0_14px_var(--theme-glow)]'
                     : 'border-white/10 bg-white/[0.04] hover:border-white/30'
@@ -1089,13 +1089,20 @@ export default function DesignSubViewContent({
   // 15. DASHBOARD TV FOCUS MODE & GLOBAL FOCUS SHAPES
   if (subView === 'design-focus-mode') {
     const mode = settings.dashboardFocusMode || 'both';
-    const focusStyle: FocusVisualStyle = settings.focusVisualStyle || 'lamp-halo';
+    const focusStyle: FocusVisualStyle = settings.focusVisualStyle || 'frameless-glow';
     const shapeOptions: Array<{
       id: FocusVisualStyle;
       title: string;
       desc: string;
       previewClass: string;
     }> = [
+      {
+        id: 'frameless-glow',
+        title: t('focus_style_frameless_glow_title'),
+        desc: t('focus_style_frameless_glow_desc'),
+        previewClass:
+          'rounded-full border-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.92)_0%,rgba(var(--theme-rgb),0.72)_45%,transparent_78%)]',
+      },
       {
         id: 'lamp-halo',
         title: t('focus_style_lamp_halo_title'),
@@ -1192,7 +1199,7 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('dashboardFocusMode', opt.id)}
-                className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
+                className={`p-4 rounded-2xl border transition-none cursor-pointer flex flex-col gap-1.5 ${
                   isRtl ? 'text-right' : 'text-left'
                 } ${
                   active
@@ -1239,7 +1246,7 @@ export default function DesignSubViewContent({
                   data-tv-focusable="true"
                   tabIndex={0}
                   onClick={() => updateField('focusVisualStyle', opt.id)}
-                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3 ${
+                  className={`p-3.5 rounded-2xl border transition-none cursor-pointer flex items-center gap-3 ${
                     isRtl ? 'text-right' : 'text-left'
                   } ${
                     active
@@ -1329,7 +1336,7 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('dashboardLabelColorMode', opt.id)}
-                className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 text-center ${
+                className={`p-3.5 rounded-2xl border transition-none cursor-pointer flex flex-col items-center justify-center gap-1.5 text-center ${
                   active
                     ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow,rgba(212,175,55,0.4))]'
                     : 'border-white/10 bg-white/[0.03] hover:border-white/30'
@@ -1465,7 +1472,7 @@ export default function DesignSubViewContent({
             tabIndex={0}
             onClick={resetAllWindowSizes}
             disabled={!hasAnyCustom}
-            className={`px-3.5 py-2 rounded-xl text-xs font-medium flex items-center gap-1.5 cursor-pointer transition-colors ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-medium flex items-center gap-1.5 cursor-pointer transition-none ${
               hasAnyCustom
                 ? 'achour-glossy-pill hover:brightness-110'
                 : 'bg-white/10 text-zinc-400 opacity-60 cursor-default'

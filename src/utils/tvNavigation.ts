@@ -81,7 +81,9 @@ export function isTVOrLowEndDevice(): boolean {
   }
 
   const isLargeNativeTvScreen =
-    isNativeCapacitorApp() && Math.max(window.innerWidth, window.innerHeight) >= 960 && !hasCoarseTouch;
+    isNativeCapacitorApp() &&
+    Math.max(window.innerWidth, window.innerHeight) >= 960 &&
+    (!hasCoarseTouch || (/Android/i.test(ua) && Math.min(window.innerWidth, window.innerHeight) >= 520));
 
   cachedLowEndTV = isFireOrAndroidTV || isLowSpecAndroid || isLargeNativeTvScreen || reducedMotion;
   return cachedLowEndTV;
@@ -370,58 +372,65 @@ export function setTVFocus(
   }
 
   // Read layout metrics & compute scroll delta BEFORE mutating attributes/focus to avoid forced synchronous reflow
-  let pendingScrollTarget: HTMLElement | null = null;
-  let nextScrollTop: number | null = null;
-  let nextScrollLeft: number | null = null;
+  let scrollPlan: { container: HTMLElement; top: number | null; left: number | null } | null = null;
 
   if (options.scroll !== false) {
     try {
-      let p = target.parentElement;
-      while (p && p !== document.body && p !== document.documentElement) {
-        if (
-          !p.classList.contains('achour-app-shell') &&
-          !p.hasAttribute('data-live-root')
-        ) {
-          const hasOverflowY = p.scrollHeight > p.clientHeight + 2;
-          const hasOverflowX = p.scrollWidth > p.clientWidth + 2;
-          if (hasOverflowY || hasOverflowX) {
-            const isExplicitContainer = p.hasAttribute('data-tv-scroll-container');
-            let canScrollY = hasOverflowY && isExplicitContainer;
-            let canScrollX = hasOverflowX && isExplicitContainer;
-            if (!isExplicitContainer) {
-              const cs = window.getComputedStyle(p);
-              canScrollY = hasOverflowY && (cs.overflowY === 'auto' || cs.overflowY === 'scroll');
-              canScrollX = hasOverflowX && (cs.overflowX === 'auto' || cs.overflowX === 'scroll');
-            }
-            if (canScrollY || canScrollX) {
-              const pRect = p.getBoundingClientRect();
-              const tRect = target.getBoundingClientRect();
-              if (canScrollY && pRect.height > 0) {
-                const scaleY = p.clientHeight / pRect.height;
-                const topRel = (tRect.top - pRect.top) * scaleY;
-                const botRel = (tRect.bottom - pRect.top) * scaleY;
-                if (topRel < 8) {
-                  nextScrollTop = Math.max(0, p.scrollTop + topRel - 8);
-                } else if (botRel + 8 > p.clientHeight) {
-                  nextScrollTop = Math.max(0, p.scrollTop + botRel + 8 - p.clientHeight);
-                }
-              }
-              if (canScrollX && pRect.width > 0) {
-                const scaleX = p.clientWidth / pRect.width;
-                const leftRel = (tRect.left - pRect.left) * scaleX;
-                const rightRel = (tRect.right - pRect.left) * scaleX;
-                if (leftRel < 8) {
-                  nextScrollLeft = Math.max(0, p.scrollLeft + leftRel - 8);
-                } else if (rightRel + 8 > p.clientWidth) {
-                  nextScrollLeft = Math.max(0, p.scrollLeft + rightRel + 8 - p.clientWidth);
-                }
-              }
-              pendingScrollTarget = p;
-              break;
-            }
+      const explicitContainer = target.closest<HTMLElement>('[data-tv-scroll-container="true"]');
+      const computeContainerScroll = (p: HTMLElement) => {
+        const hasOverflowY = p.scrollHeight > p.clientHeight + 2;
+        const hasOverflowX = p.scrollWidth > p.clientWidth + 2;
+        if (!hasOverflowY && !hasOverflowX) return null;
+        const pRect = p.getBoundingClientRect();
+        const tRect = target.getBoundingClientRect();
+        let top: number | null = null;
+        let left: number | null = null;
+        if (hasOverflowY && pRect.height > 0) {
+          const scaleY = p.clientHeight / pRect.height;
+          const topRel = (tRect.top - pRect.top) * scaleY;
+          const botRel = (tRect.bottom - pRect.top) * scaleY;
+          if (topRel < 8) {
+            top = Math.max(0, p.scrollTop + topRel - 8);
+          } else if (botRel + 8 > p.clientHeight) {
+            top = Math.max(0, p.scrollTop + botRel + 8 - p.clientHeight);
           }
         }
-        p = p.parentElement;
+        if (hasOverflowX && pRect.width > 0) {
+          const scaleX = p.clientWidth / pRect.width;
+          const leftRel = (tRect.left - pRect.left) * scaleX;
+          const rightRel = (tRect.right - pRect.left) * scaleX;
+          if (leftRel < 8) {
+            left = Math.max(0, p.scrollLeft + leftRel - 8);
+          } else if (rightRel + 8 > p.clientWidth) {
+            left = Math.max(0, p.scrollLeft + rightRel + 8 - p.clientWidth);
+          }
+        }
+        return { container: p, top, left };
+      };
+
+      if (explicitContainer) {
+        scrollPlan = computeContainerScroll(explicitContainer);
+      } else {
+        let p = target.parentElement;
+        while (p && p !== document.body && p !== document.documentElement) {
+          if (
+            !p.classList.contains('achour-app-shell') &&
+            !p.hasAttribute('data-live-root')
+          ) {
+            const hasOverflowY = p.scrollHeight > p.clientHeight + 2;
+            const hasOverflowX = p.scrollWidth > p.clientWidth + 2;
+            if (hasOverflowY || hasOverflowX) {
+              const cs = window.getComputedStyle(p);
+              const canScrollY = hasOverflowY && (cs.overflowY === 'auto' || cs.overflowY === 'scroll');
+              const canScrollX = hasOverflowX && (cs.overflowX === 'auto' || cs.overflowX === 'scroll');
+              if (canScrollY || canScrollX) {
+                scrollPlan = computeContainerScroll(p);
+                break;
+              }
+            }
+          }
+          p = p.parentElement;
+        }
       }
     } catch {
       // ignore older WebView scroll errors
@@ -444,12 +453,12 @@ export function setTVFocus(
       if (document.documentElement.scrollTop !== 0) document.documentElement.scrollTop = 0;
       if (document.body.scrollTop !== 0) document.body.scrollTop = 0;
       if (window.scrollY !== 0 || window.scrollX !== 0) window.scrollTo(0, 0);
-      if (pendingScrollTarget) {
-        if (nextScrollTop !== null && pendingScrollTarget.scrollTop !== nextScrollTop) {
-          pendingScrollTarget.scrollTop = nextScrollTop;
+      if (scrollPlan) {
+        if (scrollPlan.top !== null && scrollPlan.container.scrollTop !== scrollPlan.top) {
+          scrollPlan.container.scrollTop = scrollPlan.top;
         }
-        if (nextScrollLeft !== null && pendingScrollTarget.scrollLeft !== nextScrollLeft) {
-          pendingScrollTarget.scrollLeft = nextScrollLeft;
+        if (scrollPlan.left !== null && scrollPlan.container.scrollLeft !== scrollPlan.left) {
+          scrollPlan.container.scrollLeft = scrollPlan.left;
         }
       }
     } catch {
@@ -643,7 +652,7 @@ export function navigateSpatial(
   customCurrent?: HTMLElement | null
 ): boolean {
   const now = Date.now();
-  const minInterval = isTVOrLowEndDevice() ? 35 : 20;
+  const minInterval = isTVOrLowEndDevice() ? 22 : 16;
   if (now - lastNavTime < minInterval) {
     return true;
   }

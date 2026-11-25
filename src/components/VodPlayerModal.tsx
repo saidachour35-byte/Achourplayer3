@@ -510,11 +510,6 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
   const rawActiveStreamUrl = activeVod.url || activeVod.stream_url || currentEpisode?.stream_url || currentEpisode?.url || currentEpisode?.direct_source || streamUrl;
 
   const isNativeActive = isNativeApp() && typeof window !== 'undefined' && !!(window as any).AchourNative;
-  const selectedPlayerName = String(settings?.selectedPlayer || '');
-  const resolvedNativeEngine: 'libvlc' | 'exoplayer' =
-    !settings?.useExternalPlayer && /libvlc|vlc/i.test(selectedPlayerName)
-      ? 'libvlc'
-      : 'exoplayer';
 
   const liveBarLogoUrl = String(activeVod.stream_icon || activeVod.logo || activeVod.cover || '').trim();
   const vodBarPosterUrl = String(activeVod.stream_icon || activeVod.cover || activeVod.logo || '').trim();
@@ -907,7 +902,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
           JSON.stringify({
             title: displayTitle,
             isLive,
-            engine: resolvedNativeEngine,
+            engine: 'exoplayer',
             autoPlay: !shouldHoldForPrompt,
             startPositionMs: startPositionSec > 0 ? Math.round(startPositionSec * 1000) : 0,
             subtitles: !isLive && externalSubtitles.length > 0 ? externalSubtitles : undefined,
@@ -1385,7 +1380,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
         }
       };
     }
-  }, [activeStreamUrl, resolvedEpisodeIndex, vodId, isLive, resolvedNativeEngine]);
+  }, [activeStreamUrl, resolvedEpisodeIndex, vodId, isLive]);
 
   // Forward subtitle style customization to native Android Media3 player when active
   useEffect(() => {

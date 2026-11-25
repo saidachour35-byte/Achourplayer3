@@ -71,7 +71,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   liveBarSize: 'default',
   seekStep: 10,
   dashboardFocusMode: 'both',
-  focusVisualStyle: 'lamp-halo',
+  focusVisualStyle: 'frameless-glow',
   dashboardLabelColorMode: 'theme',
   dashboardLabelCustomColor: null,
 };
@@ -155,9 +155,30 @@ export default function App() {
           migratedFocusMode = 'both';
         }
       }
+      let migratedFocusVisualStyle = parsed.focusVisualStyle || DEFAULT_SETTINGS.focusVisualStyle;
+      if (!localStorage.getItem('achour_focus_frameless_v1')) {
+        localStorage.setItem('achour_focus_frameless_v1', 'true');
+        if (!parsed.focusVisualStyle || parsed.focusVisualStyle === 'lamp-halo') {
+          migratedFocusVisualStyle = 'frameless-glow';
+        }
+      }
+      const rawSelectedPlayer = String(parsed.selectedPlayer || DEFAULT_SETTINGS.selectedPlayer);
+      const isLegacyLibVlcSelected = /libvlc/i.test(rawSelectedPlayer);
+      const migratedSelectedPlayer = isLegacyLibVlcSelected ? 'ExoPlayer' : rawSelectedPlayer;
+      const migratedUseExternalPlayer = isLegacyLibVlcSelected ? false : parsed.useExternalPlayer;
+      const migratedExternalPlayers = Array.isArray(parsed.externalPlayers)
+        ? parsed.externalPlayers.filter((p: string) => !/libvlc/i.test(String(p || '')))
+        : DEFAULT_SETTINGS.externalPlayers;
+      const migratedInstalledPlayers = Array.isArray(parsed.installedPlayers)
+        ? parsed.installedPlayers.filter((p: string) => !/libvlc/i.test(String(p || '')))
+        : DEFAULT_SETTINGS.installedPlayers;
       return {
         ...DEFAULT_SETTINGS,
         ...parsed,
+        selectedPlayer: migratedSelectedPlayer,
+        useExternalPlayer: migratedUseExternalPlayer ?? DEFAULT_SETTINGS.useExternalPlayer,
+        externalPlayers: migratedExternalPlayers,
+        installedPlayers: migratedInstalledPlayers,
         iconDisplayMode: migratedDisplayMode,
         iconPack: resolvedDesign.iconPack,
         frameShape: resolvedDesign.frameShape,
@@ -165,6 +186,7 @@ export default function App() {
         glassBlur: resolvedDesign.glassBlur,
         dashboardAlignment: migratedAlignment,
         dashboardFocusMode: migratedFocusMode,
+        focusVisualStyle: migratedFocusVisualStyle,
         viewMode: resolvedViewMode,
         language: lang || 'en',
         backgroundStyle: bgValid ? parsed.backgroundStyle : DEFAULT_SETTINGS.backgroundStyle,
@@ -363,7 +385,7 @@ export default function App() {
       settings.glassBlur
     );
 
-    const nextFocusShape = settings.focusVisualStyle || 'lamp-halo';
+    const nextFocusShape = settings.focusVisualStyle || 'frameless-glow';
     if (document.documentElement.getAttribute('data-focus-shape') !== nextFocusShape) {
       document.documentElement.setAttribute('data-focus-shape', nextFocusShape);
     }

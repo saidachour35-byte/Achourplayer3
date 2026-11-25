@@ -83,7 +83,7 @@ export default function DashboardDesignStudio({
       glassOpacity: typeof src.glassOpacity === 'number' ? src.glassOpacity : 16,
       glassBlur: typeof src.glassBlur === 'number' ? src.glassBlur : 10,
       dashboardFocusMode: src.dashboardFocusMode || 'both',
-      focusVisualStyle: src.focusVisualStyle || 'lamp-halo',
+      focusVisualStyle: src.focusVisualStyle || 'frameless-glow',
       dashboardLabelColorMode: src.dashboardLabelColorMode || 'theme',
       dashboardLabelCustomColor: src.dashboardLabelCustomColor ?? null,
     };
@@ -207,7 +207,7 @@ export default function DashboardDesignStudio({
       glassOpacity: 16,
       glassBlur: 10,
       dashboardFocusMode: 'both',
-      focusVisualStyle: 'lamp-halo',
+      focusVisualStyle: 'frameless-glow',
       dashboardLabelColorMode: 'theme',
       dashboardLabelCustomColor: null,
     }));
@@ -280,7 +280,7 @@ export default function DashboardDesignStudio({
             data-tv-focusable="true"
             tabIndex={0}
             onClick={handleCancelDiscard}
-            className="p-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-white transition-colors cursor-pointer shrink-0"
+            className="p-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-white transition-none cursor-pointer shrink-0"
             title={isRtl ? 'رجوع' : 'Back'}
           >
             <ChevronLeft size={18} className={isRtl ? 'rotate-180' : ''} />
@@ -304,7 +304,7 @@ export default function DashboardDesignStudio({
             data-tv-focusable="true"
             tabIndex={0}
             onClick={handleResetDefaults}
-            className="px-3 py-2 rounded-xl bg-white/[0.06] hover:bg-white/15 border border-white/15 text-zinc-200 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+            className="px-3 py-2 rounded-xl bg-white/[0.06] hover:bg-white/15 border border-white/15 text-zinc-200 text-xs font-bold flex items-center gap-1.5 transition-none cursor-pointer whitespace-nowrap"
           >
             <RotateCcw size={14} />
             <span>{isRtl ? 'افتراضي' : 'Reset'}</span>
@@ -315,7 +315,7 @@ export default function DashboardDesignStudio({
             data-tv-focusable="true"
             tabIndex={0}
             onClick={handleCancelDiscard}
-            className="px-3 py-2 rounded-xl bg-white/[0.06] hover:bg-red-500/20 border border-white/15 hover:border-red-400/50 text-zinc-200 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+            className="px-3 py-2 rounded-xl bg-white/[0.06] hover:bg-red-500/20 border border-white/15 hover:border-red-400/50 text-zinc-200 text-xs font-bold flex items-center gap-1.5 transition-none cursor-pointer whitespace-nowrap"
           >
             <X size={14} />
             <span>{isRtl ? 'إلغاء' : 'Cancel'}</span>
@@ -326,7 +326,7 @@ export default function DashboardDesignStudio({
             data-tv-focusable="true"
             tabIndex={0}
             onClick={handleApplyConfirm}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-1.5 hover:brightness-110 transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-1.5 hover:brightness-110 transition-none cursor-pointer whitespace-nowrap ${
               justApplied
                 ? 'bg-emerald-500 text-black'
                 : 'achour-glossy-pill'
@@ -489,7 +489,7 @@ export default function DashboardDesignStudio({
                   data-tv-focusable="true"
                   tabIndex={0}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                  className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition-none cursor-pointer shrink-0 whitespace-nowrap ${
                     isActive
                       ? 'achour-glossy-surface border-gold text-gold shadow-[0_0_12px_var(--theme-glow)]'
                       : 'bg-white/[0.04] border-white/10 text-zinc-300 hover:border-gold/40 hover:text-white'
@@ -551,7 +551,7 @@ export default function DashboardDesignStudio({
                         data-tv-focusable="true"
                         tabIndex={0}
                         onClick={() => updateDraft('iconDisplayMode', opt.mode)}
-                        className={`p-4 rounded-2xl border transition-all flex flex-col gap-3 cursor-pointer ${
+                        className={`p-4 rounded-2xl border transition-none flex flex-col gap-3 cursor-pointer ${
                           active
                             ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow)]'
                             : 'border-white/10 bg-white/[0.04] hover:border-gold/45'
@@ -629,7 +629,7 @@ export default function DashboardDesignStudio({
                         data-tv-focusable="true"
                         tabIndex={0}
                         onClick={() => updateDraft('iconPack', pack.id as IconPackId)}
-                        className={`achour-perf-grid-item p-3.5 rounded-2xl border transition-colors duration-100 flex flex-col gap-2.5 cursor-pointer ${
+                        className={`achour-perf-grid-item p-3.5 rounded-2xl border transition-none flex flex-col gap-2.5 cursor-pointer ${
                           active
                             ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow)]'
                             : 'border-white/10 bg-white/[0.04] hover:border-gold/45'
@@ -715,7 +715,7 @@ export default function DashboardDesignStudio({
                             iconDisplayMode: 'with-frames',
                           }));
                         }}
-                        className={`achour-perf-grid-item p-3 rounded-2xl border transition-colors duration-100 flex flex-col items-center gap-2 text-center cursor-pointer ${
+                        className={`achour-perf-grid-item p-3 rounded-2xl border transition-none flex flex-col items-center gap-2 text-center cursor-pointer ${
                           active
                             ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow)]'
                             : 'border-white/10 bg-white/[0.04] hover:border-gold/45'
@@ -776,7 +776,7 @@ export default function DashboardDesignStudio({
                         data-tv-focusable="true"
                         tabIndex={0}
                         onClick={() => updateDraft('iconScale', sz)}
-                        className={`py-2 rounded-xl border text-xs font-sans font-medium uppercase cursor-pointer transition-colors ${
+                        className={`py-2 rounded-xl border text-xs font-sans font-medium uppercase cursor-pointer transition-none ${
                           (draft.iconScale || 'md') === sz
                             ? 'achour-glossy-pill border-gold'
                             : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
@@ -806,7 +806,7 @@ export default function DashboardDesignStudio({
                         data-tv-focusable="true"
                         tabIndex={0}
                         onClick={() => updateDraft('frameScale', sz)}
-                        className={`py-2 rounded-xl border text-xs font-sans font-medium uppercase cursor-pointer transition-colors ${
+                        className={`py-2 rounded-xl border text-xs font-sans font-medium uppercase cursor-pointer transition-none ${
                           (draft.frameScale || 'md') === sz
                             ? 'achour-glossy-pill border-gold'
                             : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
@@ -844,7 +844,7 @@ export default function DashboardDesignStudio({
                         data-tv-focusable="true"
                         tabIndex={0}
                         onClick={() => updateDraft('tileSpacing', sp.id)}
-                        className={`py-2 px-1 rounded-xl border text-[11px] font-medium cursor-pointer transition-colors whitespace-nowrap ${
+                        className={`py-2 px-1 rounded-xl border text-[11px] font-medium cursor-pointer transition-none whitespace-nowrap ${
                           (draft.tileSpacing || 'md') === sp.id
                             ? 'bg-gold text-black border-gold'
                             : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
@@ -892,7 +892,7 @@ export default function DashboardDesignStudio({
                               dashboardHorizontalAlignment: cell.h,
                             }));
                           }}
-                          className={`py-1.5 px-2 rounded-xl border text-[11px] font-medium cursor-pointer transition-colors ${
+                          className={`py-1.5 px-2 rounded-xl border text-[11px] font-medium cursor-pointer transition-none ${
                             active
                               ? 'bg-gold/25 border-gold text-gold'
                               : 'bg-white/[0.04] border-white/10 text-zinc-300 hover:border-gold/45'
@@ -976,7 +976,7 @@ export default function DashboardDesignStudio({
                       customThemeColor: '#D4AF37',
                     }));
                   }}
-                  className={`w-full p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 cursor-pointer ${
+                  className={`w-full p-3.5 rounded-2xl border transition-none flex items-center justify-between gap-3 cursor-pointer ${
                     activePalette.primary === '#D4AF37'
                       ? 'border-gold bg-gold/15 shadow-[0_0_20px_var(--theme-glow)]'
                       : 'border-white/15 bg-white/[0.04] hover:border-gold'
@@ -1091,7 +1091,7 @@ export default function DashboardDesignStudio({
                             customThemeColor: null,
                           }));
                         }}
-                        className={`p-2.5 rounded-xl border flex flex-col gap-1.5 cursor-pointer transition-colors ${
+                        className={`p-2.5 rounded-xl border flex flex-col gap-1.5 cursor-pointer transition-none ${
                           isSelected
                             ? 'border-gold bg-white/15'
                             : 'border-white/10 bg-white/[0.04] hover:border-white/30'
@@ -1139,7 +1139,7 @@ export default function DashboardDesignStudio({
                       type="button"
                       data-tv-focusable="true"
                       onClick={() => updateDraft('dashboardFocusMode', 'frame')}
-                      className={`p-3 rounded-2xl border text-right transition-all cursor-pointer flex flex-col gap-1.5 ${
+                      className={`p-3 rounded-2xl border text-right transition-none cursor-pointer flex flex-col gap-1.5 ${
                         draft.dashboardFocusMode === 'frame'
                           ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
                           : 'border-white/10 bg-white/[0.03] hover:border-white/30'
@@ -1165,7 +1165,7 @@ export default function DashboardDesignStudio({
                       type="button"
                       data-tv-focusable="true"
                       onClick={() => updateDraft('dashboardFocusMode', 'label')}
-                      className={`p-3 rounded-2xl border text-right transition-all cursor-pointer flex flex-col gap-1.5 ${
+                      className={`p-3 rounded-2xl border text-right transition-none cursor-pointer flex flex-col gap-1.5 ${
                         draft.dashboardFocusMode === 'label'
                           ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
                           : 'border-white/10 bg-white/[0.03] hover:border-white/30'
@@ -1191,7 +1191,7 @@ export default function DashboardDesignStudio({
                       type="button"
                       data-tv-focusable="true"
                       onClick={() => updateDraft('dashboardFocusMode', 'both')}
-                      className={`p-3 rounded-2xl border text-right transition-all cursor-pointer flex flex-col gap-1.5 ${
+                      className={`p-3 rounded-2xl border text-right transition-none cursor-pointer flex flex-col gap-1.5 ${
                         (draft.dashboardFocusMode || 'both') === 'both'
                           ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
                           : 'border-white/10 bg-white/[0.03] hover:border-white/30'
@@ -1217,7 +1217,7 @@ export default function DashboardDesignStudio({
                       type="button"
                       data-tv-focusable="true"
                       onClick={() => updateDraft('dashboardFocusMode', 'icon')}
-                      className={`p-3 rounded-2xl border text-right transition-all cursor-pointer flex flex-col gap-1.5 ${
+                      className={`p-3 rounded-2xl border text-right transition-none cursor-pointer flex flex-col gap-1.5 ${
                         draft.dashboardFocusMode === 'icon'
                           ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
                           : 'border-white/10 bg-white/[0.03] hover:border-white/30'
@@ -1253,6 +1253,13 @@ export default function DashboardDesignStudio({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3">
                     {(
                       [
+                        {
+                          id: 'frameless-glow' as FocusVisualStyle,
+                          title: t('focus_style_frameless_glow_title'),
+                          desc: t('focus_style_frameless_glow_desc'),
+                          swatch:
+                            'rounded-full border-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.92)_0%,rgba(var(--theme-rgb),0.72)_45%,transparent_78%)]',
+                        },
                         {
                           id: 'lamp-halo' as FocusVisualStyle,
                           title: t('focus_style_lamp_halo_title'),
@@ -1304,14 +1311,14 @@ export default function DashboardDesignStudio({
                         },
                       ] as const
                     ).map((opt) => {
-                      const active = (draft.focusVisualStyle || 'lamp-halo') === opt.id;
+                      const active = (draft.focusVisualStyle || 'frameless-glow') === opt.id;
                       return (
                         <button
                           key={opt.id}
                           type="button"
                           data-tv-focusable="true"
                           onClick={() => updateDraft('focusVisualStyle', opt.id)}
-                          className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center gap-2.5 ${
+                          className={`p-3 rounded-2xl border transition-none cursor-pointer flex items-center gap-2.5 ${
                             isRtl ? 'text-right' : 'text-left'
                           } ${
                             active
@@ -1357,7 +1364,7 @@ export default function DashboardDesignStudio({
                       type="button"
                       data-tv-focusable="true"
                       onClick={() => updateDraft('dashboardLabelColorMode', 'theme')}
-                      className={`p-3 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 text-center ${
+                      className={`p-3 rounded-2xl border transition-none cursor-pointer flex flex-col items-center justify-center gap-1.5 text-center ${
                         (draft.dashboardLabelColorMode || 'theme') === 'theme'
                           ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow,rgba(212,175,55,0.4))]'
                           : 'border-white/10 bg-white/[0.03] hover:border-white/30'
@@ -1373,7 +1380,7 @@ export default function DashboardDesignStudio({
                       type="button"
                       data-tv-focusable="true"
                       onClick={() => updateDraft('dashboardLabelColorMode', 'white')}
-                      className={`p-3 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 text-center ${
+                      className={`p-3 rounded-2xl border transition-none cursor-pointer flex flex-col items-center justify-center gap-1.5 text-center ${
                         draft.dashboardLabelColorMode === 'white'
                           ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow,rgba(212,175,55,0.4))]'
                           : 'border-white/10 bg-white/[0.03] hover:border-white/30'
@@ -1389,7 +1396,7 @@ export default function DashboardDesignStudio({
                       type="button"
                       data-tv-focusable="true"
                       onClick={() => updateDraft('dashboardLabelColorMode', 'gold')}
-                      className={`p-3 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 text-center ${
+                      className={`p-3 rounded-2xl border transition-none cursor-pointer flex flex-col items-center justify-center gap-1.5 text-center ${
                         draft.dashboardLabelColorMode === 'gold'
                           ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow,rgba(212,175,55,0.4))]'
                           : 'border-white/10 bg-white/[0.03] hover:border-white/30'
@@ -1405,7 +1412,7 @@ export default function DashboardDesignStudio({
                       type="button"
                       data-tv-focusable="true"
                       onClick={() => updateDraft('dashboardLabelColorMode', 'custom')}
-                      className={`p-3 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 text-center ${
+                      className={`p-3 rounded-2xl border transition-none cursor-pointer flex flex-col items-center justify-center gap-1.5 text-center ${
                         draft.dashboardLabelColorMode === 'custom'
                           ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow,rgba(212,175,55,0.4))]'
                           : 'border-white/10 bg-white/[0.03] hover:border-white/30'

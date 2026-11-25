@@ -126,7 +126,7 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
   glassOpacity = 16,
   glassBlur = 10,
   dashboardFocusMode = 'both',
-  focusVisualStyle = 'lamp-halo',
+  focusVisualStyle = 'frameless-glow',
   dashboardLabelColorMode = 'theme',
   dashboardLabelCustomColor = null,
   reorderingKind = null,
@@ -388,13 +388,14 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
     }
 
     const useCardChrome = mode === 'card' && !isIconsOnly;
+    const effectiveFocusStyle = focusVisualStyle || 'frameless-glow';
 
     return (
       <button
         key={item.kind}
         {...commonProps}
         style={useCardChrome ? getGlassCardStyle(isHero) : undefined}
-        className={`group relative flex flex-col items-center justify-center transition-all duration-150 cursor-pointer select-none ${
+        className={`group relative flex flex-col items-center justify-center transition-transform duration-100 cursor-pointer select-none ${
           useCardChrome
             ? `rounded-2xl border shadow-[0_10px_26px_rgba(0,0,0,0.34)] hover:border-[var(--theme-primary)] ${
                 previewMode ? 'p-2 gap-1.5' : 'p-3 sm:p-4 gap-2 sm:gap-2.5'
@@ -404,7 +405,9 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
               }`
         } ${reorderRing} ${extraClass}`}
       >
-        {mode === 'open' && <span className="dashboard-focus-halo" aria-hidden="true" />}
+        {mode === 'open' && effectiveFocusStyle !== 'frameless-glow' && (
+          <span className="dashboard-focus-halo" aria-hidden="true" />
+        )}
         {mode === 'open' && <span className="dashboard-lamp-orb" aria-hidden="true" />}
 
         {isReorderingThis && (
@@ -418,17 +421,10 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
           {iconNode}
         </div>
 
-        {mode === 'open' && (
-          <div className="dashboard-focus-rings" aria-hidden="true">
-            <span className="ring-outer" />
-            <span className="ring-inner" />
-          </div>
-        )}
-
         <div className="flex flex-col items-center text-center min-w-0 max-w-full">
           <div className={mode === 'open' ? 'dashboard-pill-btn' : ''}>
             <span
-              className={`dashboard-tile-label font-medium font-sans tracking-wide transition-colors truncate max-w-full ${
+              className={`dashboard-tile-label font-medium font-sans tracking-wide truncate max-w-full ${
                 isThemeGlossyLabel
                   ? 'achour-glossy-text'
                   : '[text-shadow:0_2px_6px_rgba(0,0,0,0.85)]'
@@ -445,18 +441,6 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
             </span>
           </div>
 
-          {mode === 'open' && (
-            <div className="dashboard-floor-reflection" aria-hidden="true">
-              <span
-                className={`dashboard-floor-reflection-text font-medium font-sans tracking-wide truncate max-w-full ${
-                  previewMode ? 'text-[9px] leading-tight' : 'text-xs sm:text-sm'
-                }`}
-              >
-                {item.label}
-              </span>
-            </div>
-          )}
-
           {mode === 'card' && !previewMode && !isIconsOnly && (
             <span className="hidden sm:block text-[10px] font-normal font-sans achour-glossy-info opacity-80 truncate max-w-[140px] mt-0.5">
               {item.subtitle}
@@ -469,10 +453,10 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
 
   const containerMax = previewMode ? 'w-full' : 'w-full max-w-6xl mx-auto py-1 sm:py-2';
 
-  // Balanced Dock Row (5 columns) with cinematic 3D pedestal & floor reflections
+  // Balanced Dock Row (5 columns) with clean frameless/framed lighting
   return (
     <div
-      data-focus-shape={focusVisualStyle || 'lamp-halo'}
+      data-focus-shape={focusVisualStyle || 'frameless-glow'}
       className={`${containerMax} grid grid-cols-5 items-center justify-items-center`}
       style={{ gap: `${gapPx}px` }}
     >

@@ -3,23 +3,14 @@ package com.achourplayer.app;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.SurfaceTexture;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
-
-import org.videolan.libvlc.LibVLC;
-import org.videolan.libvlc.Media;
-import org.videolan.libvlc.MediaPlayer;
-import org.videolan.libvlc.interfaces.IMedia;
-import org.videolan.libvlc.interfaces.IVLCVout;
 
 import androidx.media3.common.AudioAttributes;
 import androidx.media3.common.C;
@@ -87,24 +78,6 @@ public class AchourNativePlayerView extends FrameLayout {
     private PlayerView playerView;
     private AspectRatioFrameLayout contentFrame;
 
-    // Embedded LibVLC engine fields
-    private TextureView vlcTextureView;
-    private LibVLC libVlc;
-    private MediaPlayer vlcMediaPlayer;
-    private boolean usingLibVlc = false;
-    private boolean vlcViewsAttached = false;
-    private boolean vlcSurfaceReady = false;
-    private boolean vlcPendingPlay = false;
-    private boolean vlcForceSoftwareDecode = false;
-    private boolean vlcSwFallbackAttempted = false;
-    private boolean vlcHasVideoFrame = false;
-    private int vlcVideoWidth = 0;
-    private int vlcVideoHeight = 0;
-    private int vlcSarNum = 1;
-    private int vlcSarDen = 1;
-    private String vlcActiveUserAgent = "VLC/3.0.18 LibVLC/3.0.18";
-    private boolean vlcConfiguredForLive = false;
-
     private OkHttpDataSource.Factory persistentHttpFactory;
     private DefaultMediaSourceFactory persistentMediaSourceFactory;
     private HlsMediaSource.Factory persistentHlsFactory;
@@ -170,110 +143,10 @@ public class AchourNativePlayerView extends FrameLayout {
         return arr.toString();
     }
 
-    private final Runnable vlcVideoWatchdogRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (!usingLibVlc || vlcMediaPlayer == null || currentUrl == null || currentUrl.isEmpty()) {
-                return;
-            }
-            try {
-                if (!vlcHasVideoFrame && !vlcSwFallbackAttempted && vlcMediaPlayer.isPlaying()) {
-                    vlcSwFallbackAttempted = true;
-                    vlcForceSoftwareDecode = true;
-                    long resumePosMs = (!currentIsLive && cachedPositionMs > 1000L) ? cachedPositionMs : 0L;
-                    String optsToReplay = currentOptionsJson;
-                    if (resumePosMs > 0L) {
-                        try {
-                            JSONObject obj = new JSONObject(currentOptionsJson == null ? "{}" : currentOptionsJson);
-                            obj.put("startPositionMs", resumePosMs);
-                            optsToReplay = obj.toString();
-                        } catch (Exception ignored) {
-                        }
-                    }
-                    releaseVlcPlayer();
-                    setMediaInternal(currentUrl, optsToReplay, true);
-                }
-            } catch (Exception ignored) {
-            }
-        }
-    };
-
-    private final Runnable vlcRevealTextureRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (usingLibVlc && vlcTextureView != null && vlcTextureView.getAlpha() < 1f) {
-                vlcTextureView.setAlpha(1f);
-            }
-        }
-    };
-
-    private int vlcResRefreshAttempts = 0;
-    private final Runnable vlcResRefreshRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (usingLibVlc && vlcMediaPlayer != null) {
-                refreshVideoResolution();
-                applyVlcVideoLayout();
-                if ((cachedVideoResolution == null || cachedVideoResolution.isEmpty() || vlcVideoWidth <= 0) && vlcResRefreshAttempts < 6) {
-                    vlcResRefreshAttempts++;
-                    mainHandler.postDelayed(this, 300L);
-                }
-            }
-        }
-    };
-
-    private final Runnable vlcSurfaceFallbackPlayRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (!usingLibVlc || vlcMediaPlayer == null || !vlcPendingPlay) return;
-            if (vlcTextureView != null && vlcTextureView.isAvailable()
-                    && vlcTextureView.getWidth() > 0 && vlcTextureView.getHeight() > 0) {
-                vlcSurfaceReady = true;
-                vlcPendingPlay = false;
-                try {
-                    attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight());
-                    vlcMediaPlayer.play();
-                } catch (Exception ignored) {
-                }
-            } else if (vlcTextureView != null) {
-                mainHandler.postDelayed(this, 200L);
-            }
-        }
-    };
-
-    private void attachVlcVoutIfAvailable(int width, int height) {
-        if (vlcMediaPlayer == null || vlcTextureView == null || !vlcTextureView.isAvailable()) {
-            return;
-        }
-        int effW = width > 0 ? width : (vlcTextureView.getWidth() > 0 ? vlcTextureView.getWidth() : getWidth());
-        int effH = height > 0 ? height : (vlcTextureView.getHeight() > 0 ? vlcTextureView.getHeight() : getHeight());
-        try {
-            IVLCVout vout = vlcMediaPlayer.getVLCVout();
-            if (!vlcViewsAttached) {
-                vout.setVideoView(vlcTextureView);
-                vout.addCallback(vlcVoutCallback);
-                if (effW > 0 && effH > 0) {
-                    vout.setWindowSize(effW, effH);
-                }
-                vout.attachViews(vlcNewVideoLayoutListener);
-                vlcViewsAttached = true;
-            } else if (effW > 0 && effH > 0) {
-                vout.setWindowSize(effW, effH);
-            }
-        } catch (Exception ignored) {
-        }
-    }
-
     private final Runnable retryRunnable = new Runnable() {
         @Override
         public void run() {
             if (retryTargetGeneration != playbackGeneration) {
-                return;
-            }
-            if (usingLibVlc) {
-                if (currentUrl != null && !currentUrl.isEmpty()) {
-                    setMediaInternal(currentUrl, currentOptionsJson, true);
-                }
                 return;
             }
             if (isMultiSlot && currentUrl != null && !currentUrl.isEmpty() && retryCount >= 2) {
@@ -413,13 +286,6 @@ public class AchourNativePlayerView extends FrameLayout {
     private final Runnable positionTicker = new Runnable() {
         @Override
         public void run() {
-            if (usingLibVlc) {
-                if (vlcMediaPlayer != null && !currentIsLive && vlcMediaPlayer.isPlaying()) {
-                    refreshPositionSnapshot();
-                    mainHandler.postDelayed(this, 250);
-                }
-                return;
-            }
             if (player != null && !currentIsLive && player.isPlaying()) {
                 refreshPositionSnapshot();
                 mainHandler.postDelayed(this, 250);
@@ -430,7 +296,7 @@ public class AchourNativePlayerView extends FrameLayout {
     private final Runnable liveDiagTicker = new Runnable() {
         @Override
         public void run() {
-            if (player != null && currentIsLive && !isMultiSlot && !usingLibVlc) {
+            if (player != null && currentIsLive && !isMultiSlot) {
                 long bufferedAheadMs = Math.max(0L, player.getBufferedPosition() - player.getCurrentPosition());
                 long totalBufMs = Math.max(0L, player.getTotalBufferedDuration());
                 long liveOffsetMs = player.getCurrentLiveOffset();
@@ -453,7 +319,7 @@ public class AchourNativePlayerView extends FrameLayout {
 
     private void startLiveDiagTicker() {
         mainHandler.removeCallbacks(liveDiagTicker);
-        if (player != null && currentIsLive && !isMultiSlot && !usingLibVlc) {
+        if (player != null && currentIsLive && !isMultiSlot) {
             mainHandler.postDelayed(liveDiagTicker, 5000);
         }
     }
@@ -464,12 +330,6 @@ public class AchourNativePlayerView extends FrameLayout {
 
     private void startPositionTicker() {
         mainHandler.removeCallbacks(positionTicker);
-        if (usingLibVlc) {
-            if (vlcMediaPlayer != null && !currentIsLive && vlcMediaPlayer.isPlaying()) {
-                mainHandler.postDelayed(positionTicker, 250);
-            }
-            return;
-        }
         if (player != null && !currentIsLive && player.isPlaying()) {
             mainHandler.postDelayed(positionTicker, 250);
         }
@@ -657,106 +517,6 @@ public class AchourNativePlayerView extends FrameLayout {
                         LayoutParams.MATCH_PARENT
                 )
         );
-
-        // Allow vlcTextureView for multiSlot as well when libvlc is requested globally
-        vlcTextureView = new TextureView(context);
-        vlcTextureView.setFocusable(false);
-        vlcTextureView.setFocusableInTouchMode(false);
-        vlcTextureView.setKeepScreenOn(true);
-        vlcTextureView.setVisibility(View.GONE);
-            vlcTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-                @Override
-                public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                    vlcSurfaceReady = true;
-                    if (usingLibVlc && vlcMediaPlayer != null) {
-                        attachVlcVoutIfAvailable(width, height);
-                        applyVlcVideoLayout();
-                        if (vlcPendingPlay) {
-                            vlcPendingPlay = false;
-                            mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-                            try {
-                                vlcMediaPlayer.play();
-                            } catch (Exception ignored) {
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                    if (usingLibVlc && vlcMediaPlayer != null && vlcViewsAttached && width > 0 && height > 0) {
-                        try {
-                            vlcMediaPlayer.getVLCVout().setWindowSize(width, height);
-                        } catch (Exception ignored) {
-                        }
-                        applyVlcVideoLayout();
-                    }
-                }
-
-                @Override
-                public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                    vlcSurfaceReady = false;
-                    if (vlcMediaPlayer != null && vlcViewsAttached) {
-                        try {
-                            IVLCVout vout = vlcMediaPlayer.getVLCVout();
-                            vout.removeCallback(vlcVoutCallback);
-                            vout.detachViews();
-                        } catch (Exception ignored) {
-                        }
-                        vlcViewsAttached = false;
-                    }
-                    return true;
-                }
-
-                @Override
-                public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-                    if (usingLibVlc && vlcTextureView != null && vlcTextureView.getAlpha() < 1f && vlcHasVideoFrame) {
-                        vlcTextureView.setAlpha(1f);
-                    }
-                }
-            });
-            vlcTextureView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                if (!usingLibVlc) return;
-                int newW = right - left;
-                int newH = bottom - top;
-                int oldW = oldRight - oldLeft;
-                int oldH = oldBottom - oldTop;
-                if (newW > 0 && newH > 0 && (newW != oldW || newH != oldH)) {
-                    if (vlcMediaPlayer != null && vlcViewsAttached) {
-                        try {
-                            vlcMediaPlayer.getVLCVout().setWindowSize(newW, newH);
-                        } catch (Exception ignored) {
-                        }
-                    }
-                    if (vlcPendingPlay && vlcMediaPlayer != null && vlcTextureView.isAvailable()) {
-                        vlcSurfaceReady = true;
-                        vlcPendingPlay = false;
-                        attachVlcVoutIfAvailable(newW, newH);
-                        try {
-                            vlcMediaPlayer.play();
-                        } catch (Exception ignored) {
-                        }
-                    }
-                }
-            });
-            addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                if (!usingLibVlc) return;
-                int newW = right - left;
-                int newH = bottom - top;
-                int oldW = oldRight - oldLeft;
-                int oldH = oldBottom - oldTop;
-                if (newW > 0 && newH > 0 && (newW != oldW || newH != oldH)) {
-                    mainHandler.post(AchourNativePlayerView.this::applyVlcVideoLayout);
-                }
-            });
-            addView(
-                    vlcTextureView,
-                    new FrameLayout.LayoutParams(
-                            LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT,
-                            Gravity.CENTER
-                    )
-            );
 
         sharedBandwidthMeter = new DefaultBandwidthMeter.Builder(context.getApplicationContext())
                 .build();
@@ -1230,19 +990,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     private void refreshPositionSnapshot() {
-        if (usingLibVlc) {
-            if (vlcMediaPlayer == null) return;
-            try {
-                long time = vlcMediaPlayer.getTime();
-                long len = vlcMediaPlayer.getLength();
-                cachedPositionMs = time > 0L ? time : 0L;
-                cachedDurationMs = len > 0L ? len : 0L;
-                cachedIsPlaying = vlcMediaPlayer.isPlaying();
-            } catch (Exception ignored) {
-            }
-            return;
-        }
-
         if (player == null) return;
 
         cachedPositionMs = Math.max(
@@ -1259,58 +1006,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     private void refreshVideoResolution() {
-        if (usingLibVlc) {
-            if (vlcMediaPlayer != null) {
-                try {
-                    IMedia.VideoTrack vTrack = vlcMediaPlayer.getCurrentVideoTrack();
-                    if (vTrack != null && vTrack.width > 0 && vTrack.height > 0) {
-                        boolean swapped = vTrack.orientation == IMedia.VideoTrack.Orientation.LeftBottom
-                                || vTrack.orientation == IMedia.VideoTrack.Orientation.RightTop;
-                        int rw = swapped ? vTrack.height : vTrack.width;
-                        int rh = swapped ? vTrack.width : vTrack.height;
-                        if (rw > 0 && rh > 0) {
-                            vlcVideoWidth = rw;
-                            vlcVideoHeight = rh;
-                            cachedVideoResolution = rw + "x" + rh;
-                            return;
-                        }
-                    }
-                } catch (Exception ignored) {
-                }
-
-                // Fallback: check Media tracks if current video track is not yet selected
-                try {
-                    org.videolan.libvlc.interfaces.IMedia m = vlcMediaPlayer.getMedia();
-                    if (m != null) {
-                        int tCount = m.getTrackCount();
-                        for (int i = 0; i < tCount; i++) {
-                            IMedia.Track t = m.getTrack(i);
-                            if (t instanceof IMedia.VideoTrack) {
-                                IMedia.VideoTrack vt = (IMedia.VideoTrack) t;
-                                if (vt.width > 0 && vt.height > 0) {
-                                    boolean swapped = vt.orientation == IMedia.VideoTrack.Orientation.LeftBottom
-                                            || vt.orientation == IMedia.VideoTrack.Orientation.RightTop;
-                                    int rw = swapped ? vt.height : vt.width;
-                                    int rh = swapped ? vt.width : vt.height;
-                                    if (rw > 0 && rh > 0) {
-                                        vlcVideoWidth = rw;
-                                        vlcVideoHeight = rh;
-                                        cachedVideoResolution = rw + "x" + rh;
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } catch (Exception ignored) {
-                }
-            }
-            if (vlcVideoWidth > 0 && vlcVideoHeight > 0) {
-                cachedVideoResolution = vlcVideoWidth + "x" + vlcVideoHeight;
-            }
-            return;
-        }
-
         if (player == null) {
             cachedVideoResolution = "";
             return;
@@ -1348,376 +1043,8 @@ public class AchourNativePlayerView extends FrameLayout {
     private void refreshTrackSnapshots() {
         if (currentIsLive) return;
 
-        cachedAudioTracksJson = usingLibVlc ? buildVlcAudioTracksJson() : buildAudioTracksJson();
-        cachedSubtitleTracksJson = usingLibVlc ? buildVlcSubtitleTracksJson() : buildSubtitleTracksJson();
-    }
-
-    private final IVLCVout.Callback vlcVoutCallback = new IVLCVout.Callback() {
-        @Override
-        public void onSurfacesCreated(IVLCVout vlcVout) {
-            mainHandler.post(() -> {
-                vlcSurfaceReady = true;
-                if (vlcTextureView != null && vlcTextureView.getWidth() > 0 && vlcTextureView.getHeight() > 0) {
-                    try {
-                        vlcVout.setWindowSize(vlcTextureView.getWidth(), vlcTextureView.getHeight());
-                    } catch (Exception ignored) {
-                    }
-                }
-                applyVlcVideoLayout();
-                if (usingLibVlc && vlcPendingPlay && vlcMediaPlayer != null) {
-                    vlcPendingPlay = false;
-                    try {
-                        vlcMediaPlayer.play();
-                    } catch (Exception ignored) {
-                    }
-                }
-            });
-        }
-
-        @Override
-        public void onSurfacesDestroyed(IVLCVout vlcVout) {
-            mainHandler.post(() -> vlcSurfaceReady = false);
-        }
-    };
-
-    private final IVLCVout.OnNewVideoLayoutListener vlcNewVideoLayoutListener =
-            (vlcVout, width, height, visibleWidth, visibleHeight, sarNum, sarDen) -> {
-                int effW = visibleWidth > 0 ? visibleWidth : width;
-                int effH = visibleHeight > 0 ? visibleHeight : height;
-                mainHandler.post(() -> {
-                    if (effW > 0 && effH > 0) {
-                        vlcVideoWidth = effW;
-                        vlcVideoHeight = effH;
-                        vlcSarNum = sarNum > 0 ? sarNum : 1;
-                        vlcSarDen = sarDen > 0 ? sarDen : 1;
-                        vlcHasVideoFrame = true;
-                        mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
-                        mainHandler.removeCallbacks(vlcRevealTextureRunnable);
-                        if (vlcTextureView != null && vlcTextureView.getAlpha() < 1f) {
-                            vlcTextureView.setAlpha(1f);
-                        }
-                        cachedVideoResolution = effW + "x" + effH;
-                        applyVlcVideoLayout();
-                    }
-                });
-            };
-
-    private final MediaPlayer.EventListener vlcEventListener = event -> {
-        if (event == null) return;
-        final int eventGen = playbackGeneration;
-        mainHandler.post(() -> {
-            if (!usingLibVlc || eventGen != playbackGeneration || vlcMediaPlayer == null) {
-                return;
-            }
-            switch (event.type) {
-                case MediaPlayer.Event.Playing:
-                    cachedIsEnded = false;
-                    cachedHasError = false;
-                    cachedIsPlaying = true;
-                    retryCount = 0;
-                    applyVlcVideoLayout();
-                    refreshPositionSnapshot();
-                    refreshTrackSnapshots();
-                    refreshVideoResolution();
-                    vlcResRefreshAttempts = 0;
-                    mainHandler.removeCallbacks(vlcResRefreshRunnable);
-                    mainHandler.postDelayed(vlcResRefreshRunnable, 250L);
-                    mainHandler.removeCallbacks(vlcRevealTextureRunnable);
-                    mainHandler.postDelayed(vlcRevealTextureRunnable, 950L);
-                    if (!currentIsLive) {
-                        startPositionTicker();
-                    }
-                    if (!vlcHasVideoFrame && !vlcSwFallbackAttempted) {
-                        mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
-                        mainHandler.postDelayed(vlcVideoWatchdogRunnable, 2800L);
-                    }
-                    break;
-
-                case MediaPlayer.Event.Paused:
-                case MediaPlayer.Event.Stopped:
-                    cachedIsPlaying = false;
-                    stopPositionTicker();
-                    refreshPositionSnapshot();
-                    break;
-
-                case MediaPlayer.Event.EndReached:
-                    cachedIsEnded = true;
-                    cachedIsPlaying = false;
-                    stopPositionTicker();
-                    if (!currentIsLive && cachedDurationMs > 0L) {
-                        cachedPositionMs = cachedDurationMs;
-                    }
-                    break;
-
-                case MediaPlayer.Event.TimeChanged:
-                    if (!currentIsLive) {
-                        long t = event.getTimeChanged();
-                        if (t >= 0L) cachedPositionMs = t;
-                    }
-                    break;
-
-                case MediaPlayer.Event.LengthChanged:
-                    if (!currentIsLive) {
-                        long len = event.getLengthChanged();
-                        if (len > 0L) cachedDurationMs = len;
-                    }
-                    break;
-
-                case MediaPlayer.Event.Vout:
-                    if (event.getVoutCount() > 0) {
-                        vlcHasVideoFrame = true;
-                        mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
-                        mainHandler.removeCallbacks(vlcRevealTextureRunnable);
-                        if (vlcTextureView != null && vlcTextureView.getAlpha() < 1f) {
-                            vlcTextureView.setAlpha(1f);
-                        }
-                        refreshVideoResolution();
-                        applyVlcVideoLayout();
-                    }
-                    break;
-
-                case MediaPlayer.Event.ESAdded:
-                case MediaPlayer.Event.ESSelected:
-                    refreshTrackSnapshots();
-                    refreshVideoResolution();
-                    break;
-
-                case MediaPlayer.Event.EncounteredError:
-                    mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
-                    mainHandler.removeCallbacks(retryRunnable);
-                    if (!vlcSwFallbackAttempted) {
-                        vlcSwFallbackAttempted = true;
-                        vlcForceSoftwareDecode = true;
-                        releaseVlcPlayer();
-                        if (currentUrl != null && !currentUrl.isEmpty()) {
-                            setMediaInternal(currentUrl, currentOptionsJson, true);
-                        }
-                        return;
-                    }
-                    if (currentIsLive && !triedFallbackFormat && currentUrl != null) {
-                        String altUrl = buildAlternateStreamUrl(currentUrl);
-                        if (altUrl != null) {
-                            triedFallbackFormat = true;
-                            setMediaInternal(altUrl, currentOptionsJson, true);
-                            return;
-                        }
-                    }
-                    if (retryCount < MAX_RETRIES) {
-                        retryCount++;
-                        long delay = Math.min(3000L, 450L * retryCount);
-                        retryTargetGeneration = playbackGeneration;
-                        mainHandler.postDelayed(retryRunnable, delay);
-                    } else {
-                        cachedHasError = true;
-                        cachedIsPlaying = false;
-                    }
-                    break;
-            }
-        });
-    };
-
-    private void releaseExoPlayerOnly() {
-        if (playerView != null) {
-            playerView.setPlayer(null);
-        }
-        if (player != null) {
-            try {
-                player.stop();
-            } catch (Exception ignored) {
-            }
-            try {
-                player.release();
-            } catch (Exception ignored) {
-            }
-            player = null;
-        }
-    }
-
-    private void releaseVlcPlayer() {
-        mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
-        mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-        mainHandler.removeCallbacks(vlcRevealTextureRunnable);
-        mainHandler.removeCallbacks(vlcResRefreshRunnable);
-        vlcPendingPlay = false;
-        vlcSurfaceReady = false;
-        vlcHasVideoFrame = false;
-        vlcVideoWidth = 0;
-        vlcVideoHeight = 0;
-        if (vlcMediaPlayer != null) {
-            try {
-                vlcMediaPlayer.setEventListener(null);
-            } catch (Exception ignored) {
-            }
-            if (vlcViewsAttached) {
-                try {
-                    IVLCVout vout = vlcMediaPlayer.getVLCVout();
-                    vout.removeCallback(vlcVoutCallback);
-                    vout.detachViews();
-                } catch (Exception ignored) {
-                }
-                vlcViewsAttached = false;
-            }
-            try {
-                vlcMediaPlayer.stop();
-            } catch (Exception ignored) {
-            }
-            try {
-                vlcMediaPlayer.release();
-            } catch (Exception ignored) {
-            }
-            vlcMediaPlayer = null;
-        }
-        if (libVlc != null) {
-            try {
-                libVlc.release();
-            } catch (Exception ignored) {
-            }
-            libVlc = null;
-        }
-    }
-
-    private void buildVlcPlayer(Context context, boolean forLive, String userAgent) {
-        releaseVlcPlayer();
-
-        vlcConfiguredForLive = forLive;
-        vlcActiveUserAgent = (userAgent != null && !userAgent.trim().isEmpty())
-                ? userAgent.trim()
-                : "VLC/3.0.18 LibVLC/3.0.18";
-        vlcVideoWidth = 0;
-        vlcVideoHeight = 0;
-        vlcSarNum = 1;
-        vlcSarDen = 1;
-        vlcHasVideoFrame = false;
-
-        ArrayList<String> args = new ArrayList<>();
-        args.add("--http-reconnect");
-        args.add("--network-caching=" + (forLive ? 350 : 1200));
-        if (forLive) {
-            args.add("--live-caching=350");
-            args.add("--sout-mux-caching=350");
-            args.add("--file-caching=350");
-        }
-        args.add("--clock-jitter=0");
-        args.add("--clock-synchro=0");
-        args.add("--audio-time-stretch");
-        args.add("--no-video-title-show");
-        args.add("--no-sub-autodetect-file");
-        args.add("--no-stats");
-        // Start adaptive streams (HLS/DASH) at the highest available bitrate immediately instead of 360p
-        args.add("--adaptive-logic=highest");
-        args.add("--adaptive-maxwidth=3840");
-        args.add("--adaptive-maxheight=2160");
-        args.add("--adaptive-bandwidth=100000000");
-        // Maintain pristine picture quality from frame 0 without skipping deblock or frames
-        args.add("--avcodec-skiploopfilter=0");
-        args.add(vlcForceSoftwareDecode ? "--avcodec-hw=none" : "--avcodec-hw=any");
-
-        LibVLC createdLibVlc = null;
-        try {
-            createdLibVlc = new LibVLC(context.getApplicationContext(), args);
-        } catch (Exception e) {
-            // Fallback if hardware/advanced options fail on certain devices/architectures
-            try {
-                ArrayList<String> safeArgs = new ArrayList<>();
-                safeArgs.add("--http-reconnect");
-                safeArgs.add("--avcodec-hw=none");
-                createdLibVlc = new LibVLC(context.getApplicationContext(), safeArgs);
-                vlcForceSoftwareDecode = true;
-            } catch (Exception ignored) {
-            }
-        }
-        libVlc = createdLibVlc;
-        if (libVlc != null) {
-            try {
-                libVlc.setUserAgent("AchourPlayer", vlcActiveUserAgent);
-            } catch (Exception ignored) {
-            }
-        }
-
-        if (libVlc != null) {
-            vlcMediaPlayer = new MediaPlayer(libVlc);
-            vlcMediaPlayer.setEventListener(vlcEventListener);
-        }
-
-        if (vlcTextureView != null) {
-            vlcTextureView.setVisibility(View.VISIBLE);
-            vlcTextureView.setKeepScreenOn(true);
-            if (vlcTextureView.isAvailable()) {
-                attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight());
-                if (vlcTextureView.getWidth() > 0 && vlcTextureView.getHeight() > 0) {
-                    vlcSurfaceReady = true;
-                }
-            }
-        }
-    }
-
-    private void applyVlcVideoLayout() {
-        if (vlcTextureView == null || !usingLibVlc) return;
-        int containerW = getWidth();
-        int containerH = getHeight();
-        if (containerW <= 0 || containerH <= 0) return;
-
-        int outW = containerW;
-        int outH = containerH;
-
-        if ("fill".equals(resizeMode) || "full".equals(resizeMode)) {
-            outW = containerW;
-            outH = containerH;
-        } else {
-            float targetAr;
-            if ("16:9".equals(resizeMode)) {
-                targetAr = 16.0f / 9.0f;
-            } else if ("4:3".equals(resizeMode)) {
-                targetAr = 4.0f / 3.0f;
-            } else if (vlcVideoWidth > 0 && vlcVideoHeight > 0) {
-                double dw = vlcVideoWidth;
-                double dh = vlcVideoHeight;
-                if (vlcSarDen > 0 && vlcSarNum > 0 && vlcSarNum != vlcSarDen) {
-                    dw = dw * vlcSarNum / vlcSarDen;
-                }
-                targetAr = (float) (dw / dh);
-            } else {
-                targetAr = (float) containerW / (float) containerH;
-            }
-
-            float containerAr = (float) containerW / (float) containerH;
-            if ("zoom".equals(resizeMode) || "cover".equals(resizeMode)) {
-                if (containerAr < targetAr) {
-                    outH = containerH;
-                    outW = Math.round(containerH * targetAr);
-                } else {
-                    outW = containerW;
-                    outH = Math.round(containerW / targetAr);
-                }
-            } else {
-                if (containerAr < targetAr) {
-                    outW = containerW;
-                    outH = Math.round(containerW / targetAr);
-                } else {
-                    outH = containerH;
-                    outW = Math.round(containerH * targetAr);
-                }
-            }
-        }
-
-        outW = Math.max(1, outW);
-        outH = Math.max(1, outH);
-
-        if (vlcMediaPlayer != null) {
-            try {
-                vlcMediaPlayer.setScale(0f);
-                vlcMediaPlayer.setAspectRatio(null);
-                if (vlcViewsAttached) {
-                    vlcMediaPlayer.getVLCVout().setWindowSize(outW, outH);
-                }
-            } catch (Exception ignored) {
-            }
-        }
-
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) vlcTextureView.getLayoutParams();
-        if (lp == null || lp.width != outW || lp.height != outH || lp.gravity != Gravity.CENTER) {
-            vlcTextureView.setLayoutParams(new FrameLayout.LayoutParams(outW, outH, Gravity.CENTER));
-        }
+        cachedAudioTracksJson = buildAudioTracksJson();
+        cachedSubtitleTracksJson = buildSubtitleTracksJson();
     }
 
     public void setMedia(String url, String optionsJson) {
@@ -1767,7 +1094,6 @@ public class AchourNativePlayerView extends FrameLayout {
         boolean isLiveStream = false;
         boolean autoPlay = true;
         boolean initialMuted = false;
-        String requestedEngine = "exoplayer";
 
         float initialVolume = 1f;
         long startPositionMs = 0L;
@@ -1791,7 +1117,6 @@ public class AchourNativePlayerView extends FrameLayout {
             isLiveStream = parsedOptions.optBoolean("isLive", false);
             autoPlay = parsedOptions.optBoolean("autoPlay", true);
             initialMuted = parsedOptions.optBoolean("muted", false);
-            requestedEngine = parsedOptions.optString("engine", "exoplayer").trim().toLowerCase();
 
             double volOpt = parsedOptions.optDouble(
                     "volume",
@@ -1831,151 +1156,6 @@ public class AchourNativePlayerView extends FrameLayout {
 
         currentIsLive = isLiveStream;
         stopPositionTicker();
-
-        boolean wantsLibVlc = !isMultiSlot && vlcTextureView != null
-                && ("libvlc".equals(requestedEngine) || "vlc".equals(requestedEngine));
-
-        if (!isFallbackAttempt) {
-            vlcForceSoftwareDecode = false;
-            vlcSwFallbackAttempted = false;
-        }
-
-        if (wantsLibVlc) {
-            if (!usingLibVlc) {
-                usingLibVlc = true;
-                releaseExoPlayerOnly();
-            }
-            if (playerView != null) {
-                playerView.setKeepScreenOn(false);
-                playerView.setVisibility(View.GONE);
-            }
-            if (vlcTextureView != null) {
-                if (vlcTextureView.getVisibility() != View.VISIBLE) {
-                    vlcTextureView.setLayoutParams(new FrameLayout.LayoutParams(
-                            LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT,
-                            Gravity.CENTER
-                    ));
-                    vlcTextureView.setVisibility(View.VISIBLE);
-                }
-                vlcTextureView.setKeepScreenOn(true);
-                if (isLiveStream && !isFallbackAttempt) {
-                    vlcTextureView.setAlpha(0f);
-                } else {
-                    vlcTextureView.setAlpha(1f);
-                }
-            }
-
-            String effectiveUa = headers.get("User-Agent");
-            if (effectiveUa == null || effectiveUa.isEmpty()) {
-                effectiveUa = "VLC/3.0.18 LibVLC/3.0.18";
-            }
-
-            if (libVlc == null || vlcMediaPlayer == null
-                    || vlcConfiguredForLive != isLiveStream
-                    || !effectiveUa.equals(vlcActiveUserAgent)) {
-                buildVlcPlayer(getContext(), isLiveStream, effectiveUa);
-            } else if (vlcTextureView != null && !vlcViewsAttached && vlcTextureView.isAvailable()) {
-                attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight());
-                if (vlcTextureView.getWidth() > 0 && vlcTextureView.getHeight() > 0) {
-                    vlcSurfaceReady = true;
-                }
-            }
-
-            if (libVlc == null || vlcMediaPlayer == null) return;
-
-            mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
-            mainHandler.removeCallbacks(vlcRevealTextureRunnable);
-            mainHandler.removeCallbacks(vlcResRefreshRunnable);
-            vlcResRefreshAttempts = 0;
-            vlcHasVideoFrame = false;
-            vlcVideoWidth = 0;
-            vlcVideoHeight = 0;
-            vlcPendingPlay = autoPlay;
-
-            if (vlcMediaPlayer != null) {
-                try {
-                    vlcMediaPlayer.stop();
-                } catch (Exception ignored) {
-                }
-            }
-
-            if (vlcTextureView != null) {
-                vlcTextureView.setAlpha(0f);
-            }
-
-            Media vlcMedia = new Media(libVlc, Uri.parse(this.currentUrl));
-            vlcMedia.setHWDecoderEnabled(!vlcForceSoftwareDecode, false);
-            vlcMedia.addOption(vlcForceSoftwareDecode ? ":avcodec-hw=none" : ":avcodec-hw=any");
-            vlcMedia.addOption(":network-caching=" + (isLiveStream ? 350 : 1200));
-            if (isLiveStream) {
-                vlcMedia.addOption(":live-caching=350");
-                vlcMedia.addOption(":sout-mux-caching=350");
-                vlcMedia.addOption(":file-caching=350");
-            } else if (startPositionMs > 0L) {
-                vlcMedia.addOption(":start-time=" + (startPositionMs / 1000L));
-            }
-            vlcMedia.addOption(":clock-jitter=0");
-            vlcMedia.addOption(":clock-synchro=0");
-            // Start adaptive streams (HLS/DASH) at the highest available bitrate immediately instead of 360p
-            vlcMedia.addOption(":adaptive-logic=highest");
-            vlcMedia.addOption(":adaptive-maxwidth=3840");
-            vlcMedia.addOption(":adaptive-maxheight=2160");
-            vlcMedia.addOption(":adaptive-bandwidth=100000000");
-            // Maintain pristine picture quality from frame 0 without skipping deblock or frames
-            vlcMedia.addOption(":avcodec-skiploopfilter=0");
-            vlcMedia.addOption(":http-user-agent=" + effectiveUa);
-            String refererVal = headers.get("Referer");
-            if (refererVal == null) refererVal = headers.get("referer");
-            if (refererVal != null && !refererVal.trim().isEmpty()) {
-                vlcMedia.addOption(":http-referrer=" + refererVal.trim());
-            }
-
-            vlcMediaPlayer.setMedia(vlcMedia);
-            vlcMedia.release();
-
-            currentVolume = initialVolume;
-            try {
-                vlcMediaPlayer.setVolume(Math.round(initialVolume * 100f));
-                vlcMediaPlayer.setRate(1.0f);
-            } catch (Exception ignored) {
-            }
-
-            if (initialPosMsFallback(isLiveStream, startPositionMs) > 0L) {
-                cachedPositionMs = startPositionMs;
-            }
-            cachedIsPlaying = autoPlay;
-
-            if (autoPlay) {
-                boolean readyNow = (vlcTextureView != null && vlcTextureView.isAvailable()
-                        && vlcTextureView.getWidth() > 0 && vlcTextureView.getHeight() > 0);
-                if (readyNow) {
-                    vlcSurfaceReady = true;
-                    vlcPendingPlay = false;
-                    attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight());
-                    try {
-                        vlcMediaPlayer.play();
-                    } catch (Exception ignored) {
-                    }
-                    mainHandler.postDelayed(vlcRevealTextureRunnable, 1100L);
-                } else if (vlcTextureView != null) {
-                    vlcTextureView.requestLayout();
-                    mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-                    mainHandler.postDelayed(vlcSurfaceFallbackPlayRunnable, 180L);
-                }
-            }
-            return;
-        }
-
-        if (usingLibVlc) {
-            usingLibVlc = false;
-            releaseVlcPlayer();
-            if (vlcTextureView != null) {
-                vlcTextureView.setAlpha(1f);
-                vlcTextureView.setKeepScreenOn(false);
-                vlcTextureView.setVisibility(View.GONE);
-            }
-        }
 
         if (playerView != null) {
             if (playerView.getVisibility() != View.VISIBLE) {
@@ -2218,16 +1398,9 @@ public class AchourNativePlayerView extends FrameLayout {
         cachedIsPlaying = autoPlay;
     }
 
-    private long initialPosMsFallback(boolean isLiveStream, long startPositionMs) {
-        return (!isLiveStream && startPositionMs > 0L) ? startPositionMs : 0L;
-    }
-
     public void setResizeMode(String mode) {
         if (mode == null) return;
         resizeMode = mode;
-        if (usingLibVlc) {
-            applyVlcVideoLayout();
-        }
         applyResizeMode();
     }
 
@@ -2277,22 +1450,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public void play() {
-        if (usingLibVlc) {
-            if (vlcMediaPlayer != null) {
-                if (vlcSurfaceReady) {
-                    vlcPendingPlay = false;
-                    try {
-                        vlcMediaPlayer.play();
-                    } catch (Exception ignored) {
-                    }
-                } else {
-                    vlcPendingPlay = true;
-                }
-                cachedIsPlaying = true;
-                startPositionTicker();
-            }
-            return;
-        }
         if (player != null) {
             player.play();
             cachedIsPlaying = true;
@@ -2301,18 +1458,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public void pause() {
-        if (usingLibVlc) {
-            vlcPendingPlay = false;
-            if (vlcMediaPlayer != null) {
-                try {
-                    vlcMediaPlayer.pause();
-                } catch (Exception ignored) {
-                }
-                cachedIsPlaying = false;
-                stopPositionTicker();
-            }
-            return;
-        }
         if (player != null) {
             player.pause();
             cachedIsPlaying = false;
@@ -2321,20 +1466,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public void seekTo(long position) {
-        if (usingLibVlc) {
-            if (vlcMediaPlayer == null) return;
-            try {
-                long targetPos = Math.max(0L, position);
-                long dur = Math.max(0L, vlcMediaPlayer.getLength());
-                if (dur > 0L) {
-                    targetPos = Math.min(dur, targetPos);
-                }
-                cachedPositionMs = targetPos;
-                vlcMediaPlayer.setTime(targetPos);
-            } catch (Exception ignored) {
-            }
-            return;
-        }
         if (player == null) return;
 
         try {
@@ -2369,15 +1500,6 @@ public class AchourNativePlayerView extends FrameLayout {
             return;
         }
         this.currentVolume = clamped;
-        if (usingLibVlc) {
-            if (vlcMediaPlayer != null) {
-                try {
-                    vlcMediaPlayer.setVolume(Math.round(clamped * 100f));
-                } catch (Exception ignored) {
-                }
-            }
-            return;
-        }
         if (player != null) {
             player.setVolume(clamped);
         }
@@ -2406,15 +1528,6 @@ public class AchourNativePlayerView extends FrameLayout {
 
     public void setPlaybackSpeed(float speed) {
         if (speed <= 0f) return;
-        if (usingLibVlc) {
-            if (vlcMediaPlayer != null) {
-                try {
-                    vlcMediaPlayer.setRate(speed);
-                } catch (Exception ignored) {
-                }
-            }
-            return;
-        }
         if (player != null) {
             player.setPlaybackParameters(
                     new PlaybackParameters(speed)
@@ -2435,16 +1548,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public void setAudioTrack(int trackIndex) {
-        if (usingLibVlc) {
-            if (vlcMediaPlayer != null) {
-                try {
-                    vlcMediaPlayer.setAudioTrack(trackIndex);
-                    refreshTrackSnapshots();
-                } catch (Exception ignored) {
-                }
-            }
-            return;
-        }
         if (player == null) return;
 
         try {
@@ -2485,16 +1588,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public void setSubtitleTrack(int trackIndex) {
-        if (usingLibVlc) {
-            if (vlcMediaPlayer != null) {
-                try {
-                    vlcMediaPlayer.setSpuTrack(trackIndex < 0 ? -1 : trackIndex);
-                    refreshTrackSnapshots();
-                } catch (Exception ignored) {
-                }
-            }
-            return;
-        }
         if (player == null) return;
 
         try {
@@ -2619,9 +1712,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public long getCurrentPosition() {
-        if (usingLibVlc) {
-            return vlcMediaPlayer == null ? 0 : Math.max(0, vlcMediaPlayer.getTime());
-        }
         return player == null
                 ? 0
                 : Math.max(0, player.getCurrentPosition());
@@ -2632,15 +1722,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public long captureCurrentPositionMs() {
-        if (usingLibVlc && vlcMediaPlayer != null) {
-            try {
-                long pos = Math.max(0L, vlcMediaPlayer.getTime());
-                cachedPositionMs = pos;
-                return pos;
-            } catch (Exception ignored) {
-            }
-            return cachedPositionMs;
-        }
         if (player != null) {
             try {
                 long pos = Math.max(0L, player.getCurrentPosition());
@@ -2673,15 +1754,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public boolean getPlayWhenReadyState() {
-        if (usingLibVlc) {
-            if (vlcMediaPlayer != null) {
-                try {
-                    return vlcPendingPlay || vlcMediaPlayer.isPlaying();
-                } catch (Exception ignored) {
-                }
-            }
-            return cachedIsPlaying;
-        }
         if (player != null) {
             try {
                 return player.getPlayWhenReady();
@@ -2692,11 +1764,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public long getDuration() {
-        if (usingLibVlc) {
-            if (vlcMediaPlayer == null) return 0;
-            long dur = vlcMediaPlayer.getLength();
-            return dur < 0 ? 0 : dur;
-        }
         if (player == null) return 0;
 
         long dur = player.getDuration();
@@ -2711,9 +1778,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public boolean isPlaying() {
-        if (usingLibVlc) {
-            return vlcMediaPlayer != null && vlcMediaPlayer.isPlaying();
-        }
         return player != null && player.isPlaying();
     }
 
@@ -2727,54 +1791,6 @@ public class AchourNativePlayerView extends FrameLayout {
 
     public boolean getCachedHasError() {
         return cachedHasError;
-    }
-
-    private String buildVlcAudioTracksJson() {
-        JSONArray result = new JSONArray();
-        if (vlcMediaPlayer == null) return "[]";
-        try {
-            int activeId = vlcMediaPlayer.getAudioTrack();
-            MediaPlayer.TrackDescription[] tracks = vlcMediaPlayer.getAudioTracks();
-            if (tracks != null) {
-                for (MediaPlayer.TrackDescription td : tracks) {
-                    if (td == null || td.id < 0) continue;
-                    JSONObject obj = new JSONObject();
-                    obj.put("id", td.id);
-                    obj.put("lang", "");
-                    obj.put("label", td.name != null ? td.name : ("Track " + td.id));
-                    obj.put("channels", 0);
-                    obj.put("channelLabel", "");
-                    obj.put("bitrate", 0);
-                    obj.put("selected", td.id == activeId);
-                    result.put(obj);
-                }
-            }
-        } catch (Exception ignored) {
-        }
-        return result.toString();
-    }
-
-    private String buildVlcSubtitleTracksJson() {
-        JSONArray result = new JSONArray();
-        if (vlcMediaPlayer == null) return "[]";
-        try {
-            int activeId = vlcMediaPlayer.getSpuTrack();
-            MediaPlayer.TrackDescription[] tracks = vlcMediaPlayer.getSpuTracks();
-            if (tracks != null) {
-                for (MediaPlayer.TrackDescription td : tracks) {
-                    if (td == null || td.id < 0) continue;
-                    JSONObject obj = new JSONObject();
-                    obj.put("id", td.id);
-                    obj.put("lang", "");
-                    obj.put("label", td.name != null ? td.name : ("Subtitle " + td.id));
-                    obj.put("mimeType", "");
-                    obj.put("selected", td.id == activeId);
-                    result.put(obj);
-                }
-            }
-        } catch (Exception ignored) {
-        }
-        return result.toString();
     }
 
     private String buildAudioTracksJson() {
@@ -2840,7 +1856,7 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public String getAudioTracks() {
-        return usingLibVlc ? buildVlcAudioTracksJson() : buildAudioTracksJson();
+        return buildAudioTracksJson();
     }
 
     public String getCachedAudioTracks() {
@@ -2897,7 +1913,7 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public String getSubtitleTracks() {
-        return usingLibVlc ? buildVlcSubtitleTracksJson() : buildSubtitleTracksJson();
+        return buildSubtitleTracksJson();
     }
 
     public String getCachedSubtitleTracks() {
@@ -2905,15 +1921,6 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public String getVideoResolution() {
-        if (usingLibVlc) {
-            if (cachedVideoResolution == null || cachedVideoResolution.isEmpty() || vlcVideoWidth <= 0) {
-                refreshVideoResolution();
-            }
-            if (vlcVideoWidth > 0 && vlcVideoHeight > 0) {
-                return vlcVideoWidth + "x" + vlcVideoHeight;
-            }
-            return cachedVideoResolution != null ? cachedVideoResolution : "";
-        }
         if (player == null) return "";
 
         try {
@@ -2942,17 +1949,11 @@ public class AchourNativePlayerView extends FrameLayout {
     }
 
     public String getCachedVideoResolution() {
-        if (usingLibVlc && (cachedVideoResolution == null || cachedVideoResolution.isEmpty())) {
-            refreshVideoResolution();
-        }
         return cachedVideoResolution;
     }
 
     public String getPlaybackSnapshotJson() {
         try {
-            if (usingLibVlc && (cachedVideoResolution == null || cachedVideoResolution.isEmpty())) {
-                refreshVideoResolution();
-            }
             JSONObject obj = new JSONObject();
             obj.put("positionMs", cachedPositionMs);
             obj.put("durationMs", cachedDurationMs);
@@ -2969,20 +1970,12 @@ public class AchourNativePlayerView extends FrameLayout {
     public void stopAndHide() {
         playbackGeneration++;
         mainHandler.removeCallbacks(retryRunnable);
-        mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
-        mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-        mainHandler.removeCallbacks(vlcRevealTextureRunnable);
-        mainHandler.removeCallbacks(vlcResRefreshRunnable);
         stopPositionTicker();
         stopLiveDiagTicker();
         stopMultiSlotWatchdog();
         needsDecoderRebuildOnRetry = false;
         audioFocusEnabled = !isMultiSlot;
         sourceAspectRatio = 0.0f;
-        usingLibVlc = false;
-        vlcForceSoftwareDecode = false;
-        vlcSwFallbackAttempted = false;
-        vlcHasVideoFrame = false;
 
         liveBufferingStartedAtMs = 0L;
         cachedIsPlaying = false;
@@ -2993,13 +1986,6 @@ public class AchourNativePlayerView extends FrameLayout {
         cachedVideoResolution = "";
         cachedAudioTracksJson = "[]";
         cachedSubtitleTracksJson = "[]";
-
-        releaseVlcPlayer();
-        if (vlcTextureView != null) {
-            vlcTextureView.setAlpha(1f);
-            vlcTextureView.setKeepScreenOn(false);
-            vlcTextureView.setVisibility(View.GONE);
-        }
 
         if (playerView != null) {
             playerView.setKeepScreenOn(false);
@@ -3027,14 +2013,9 @@ public class AchourNativePlayerView extends FrameLayout {
     public void release() {
         playbackGeneration++;
         mainHandler.removeCallbacks(retryRunnable);
-        mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
-        mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-        mainHandler.removeCallbacks(vlcRevealTextureRunnable);
-        mainHandler.removeCallbacks(vlcResRefreshRunnable);
         stopPositionTicker();
         stopLiveDiagTicker();
         stopMultiSlotWatchdog();
-        usingLibVlc = false;
 
         liveBufferingStartedAtMs = 0L;
         cachedIsPlaying = false;
@@ -3045,13 +2026,6 @@ public class AchourNativePlayerView extends FrameLayout {
         cachedVideoResolution = "";
         cachedAudioTracksJson = "[]";
         cachedSubtitleTracksJson = "[]";
-
-        releaseVlcPlayer();
-        if (vlcTextureView != null) {
-            vlcTextureView.setAlpha(1f);
-            vlcTextureView.setKeepScreenOn(false);
-            vlcTextureView.setVisibility(View.GONE);
-        }
 
         if (playerView != null) {
             playerView.setKeepScreenOn(false);

@@ -1758,7 +1758,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
     const resolvedType = playbackType || (mediaType === 'series' ? 'series' : mediaType === 'movie' ? 'movie' : 'live');
     const finalUrl = resolveDirectStreamUrl(url, targetItem, resolvedType);
 
-    // Ensure any internal native player or MultiView surface is cleared before transferring to VLC / MX Player
+    // Ensure any internal native player or MultiView surface is cleared before transferring to an external player
     if (typeof document !== 'undefined') {
       document.documentElement.classList.remove('native-player-active', 'native-player-preview');
       document.body.classList.remove('native-player-active', 'native-player-preview');
@@ -1782,7 +1782,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
 
     const result = await launchExternalPlayerSession({
       streamUrl: finalUrl,
-      playerName: settings.selectedPlayer || 'VLC for Android',
+      playerName: settings.selectedPlayer || 'External Player',
       title: targetItem?.name || 'Achour Player',
       logo: targetItem?.stream_icon || targetItem?.cover || targetItem?.logo || '',
       streamId: targetItem?.stream_id || '',
@@ -6851,8 +6851,8 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
             if (result?.reason === 'firetv_incompatible' || (fireTv && safeProfile.fireTvCompatible === false)) {
               titleText = isRtl ? `${playerLabel} غير متوافق مع Fire TV Stick` : `${playerLabel} is not compatible with Fire TV Stick`;
               descText = isRtl
-                ? `تطبيق ${playerLabel} (${pkgLabel}) مُصمم للهواتف اللمسية ولا يعمل بشكل موثوق على Amazon Fire TV Stick أو لم يتم تثبيته. ننصح باستخدام VLC for Android أو Just Player أو المشغّل الداخلي.`
-                : `${playerLabel} (${pkgLabel}) is built for touch devices and is not compatible with Amazon Fire TV Stick, or is not installed. Try VLC for Android, Just Player, or the internal player.`;
+                ? `تطبيق ${playerLabel} (${pkgLabel}) مُصمم للهواتف اللمسية ولا يعمل بشكل موثوق على Amazon Fire TV Stick أو لم يتم تثبيته. ننصح باستخدام Just Player أو المشغّل الداخلي (ExoPlayer).`
+                : `${playerLabel} (${pkgLabel}) is built for touch devices and is not compatible with Amazon Fire TV Stick, or is not installed. Try Just Player or the internal player (ExoPlayer).`;
             } else if (result?.reason === 'not_installed') {
               titleText = isRtl ? `المشغّل ${playerLabel} غير مثبّت على الجهاز` : `${playerLabel} is not installed on this device`;
               descText = isRtl

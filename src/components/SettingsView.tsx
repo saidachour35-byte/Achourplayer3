@@ -93,7 +93,6 @@ type SettingsSubView =
   | 'seek-step';
 
 export const DEFAULT_PLAYERS = Array.from(new Set([
-  'LibVLC (محرك VLC المدمج الداخلي)',
   'Achour Player (مدمج - Native)',
   'ExoPlayer',
   'IJK Player',
@@ -153,7 +152,7 @@ const SettingsTimePreview = React.memo(({
             data-tv-focusable="true"
             tabIndex={0}
             onClick={() => onSelect(item.format)}
-            className={`sm:col-span-1 lg:col-span-2 flex flex-col justify-between p-4 rounded-2xl border transition-colors cursor-pointer min-h-[92px] ${
+            className={`sm:col-span-1 lg:col-span-2 flex flex-col justify-between p-4 rounded-2xl border transition-none cursor-pointer min-h-[92px] ${
               active
                 ? 'border-gold achour-glossy-surface'
                 : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
@@ -542,7 +541,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
   const allPlayers = useMemo(() => {
     const list = [...DEFAULT_PLAYERS];
     (settings.externalPlayers || []).forEach(p => {
-      if (!list.includes(p)) list.push(p);
+      if (!/libvlc/i.test(p) && !list.includes(p)) list.push(p);
     });
     return list;
   }, [settings.externalPlayers]);
@@ -888,7 +887,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
         {
           icon: MonitorPlay,
           label: t('players_title'),
-          subLabel: `${settings.useExternalPlayer ? t('player_external_tag') : t('player_internal_tag')} · ${settings.selectedPlayer || 'Achour Player'}`,
+          subLabel: `${settings.useExternalPlayer ? t('player_external_tag') : t('player_internal_tag')} · ${/libvlc/i.test(settings.selectedPlayer || '') ? 'ExoPlayer' : (settings.selectedPlayer || 'Achour Player')}`,
           action: () => navigateToSubView('players')
         },
         { icon: ArrowUpDown, label: t('sort_by'), action: () => navigateToSubView('vod-sort') },
@@ -906,7 +905,6 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
           action: () => navigateToSubView('background-opacity'),
         },
         { icon: Palette, label: t('app_theme_colors'), action: () => navigateToSubView('design-colors') },
-        { icon: Sparkles, label: t('custom_color_hex'), action: () => navigateToSubView('design-custom-color') },
         { icon: Eye, label: t('icon_display_mode'), action: () => navigateToSubView('design-display') },
         { icon: Sparkles, label: t('icon_styles_10'), action: () => navigateToSubView('design-icons') },
         { icon: Frame, label: t('frame_shapes_40'), action: () => navigateToSubView('design-frames') },
@@ -1181,7 +1179,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
             {scaleValues.map(value => (
               <button key={value} data-tv-focusable="true" tabIndex={0}
                 onClick={() => updateSetting(scaleConfig.key, value)}
-                className={`min-h-[72px] rounded-2xl border flex flex-col items-center justify-center gap-1 transition-colors ${scaleConfig.current === value ? 'border-gold achour-glossy-surface' : 'border-white/10 bg-white/[0.04] hover:border-gold/40'}`}>
+                className={`min-h-[72px] rounded-2xl border flex flex-col items-center justify-center gap-1 transition-none ${scaleConfig.current === value ? 'border-gold achour-glossy-surface' : 'border-white/10 bg-white/[0.04] hover:border-gold/40'}`}>
                 <span className="text-lg font-sans font-normal tabular-nums achour-glossy-title">{value}%</span>
                 {scaleConfig.current === value && <Check size={14} className="text-gold" />}
               </button>
@@ -1255,7 +1253,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                   data-tv-focusable="true"
                   tabIndex={0}
                   onClick={() => updateSetting('zoomScale', val)}
-                  className={`p-3 rounded-2xl border transition-colors flex flex-col items-center justify-center gap-1 min-h-[76px] cursor-pointer ${
+                  className={`p-3 rounded-2xl border transition-none flex flex-col items-center justify-center gap-1 min-h-[76px] cursor-pointer ${
                     isActive ? 'border-gold achour-glossy-surface' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
                   }`}
                 >
@@ -1278,7 +1276,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateSetting('zoomScale', Math.max(70, currentZoom - 1))}
-                className="px-4 py-2 bg-white/10 hover:bg-gold hover:text-black text-white rounded-xl text-sm font-medium transition-colors cursor-pointer font-sans tabular-nums"
+                className="px-4 py-2 bg-white/10 hover:bg-gold hover:text-black text-white rounded-xl text-sm font-medium transition-none cursor-pointer font-sans tabular-nums"
               >
                 - 1%
               </button>
@@ -1287,7 +1285,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateSetting('zoomScale', Math.min(150, currentZoom + 1))}
-                className="px-4 py-2 bg-white/10 hover:bg-gold hover:text-black text-white rounded-xl text-sm font-medium transition-colors cursor-pointer font-sans tabular-nums"
+                className="px-4 py-2 bg-white/10 hover:bg-gold hover:text-black text-white rounded-xl text-sm font-medium transition-none cursor-pointer font-sans tabular-nums"
               >
                 + 1%
               </button>
@@ -1309,14 +1307,13 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
   // SUBVIEW: PLAYERS (Clean sub-tabs so all fit on 1 TV screen in 4-5 tiles/row)
   if (subView === 'players') {
     const internalEngines = [
-      { id: 'LibVLC (محرك VLC المدمج الداخلي)', name: t('engine_libvlc_name'), desc: t('engine_libvlc_desc') },
       { id: 'ExoPlayer', name: 'ExoPlayer / Media3', desc: t('engine_exo_desc') },
       { id: 'Achour Player (مدمج - Native)', name: 'Achour 4K Native', desc: t('engine_achour_desc') },
       { id: 'IJK Player', name: 'FFmpeg / IJK', desc: t('engine_ijk_desc') },
       { id: 'MPV Player', name: 'MPV Bitrate', desc: t('engine_mpv_desc') },
     ];
     const externalApps = EXTERNAL_PLAYER_PROFILES;
-    const customList = (settings.externalPlayers || []).filter(p => !DEFAULT_PLAYERS.includes(p));
+    const customList = (settings.externalPlayers || []).filter(p => !DEFAULT_PLAYERS.includes(p) && !/libvlc/i.test(p));
     const onFireTv = isFireTVDevice();
 
     return (
@@ -1333,7 +1330,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => setPlayersTab(tab.id as any)}
-                className={`flex-1 py-2 px-3 rounded-xl text-sm font-medium transition-colors cursor-pointer ${
+                className={`flex-1 py-2 px-3 rounded-xl text-sm font-medium transition-none cursor-pointer ${
                   playersTab === tab.id ? 'achour-glossy-pill' : 'text-zinc-300 hover:bg-white/5'
                 }`}
               >
@@ -1355,7 +1352,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                       onUpdateSettings(prev => ({ ...prev, useExternalPlayer: false, selectedPlayer: p.id }));
                       setSubView('main');
                     }}
-                    className={`p-3.5 rounded-2xl border transition-colors flex flex-col justify-between min-h-[96px] cursor-pointer ${
+                    className={`p-3.5 rounded-2xl border transition-none flex flex-col justify-between min-h-[96px] cursor-pointer ${
                       isActive ? 'border-gold achour-glossy-surface' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
                     } ${isRtl ? 'text-right' : 'text-left'}`}
                   >
@@ -1396,7 +1393,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                             onUpdateSettings(prev => ({ ...prev, useExternalPlayer: true, selectedPlayer: p.id }));
                             setSubView('main');
                           }}
-                          className={`p-3.5 rounded-2xl border transition-colors flex flex-col justify-between min-h-[112px] cursor-pointer ${
+                          className={`p-3.5 rounded-2xl border transition-none flex flex-col justify-between min-h-[112px] cursor-pointer ${
                             isActive ? 'border-gold achour-glossy-surface' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
                           } ${isRtl ? 'text-right' : 'text-left'}`}
                         >
@@ -1466,7 +1463,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                     }}
                     className="px-4 py-2 rounded-xl bg-gold text-black font-bold text-xs hover:bg-gold/90 transition-colors cursor-pointer"
                   >
-                    {isRtl ? 'الانتقال إلى المحركات المدمجة (ExoPlayer و LibVLC)' : 'Switch to Internal Engines (ExoPlayer & LibVLC)'}
+                    {isRtl ? 'الانتقال إلى المحركات المدمجة (ExoPlayer)' : 'Switch to Internal Engines (ExoPlayer)'}
                   </button>
                 </div>
               )}
@@ -1567,7 +1564,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                   tabIndex={0}
                   disabled={safeBgPage <= 0}
                   onClick={() => setBgPage((p) => Math.max(0, p - 1))}
-                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xs font-medium flex items-center gap-1 cursor-pointer transition-colors"
+                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xs font-medium flex items-center gap-1 cursor-pointer transition-none"
                 >
                   {isRtl ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
                   <span>{t('prev_label')}</span>
@@ -1578,7 +1575,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                   tabIndex={0}
                   disabled={safeBgPage >= totalBgPages - 1}
                   onClick={() => setBgPage((p) => Math.min(totalBgPages - 1, p + 1))}
-                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xs font-medium flex items-center gap-1 cursor-pointer transition-colors"
+                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xs font-medium flex items-center gap-1 cursor-pointer transition-none"
                 >
                   <span>{t('next_label')}</span>
                   {isRtl ? <ChevronLeft size={15} /> : <ChevronRight size={15} />}
@@ -1596,7 +1593,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                   data-tv-focusable="true"
                   tabIndex={0}
                   onClick={() => handleSelectBackground(bg.id)}
-                  className={`achour-perf-grid-item p-2.5 rounded-2xl border transition-colors duration-100 flex flex-col justify-between cursor-pointer ${
+                  className={`achour-perf-grid-item p-2.5 rounded-2xl border transition-none flex flex-col justify-between cursor-pointer ${
                     isActive ? 'border-gold bg-gold/15' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
                   } ${isRtl ? 'text-right' : 'text-left'}`}
                 >
@@ -1736,7 +1733,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                   tabIndex={0}
                   disabled={safeCatPage <= 0}
                   onClick={() => setCatPage((p) => Math.max(0, p - 1))}
-                  className="px-3 py-1 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xs font-medium flex items-center gap-1 cursor-pointer transition-colors"
+                  className="px-3 py-1 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xs font-medium flex items-center gap-1 cursor-pointer transition-none"
                 >
                   {isRtl ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
                   <span>{t('prev_label')}</span>
@@ -1747,7 +1744,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                   tabIndex={0}
                   disabled={safeCatPage >= totalCatPages - 1}
                   onClick={() => setCatPage((p) => Math.min(totalCatPages - 1, p + 1))}
-                  className="px-3 py-1 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xs font-medium flex items-center gap-1 cursor-pointer transition-colors"
+                  className="px-3 py-1 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xs font-medium flex items-center gap-1 cursor-pointer transition-none"
                 >
                   <span>{t('next_label')}</span>
                   {isRtl ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
@@ -1776,7 +1773,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                     data-tv-focusable="true"
                     tabIndex={0}
                     onClick={() => toggleCategoryVisibility(cat.category_id)}
-                    className={`achour-perf-grid-item flex items-center justify-between p-2.5 rounded-2xl transition-colors duration-100 border min-h-[60px] cursor-pointer ${
+                    className={`achour-perf-grid-item flex items-center justify-between p-2.5 rounded-2xl transition-none border min-h-[60px] cursor-pointer ${
                       isHidden
                         ? 'border-red-500/45 bg-red-950/30'
                         : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
@@ -1821,7 +1818,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
           data-tv-back-btn="true"
           tabIndex={-1}
           onClick={onBack}
-          className="p-2 bg-white/10 hover:bg-gold hover:text-black rounded-xl text-white transition-colors cursor-pointer flex items-center justify-center"
+          className="p-2 bg-white/10 hover:bg-gold hover:text-black rounded-xl text-white transition-none cursor-pointer flex items-center justify-center"
           title={t('back')}
         >
           <ChevronLeft size={20} className={isRtl ? 'rotate-180' : ''} />
@@ -1865,7 +1862,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                   data-settings-tile-id={tileId}
                   tabIndex={0}
                   onClick={() => navigateToSubView(catCard.view, tileId)}
-                  className={`px-3.5 py-2.5 bg-white/[0.04] hover:bg-white/[0.09] rounded-2xl border border-white/10 hover:border-gold/50 flex items-center justify-between transition-colors duration-100 cursor-pointer ${isRtl ? 'flex-row-reverse text-right' : 'text-left'}`}
+                  className={`px-3.5 py-2.5 bg-white/[0.04] hover:bg-white/[0.09] rounded-2xl border border-white/10 hover:border-gold/50 flex items-center justify-between transition-none cursor-pointer ${isRtl ? 'flex-row-reverse text-right' : 'text-left'}`}
                 >
                   <div className={`flex items-center gap-2.5 min-w-0 ${isRtl ? 'flex-row-reverse' : ''}`}>
                     <div className="p-1.5 rounded-xl bg-gold/15 text-gold shrink-0">
@@ -1900,9 +1897,9 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                           captureMainState(tileId);
                           item.action();
                         }}
-                        className="flex flex-col items-center justify-center p-3 bg-white/[0.04] hover:bg-white/[0.09] rounded-2xl border border-white/10 hover:border-gold/50 transition-colors duration-100 group h-[84px] sm:h-[90px] text-center cursor-pointer gap-2"
+                        className="flex flex-col items-center justify-center p-3 bg-white/[0.04] hover:bg-white/[0.09] rounded-2xl border border-white/10 hover:border-gold/50 transition-none group h-[84px] sm:h-[90px] text-center cursor-pointer gap-2"
                       >
-                        <div className="p-1.5 rounded-xl bg-gold/15 text-gold group-hover:bg-gold group-hover:text-black transition-colors shrink-0">
+                        <div className="p-1.5 rounded-xl bg-gold/15 text-gold group-hover:bg-gold group-hover:text-black transition-none shrink-0">
                           <Icon size={17} />
                         </div>
                         <div className="w-full min-w-0">
@@ -2070,7 +2067,7 @@ function SubViewContainer({ title, onBack, children, isRtl, backLabel }: { title
           data-tv-focusable="false"
           tabIndex={-1}
           onClick={onBack}
-          className="p-2 bg-white/10 hover:bg-gold hover:text-black rounded-lg text-white transition-colors cursor-pointer flex items-center justify-center"
+          className="p-2 bg-white/10 hover:bg-gold hover:text-black rounded-lg text-white transition-none cursor-pointer flex items-center justify-center"
           title={backLabel || 'Back'}
         >
           <ChevronLeft size={18} className={isRtl ? 'rotate-180' : ''} />
@@ -2107,7 +2104,7 @@ function TileOptionButton({
       data-tv-focusable="true"
       tabIndex={0}
       onClick={onClick}
-      className={`w-full flex flex-col justify-between p-3 rounded-2xl transition-colors border min-h-[82px] cursor-pointer ${
+      className={`w-full flex flex-col justify-between p-3 rounded-2xl transition-none border min-h-[82px] cursor-pointer ${
         active
           ? 'border-gold achour-glossy-surface'
           : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
