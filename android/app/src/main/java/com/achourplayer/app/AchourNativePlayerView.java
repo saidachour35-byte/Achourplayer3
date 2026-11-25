@@ -1367,11 +1367,17 @@ private boolean attachVlcVoutIfAvailable(int width, int height) {
         }
 
         @Override
-        public void onSurfacesDestroyed(IVLCVout vlcVout) {
-            mainHandler.post(() -> vlcSurfaceReady = false);
-        }
-    };
+public void onSurfacesDestroyed(IVLCVout vlcVout) {
+    mainHandler.post(() -> {
+        vlcSurfaceReady = false;
+        vlcViewsAttached = false;
 
+        if (usingLibVlc && vlcPendingPlay && vlcTextureView != null) {
+            mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
+            mainHandler.postDelayed(vlcSurfaceFallbackPlayRunnable, 200L);
+        }
+    });
+}
     private final IVLCVout.OnNewVideoLayoutListener vlcNewVideoLayoutListener =
             (vlcVout, width, height, visibleWidth, visibleHeight, sarNum, sarDen) -> {
                 int effW = visibleWidth > 0 ? visibleWidth : width;
