@@ -4375,6 +4375,43 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
               }
             }
           }
+          if (mediaType === 'live') {
+            const isFavorites =
+              selectedCategory === 'favorites' ||
+              selectedCategory === 'FAVORITES_INTERNAL';
+
+            const isSynthetic =
+              selectedCategory === WATCH_HISTORY_CAT_ID ||
+              selectedCategory === CONTINUE_WATCHING_CAT_ID;
+
+            if (!isSynthetic) {
+              const categoryKey = isFavorites
+                ? 'favorites'
+                : String(selectedCategory || '__all__');
+
+              const orderKey =
+                `${encodeURIComponent(effectivePlaylistId || 'default')}::live::${encodeURIComponent(categoryKey)}`;
+
+              const newOrderIds = reorderedCurList.map(c => String(c.stream_id));
+
+              onUpdateSettings(st => ({
+                ...st,
+                channelOrders: {
+                  ...(st.channelOrders || {}),
+                  [orderKey]: newOrderIds
+                }
+              }));
+
+              try {
+                localStorage.setItem(
+                  `achour_channel_orders_${orderKey}`,
+                  JSON.stringify(newOrderIds)
+                );
+              } catch (e) {}
+            }
+
+            return prevMaster;
+          }
 
           const newOrderIds = nextMaster.map(c => c.stream_id);
           onUpdateSettings(st => ({
@@ -4382,10 +4419,14 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
             channelOrders: { ...(st.channelOrders || {}), [mediaType]: newOrderIds }
           }));
           try {
-            localStorage.setItem(`achour_channel_orders_${mediaType}`, JSON.stringify(newOrderIds));
+            localStorage.setItem(
+              `achour_channel_orders_${mediaType}`,
+              JSON.stringify(newOrderIds)
+            );
           } catch (e) {}
 
           return nextMaster;
+    
         });
       }
     }
