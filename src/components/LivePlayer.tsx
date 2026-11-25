@@ -4790,30 +4790,29 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
           if (filtered.length > 0) rawList = filtered;
         }
   
+if (mediaType === 'live') {
+  const isFavorites =
+    selectedCategory === 'favorites' ||
+    selectedCategory === 'FAVORITES_INTERNAL';
 
-    if (mediaType === 'live') {
-      const isFavorites =
-        selectedCategory === 'favorites' ||
-        selectedCategory === 'FAVORITES_INTERNAL';
+  const categoryKey = isFavorites
+    ? 'favorites'
+    : String(selectedCategory || '__all__');
 
-      const categoryKey = isFavorites
-        ? 'favorites'
-        : String(selectedCategory || '__all__');
+  orderKey =
+    `${encodeURIComponent(effectivePlaylistId || 'default')}::live::${encodeURIComponent(categoryKey)}`;
+} else {
+  orderKey = mediaType;
+}
 
-      orderKey =
-        `${encodeURIComponent(effectivePlaylistId || 'default')}::live::${encodeURIComponent(categoryKey)}`;
-    } else {
-      orderKey = mediaType;
-    }
+let savedOrder = settings.channelOrders?.[orderKey];
 
-    let savedOrder = settings.channelOrders?.[orderKey];
-
-    if (!savedOrder || !Array.isArray(savedOrder) || savedOrder.length === 0) {
-      try {
-        const raw = localStorage.getItem(`achour_channel_orders_${orderKey}`);
-        if (raw) savedOrder = JSON.parse(raw);
-      } catch (e) {}
-    }
+if (!savedOrder || !Array.isArray(savedOrder) || savedOrder.length === 0) {
+  try {
+    const raw = localStorage.getItem(`achour_channel_orders_${orderKey}`);
+    if (raw) savedOrder = JSON.parse(raw);
+  } catch (e) {}
+}
 
     if (!savedOrder || !Array.isArray(savedOrder) || savedOrder.length === 0) {
       return incomingChs;
