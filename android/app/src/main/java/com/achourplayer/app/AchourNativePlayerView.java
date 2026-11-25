@@ -757,7 +757,6 @@ public class AchourNativePlayerView extends FrameLayout {
                             Gravity.CENTER
                     )
             );
-        }
 
         sharedBandwidthMeter = new DefaultBandwidthMeter.Builder(context.getApplicationContext())
                 .build();
