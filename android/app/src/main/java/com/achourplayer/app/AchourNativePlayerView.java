@@ -695,60 +695,8 @@ private boolean attachVlcVoutIfAvailable(int width, int height) {
             vlcTextureView.setFocusableInTouchMode(false);
             vlcTextureView.setKeepScreenOn(true);
             vlcTextureView.setVisibility(View.GONE);
-            vlcTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-                @Override
-                public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                    vlcSurfaceReady = true;
-                    if (usingLibVlc && vlcMediaPlayer != null) {
-                        
-                        boolean vlcOutputReady = attachVlcVoutIfAvailable(width, height);
-applyVlcVideoLayout();
-
-if (vlcPendingPlay && vlcOutputReady) {
-    vlcPendingPlay = false;
-    mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-    try {
-        vlcMediaPlayer.play();
-    } catch (Exception e) {
-        Log.e("AchourVLC", "Failed to start VLC playback", e);
-    }
-}
-                }
-                    
-}
-                @Override
-                public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                    if (usingLibVlc && vlcMediaPlayer != null && vlcViewsAttached && width > 0 && height > 0) {
-                        try {
-                            vlcMediaPlayer.getVLCVout().setWindowSize(width, height);
-                        } catch (Exception ignored) {
-                        }
-                        applyVlcVideoLayout();
-                    }
-                }
-
-                @Override
-                public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                    vlcSurfaceReady = false;
-                    if (vlcMediaPlayer != null && vlcViewsAttached) {
-                        try {
-                            IVLCVout vout = vlcMediaPlayer.getVLCVout();
-                            vout.removeCallback(vlcVoutCallback);
-                            vout.detachViews();
-                        } catch (Exception ignored) {
-                        }
-                        vlcViewsAttached = false;
-                    }
-                    return true;
-                }
-
-                @Override
-                public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-                    if (usingLibVlc && vlcTextureView != null && vlcTextureView.getAlpha() < 1f && vlcHasVideoFrame) {
-                        vlcTextureView.setAlpha(1f);
-                    }
-                }
-            });
+            // LibVLC manages the TextureView surface lifecycle through IVLCVout.Callback.
+// Do not install a second SurfaceTextureListener here.
             vlcTextureView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
                 if (!usingLibVlc) return;
                 int newW = right - left;
