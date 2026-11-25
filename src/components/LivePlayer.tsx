@@ -4790,49 +4790,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
           if (filtered.length > 0) rawList = filtered;
         }
   
-if (mediaType === 'live') {
-  const isFavorites =
-    selectedCategory === 'favorites' ||
-    selectedCategory === 'FAVORITES_INTERNAL';
 
-  const categoryKey = isFavorites
-    ? 'favorites'
-    : String(selectedCategory || '__all__');
-
-  orderKey =
-    `${encodeURIComponent(effectivePlaylistId || 'default')}::live::${encodeURIComponent(categoryKey)}`;
-} else {
-  orderKey = mediaType;
-}
-
-let savedOrder = settings.channelOrders?.[orderKey];
-
-if (!savedOrder || !Array.isArray(savedOrder) || savedOrder.length === 0) {
-  try {
-    const raw = localStorage.getItem(`achour_channel_orders_${orderKey}`);
-    if (raw) savedOrder = JSON.parse(raw);
-  } catch (e) {}
-}
-
-    if (!savedOrder || !Array.isArray(savedOrder) || savedOrder.length === 0) {
-      return incomingChs;
-    }
-
-    const orderMap = new Map<string, number>();
-    savedOrder.forEach((id, idx) => orderMap.set(String(id), idx));
-
-    return incomingChs.slice().sort((a, b) => {
-      const idxA = orderMap.has(String(a.stream_id))
-        ? orderMap.get(String(a.stream_id))!
-        : 999999;
-
-      const idxB = orderMap.has(String(b.stream_id))
-        ? orderMap.get(String(b.stream_id))!
-        : 999999;
-
-      return idxA - idxB;
-    });
-  }, [settings.channelOrders, mediaType, selectedCategory, effectivePlaylistId]);
           return {
             stream_id: cleanStreamId,
             name: String(ch.name || ch.title || 'Channel ' + (idx + 1)),
