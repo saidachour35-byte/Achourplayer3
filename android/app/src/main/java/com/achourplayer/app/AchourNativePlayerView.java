@@ -228,72 +228,41 @@ public class AchourNativePlayerView extends FrameLayout {
             if (!usingLibVlc || vlcMediaPlayer == null || !vlcPendingPlay) return;
             if (vlcTextureView != null && vlcTextureView.isAvailable()
                     && vlcTextureView.getWidth() > 0 && vlcTextureView.getHeight() > 0) {
-                
-vlcSurfaceReady = true;
-
-if (attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight())) {
-    try {
-        vlcMediaPlayer.play();
-        vlcPendingPlay = false;
-    } catch (Exception e) {
-        vlcPendingPlay = true;
-        Log.e("AchourVLC", "VLC fallback playback failed", e);
-        mainHandler.postDelayed(this, 200L);
-    }
-} else {
-    vlcPendingPlay = true;
-    mainHandler.postDelayed(this, 200L);
-}
-
+                vlcSurfaceReady = true;
+                vlcPendingPlay = false;
+                try {
+                    attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight());
+                    vlcMediaPlayer.play();
+                } catch (Exception ignored) {
+                }
             } else if (vlcTextureView != null) {
                 mainHandler.postDelayed(this, 200L);
             }
         }
     };
 
-  
-private boolean attachVlcVoutIfAvailable(int width, int height) {
-    if (vlcMediaPlayer == null || vlcTextureView == null
-            || !vlcTextureView.isAvailable()) {
-        Log.w("AchourVLC", "Video surface is not ready");
-        return false;
-    }
-
-    int effW = width > 0 ? width
-            : (vlcTextureView.getWidth() > 0
-            ? vlcTextureView.getWidth() : getWidth());
-
-    int effH = height > 0 ? height
-            : (vlcTextureView.getHeight() > 0
-            ? vlcTextureView.getHeight() : getHeight());
-
-    if (effW <= 0 || effH <= 0) {
-        Log.w("AchourVLC", "Invalid video surface size");
-        return false;
-    }
-
-    try {
-        IVLCVout vout = vlcMediaPlayer.getVLCVout();
-
-        if (!vlcViewsAttached) {
-            vout.setVideoView(vlcTextureView);
-            vout.addCallback(vlcVoutCallback);
-            vout.setWindowSize(effW, effH);
-            vout.attachViews(vlcNewVideoLayoutListener);
-            vlcViewsAttached = true;
-        } else {
-            vout.setWindowSize(effW, effH);
+    private void attachVlcVoutIfAvailable(int width, int height) {
+        if (vlcMediaPlayer == null || vlcTextureView == null || !vlcTextureView.isAvailable()) {
+            return;
         }
-
-        return true;
-
-    } catch (Exception e) {
-        vlcViewsAttached = false;
-        Log.e("AchourVLC", "Failed to attach VLC video output", e);
-        return false;
+        int effW = width > 0 ? width : (vlcTextureView.getWidth() > 0 ? vlcTextureView.getWidth() : getWidth());
+        int effH = height > 0 ? height : (vlcTextureView.getHeight() > 0 ? vlcTextureView.getHeight() : getHeight());
+        try {
+            IVLCVout vout = vlcMediaPlayer.getVLCVout();
+            if (!vlcViewsAttached) {
+                vout.setVideoView(vlcTextureView);
+                vout.addCallback(vlcVoutCallback);
+                if (effW > 0 && effH > 0) {
+                    vout.setWindowSize(effW, effH);
+                }
+                vout.attachViews(vlcNewVideoLayoutListener);
+                vlcViewsAttached = true;
+            } else if (effW > 0 && effH > 0) {
+                vout.setWindowSize(effW, effH);
+            }
+        } catch (Exception ignored) {
+        }
     }
-}
-
 
     private final Runnable retryRunnable = new Runnable() {
         @Override
@@ -695,8 +664,57 @@ private boolean attachVlcVoutIfAvailable(int width, int height) {
             vlcTextureView.setFocusableInTouchMode(false);
             vlcTextureView.setKeepScreenOn(true);
             vlcTextureView.setVisibility(View.GONE);
-            // LibVLC manages the TextureView surface lifecycle through IVLCVout.Callback.
-// Do not install a second SurfaceTextureListener here.
+            vlcTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+                @Override
+                public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                    vlcSurfaceReady = true;
+                    if (usingLibVlc && vlcMediaPlayer != null) {
+                        attachVlcVoutIfAvailable(width, height);
+                        applyVlcVideoLayout();
+                        if (vlcPendingPlay) {
+                            vlcPendingPlay = false;
+                            mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
+                            try {
+                                vlcMediaPlayer.play();
+                            } catch (Exception ignored) {
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+                    if (usingLibVlc && vlcMediaPlayer != null && vlcViewsAttached && width > 0 && height > 0) {
+                        try {
+                            vlcMediaPlayer.getVLCVout().setWindowSize(width, height);
+                        } catch (Exception ignored) {
+                        }
+                        applyVlcVideoLayout();
+                    }
+                }
+
+                @Override
+                public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                    vlcSurfaceReady = false;
+                    if (vlcMediaPlayer != null && vlcViewsAttached) {
+                        try {
+                            IVLCVout vout = vlcMediaPlayer.getVLCVout();
+                            vout.removeCallback(vlcVoutCallback);
+                            vout.detachViews();
+                        } catch (Exception ignored) {
+                        }
+                        vlcViewsAttached = false;
+                    }
+                    return true;
+                }
+
+                @Override
+                public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+                    if (usingLibVlc && vlcTextureView != null && vlcTextureView.getAlpha() < 1f && vlcHasVideoFrame) {
+                        vlcTextureView.setAlpha(1f);
+                    }
+                }
+            });
             vlcTextureView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
                 if (!usingLibVlc) return;
                 int newW = right - left;
@@ -711,19 +729,16 @@ private boolean attachVlcVoutIfAvailable(int width, int height) {
                         }
                     }
                     if (vlcPendingPlay && vlcMediaPlayer != null && vlcTextureView.isAvailable()) {
-    vlcSurfaceReady = true;
-    if (attachVlcVoutIfAvailable(newW, newH)) {
-        vlcPendingPlay = false;
-        try {
-            vlcMediaPlayer.play();
-        } catch (Exception e) {
-            Log.e("AchourVLC", "Failed to start VLC after layout change", e);
-        }
-    }
-}
+                        vlcSurfaceReady = true;
+                        vlcPendingPlay = false;
+                        attachVlcVoutIfAvailable(newW, newH);
+                        try {
+                            vlcMediaPlayer.play();
+                        } catch (Exception ignored) {
+                        }
                     }
-                            });
-            
+                }
+            });
             addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
                 if (!usingLibVlc) return;
                 int newW = right - left;
@@ -1266,7 +1281,7 @@ private boolean attachVlcVoutIfAvailable(int width, int height) {
 
                 // Fallback: check Media tracks if current video track is not yet selected
                 try {
-                    IMedia m = vlcMediaPlayer.getMedia();
+                    org.videolan.libvlc.interfaces.IMedia m = vlcMediaPlayer.getMedia();
                     if (m != null) {
                         int tCount = m.getTrackCount();
                         for (int i = 0; i < tCount; i++) {
@@ -1350,35 +1365,22 @@ private boolean attachVlcVoutIfAvailable(int width, int height) {
                     }
                 }
                 applyVlcVideoLayout();
-                if (usingLibVlc && vlcPendingPlay && vlcMediaPlayer != null
-        && vlcTextureView != null
-        && attachVlcVoutIfAvailable(
-                vlcTextureView.getWidth(),
-                vlcTextureView.getHeight())) {
-    try {
-        vlcMediaPlayer.play();
-        vlcPendingPlay = false;
-    } catch (Exception e) {
-        vlcPendingPlay = true;
-        Log.e("AchourVLC", "Failed to start VLC after surfaces created", e);
-    }
-}
+                if (usingLibVlc && vlcPendingPlay && vlcMediaPlayer != null) {
+                    vlcPendingPlay = false;
+                    try {
+                        vlcMediaPlayer.play();
+                    } catch (Exception ignored) {
+                    }
+                }
             });
         }
 
         @Override
-public void onSurfacesDestroyed(IVLCVout vlcVout) {
-    mainHandler.post(() -> {
-        vlcSurfaceReady = false;
-        vlcViewsAttached = false;
-
-        if (usingLibVlc && vlcPendingPlay && vlcTextureView != null) {
-            mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-            mainHandler.postDelayed(vlcSurfaceFallbackPlayRunnable, 200L);
+        public void onSurfacesDestroyed(IVLCVout vlcVout) {
+            mainHandler.post(() -> vlcSurfaceReady = false);
         }
-    });
-}
-            };
+    };
+
     private final IVLCVout.OnNewVideoLayoutListener vlcNewVideoLayoutListener =
             (vlcVout, width, height, visibleWidth, visibleHeight, sarNum, sarDen) -> {
                 int effW = visibleWidth > 0 ? visibleWidth : width;
@@ -1532,61 +1534,48 @@ public void onSurfacesDestroyed(IVLCVout vlcVout) {
         }
     }
 
-    
-private void releaseVlcPlayer() {
-    mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
-    mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-    mainHandler.removeCallbacks(vlcRevealTextureRunnable);
-    mainHandler.removeCallbacks(vlcResRefreshRunnable);
-
-    vlcPendingPlay = false;
-    vlcSurfaceReady = false;
-    vlcHasVideoFrame = false;
-    vlcVideoWidth = 0;
-    vlcVideoHeight = 0;
-
-    if (vlcMediaPlayer != null) {
-        try {
-            vlcMediaPlayer.setEventListener(null);
-        } catch (Exception e) {
-            Log.e("AchourVLC", "Failed to clear VLC event listener", e);
-        }
-
-        try {
-            vlcMediaPlayer.stop();
-        } catch (Exception e) {
-            Log.w("AchourVLC", "VLC stop failed during release", e);
-        }
-
-        if (vlcViewsAttached) {
+    private void releaseVlcPlayer() {
+        mainHandler.removeCallbacks(vlcVideoWatchdogRunnable);
+        mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
+        mainHandler.removeCallbacks(vlcRevealTextureRunnable);
+        mainHandler.removeCallbacks(vlcResRefreshRunnable);
+        vlcPendingPlay = false;
+        vlcSurfaceReady = false;
+        vlcHasVideoFrame = false;
+        vlcVideoWidth = 0;
+        vlcVideoHeight = 0;
+        if (vlcMediaPlayer != null) {
             try {
-                IVLCVout vout = vlcMediaPlayer.getVLCVout();
-                vout.removeCallback(vlcVoutCallback);
-                vout.detachViews();
-            } catch (Exception e) {
-                Log.w("AchourVLC", "VLC video output detach failed", e);
+                vlcMediaPlayer.setEventListener(null);
+            } catch (Exception ignored) {
             }
-            vlcViewsAttached = false;
+            if (vlcViewsAttached) {
+                try {
+                    IVLCVout vout = vlcMediaPlayer.getVLCVout();
+                    vout.removeCallback(vlcVoutCallback);
+                    vout.detachViews();
+                } catch (Exception ignored) {
+                }
+                vlcViewsAttached = false;
+            }
+            try {
+                vlcMediaPlayer.stop();
+            } catch (Exception ignored) {
+            }
+            try {
+                vlcMediaPlayer.release();
+            } catch (Exception ignored) {
+            }
+            vlcMediaPlayer = null;
         }
-
-        try {
-            vlcMediaPlayer.release();
-        } catch (Exception e) {
-            Log.e("AchourVLC", "VLC MediaPlayer release failed", e);
+        if (libVlc != null) {
+            try {
+                libVlc.release();
+            } catch (Exception ignored) {
+            }
+            libVlc = null;
         }
-        vlcMediaPlayer = null;
     }
-
-    if (libVlc != null) {
-        try {
-            libVlc.release();
-        } catch (Exception e) {
-            Log.e("AchourVLC", "LibVLC release failed", e);
-        }
-        libVlc = null;
-    }
-}
-
 
     private void buildVlcPlayer(Context context, boolean forLive, String userAgent) {
         releaseVlcPlayer();
@@ -1939,20 +1928,16 @@ private void releaseVlcPlayer() {
                 if (readyNow) {
                     vlcSurfaceReady = true;
                     vlcPendingPlay = false;
-                    if (attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight())) {
-    vlcPendingPlay = false;
-    try {
-        vlcMediaPlayer.play();
-        mainHandler.postDelayed(vlcRevealTextureRunnable, 1100L);
-    } catch (Exception e) {
-        Log.e("AchourVLC", "Failed to start initial VLC playback", e);
-    }
-} else {
-    vlcPendingPlay = true;
-    mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
-    mainHandler.postDelayed(vlcSurfaceFallbackPlayRunnable, 200L);
-}
-                    
+                    attachVlcVoutIfAvailable(vlcTextureView.getWidth(), vlcTextureView.getHeight());
+                    try {
+                        vlcMediaPlayer.play();
+                    } catch (Exception ignored) {
+                    }
+                    mainHandler.postDelayed(vlcRevealTextureRunnable, 1100L);
+                } else if (vlcTextureView != null) {
+                    vlcTextureView.requestLayout();
+                    mainHandler.removeCallbacks(vlcSurfaceFallbackPlayRunnable);
+                    mainHandler.postDelayed(vlcSurfaceFallbackPlayRunnable, 180L);
                 }
             }
             return;
@@ -2271,15 +2256,14 @@ private void releaseVlcPlayer() {
         if (usingLibVlc) {
             if (vlcMediaPlayer != null) {
                 if (vlcSurfaceReady) {
-    vlcPendingPlay = false;
-    try {
-        vlcMediaPlayer.play();
-    } catch (Exception ignored) {
-    }
-} else {
-    vlcPendingPlay = true;
-}
-                
+                    vlcPendingPlay = false;
+                    try {
+                        vlcMediaPlayer.play();
+                    } catch (Exception ignored) {
+                    }
+                } else {
+                    vlcPendingPlay = true;
+                }
                 cachedIsPlaying = true;
                 startPositionTicker();
             }
