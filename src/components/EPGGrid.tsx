@@ -104,10 +104,10 @@ export default function EPGGrid({ isOpen, onClose, channels, epgData, onSelectCh
                 <Calendar size={24} />
               </div>
               <div className="flex flex-col">
-                <h2 className="text-xl font-black text-white uppercase tracking-tighter">
+                <h2 className="text-xl font-semibold achour-glossy-title uppercase tracking-tight">
                   {isRtl ? 'دليل البرامج الإلكتروني' : 'Electronic Program Guide'}
                 </h2>
-                <span className="text-sm font-bold text-gold">{formattedDate}</span>
+                <span className="text-sm font-medium achour-glossy-text">{formattedDate}</span>
               </div>
             </div>
 
@@ -119,7 +119,7 @@ export default function EPGGrid({ isOpen, onClose, channels, epgData, onSelectCh
               >
                 <ChevronLeft size={18} />
               </button>
-              <span className="px-4 text-xs font-black uppercase text-zinc-300">
+              <span className="px-4 text-xs font-medium uppercase text-zinc-300">
                 {currentDayOffset === 0 ? (isRtl ? 'اليوم' : 'Today') : (isRtl ? `يوم ${currentDayOffset}` : `Day ${currentDayOffset}`)}
               </span>
               <button 
@@ -134,13 +134,13 @@ export default function EPGGrid({ isOpen, onClose, channels, epgData, onSelectCh
           <div className="flex items-center gap-4">
             {/* Search */}
             <div className="relative group">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-gold transition-colors" size={16} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gold/80 group-focus-within:text-gold transition-colors" size={16} />
               <input 
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={isRtl ? 'بحث عن قناة...' : 'Search channel...'}
-                className="bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-gold/50 focus:bg-white/10 transition-all w-64"
+                className="bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-gold placeholder:text-gold/75 focus:outline-none focus:border-gold/50 focus:bg-white/10 transition-all w-64"
               />
             </div>
 
@@ -163,7 +163,7 @@ export default function EPGGrid({ isOpen, onClose, channels, epgData, onSelectCh
             <div className="w-48 sm:w-64 bg-white/[0.03] border-r border-white/10 flex flex-col z-30">
               <div className="h-14 border-b border-white/10 flex items-center px-4 bg-white/[0.04]">
                 <Tv size={18} className="text-gold mr-2" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-400">
                   {isRtl ? 'القنوات' : 'Channels'}
                 </span>
               </div>
@@ -182,7 +182,7 @@ export default function EPGGrid({ isOpen, onClose, channels, epgData, onSelectCh
                       )}
                     </div>
                     <div className="flex flex-col min-w-0">
-                      <span className="text-xs font-black text-zinc-200 truncate group-hover:text-gold transition-colors">{channel.name}</span>
+                      <span className="text-xs font-medium text-zinc-200 truncate group-hover:text-gold transition-colors">{channel.name}</span>
                       {(() => {
                         const rawCat = typeof channel.category === 'string' ? channel.category.trim() : '';
                         const lowerCat = rawCat.toLowerCase();
@@ -213,7 +213,7 @@ export default function EPGGrid({ isOpen, onClose, channels, epgData, onSelectCh
                       className="absolute top-0 bottom-0 border-l border-white/5 flex items-center px-2"
                       style={{ left: idx * 30 * PIXELS_PER_MINUTE }}
                     >
-                      <span className="text-[10px] font-black font-mono text-zinc-500">
+                      <span className="text-[10px] font-normal font-sans tabular-nums text-zinc-400">
                         {time.toLocaleTimeString(settings.language, { hour: '2-digit', minute: '2-digit', hour12: settings.timeFormat === '12h' })}
                       </span>
                     </div>
@@ -278,16 +278,16 @@ export default function EPGGrid({ isOpen, onClose, channels, epgData, onSelectCh
                               onClick={() => onSelectChannel(channel)}
                             >
                               <div className="flex items-center justify-between gap-2 overflow-hidden">
-                                <span className={`text-[11px] font-black truncate ${isCurrentlyPlaying ? 'text-gold' : 'text-zinc-200'}`}>
+                                <span className={`text-[11px] font-medium truncate ${isCurrentlyPlaying ? 'achour-glossy-text' : 'text-zinc-200'}`}>
                                   {prog.title}
                                 </span>
                                 {isCurrentlyPlaying && (
-                                  <div className="shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-gold text-[8px] font-black text-black">
+                                  <div className="shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded-md achour-glossy-badge text-[8px] font-semibold">
                                     LIVE
                                   </div>
                                 )}
                               </div>
-                              <div className="flex items-center gap-2 text-[9px] font-bold text-zinc-500">
+                              <div className="flex items-center gap-2 text-[9px] font-normal font-sans tabular-nums text-zinc-400">
                                 <Clock size={10} className="shrink-0" />
                                 <span>
                                   {prog.start.toLocaleTimeString(settings.language, { hour: '2-digit', minute: '2-digit', hour12: false })} - {prog.stop.toLocaleTimeString(settings.language, { hour: '2-digit', minute: '2-digit', hour12: false })}

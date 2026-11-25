@@ -88,10 +88,10 @@ export default function ExtractionProgressModal({
               )}
             </div>
             <div className="min-w-0">
-              <h2 className="text-sm font-black text-white truncate">
+              <h2 className="text-sm font-semibold achour-glossy-title truncate">
                 {playlistName || 'Achour Player'}
               </h2>
-              <p className="text-[11px] font-bold text-gold truncate">
+              <p className="text-[11px] font-medium achour-glossy-text truncate">
                 {getStageLabel()}
               </p>
             </div>
@@ -122,10 +122,10 @@ export default function ExtractionProgressModal({
 
         {/* Message + Percentage */}
         <div className="flex justify-between items-center gap-2 mb-3">
-          <span className="text-zinc-300 text-[11px] font-semibold truncate">
+          <span className="text-zinc-300 text-[11px] font-normal truncate">
             {localizedMessage}
           </span>
-          <span className="text-gold font-black text-sm font-mono shrink-0">
+          <span className="achour-glossy-text font-semibold text-sm font-sans tabular-nums shrink-0">
             {Math.max(0, Math.min(100, Math.round(percent)))}%
           </span>
         </div>
@@ -133,26 +133,26 @@ export default function ExtractionProgressModal({
         {/* Stage Counts (Live, Movie, Series) with Readiness Indicator */}
         <div className="grid grid-cols-3 gap-1.5 p-2.5 bg-white/5 rounded-xl border border-white/10 mb-3 text-center">
           <div className={`rounded-lg py-1 px-1 ${liveReady ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`}>
-            <span className="block text-[10px] text-zinc-400 font-bold">
+            <span className="block text-[10px] text-zinc-400 font-medium">
               {t('live')} {liveReady ? '✓' : ''}
             </span>
-            <span className="text-xs font-black text-white font-mono">
+            <span className="text-xs font-semibold text-white font-sans tabular-nums">
               {(counts?.live || 0).toLocaleString()}
             </span>
           </div>
           <div className={`rounded-lg py-1 px-1 ${movieReady ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`}>
-            <span className="block text-[10px] text-zinc-400 font-bold">
+            <span className="block text-[10px] text-zinc-400 font-medium">
               {t('movies')} {movieReady ? '✓' : ''}
             </span>
-            <span className="text-xs font-black text-white font-mono">
+            <span className="text-xs font-semibold text-white font-sans tabular-nums">
               {(counts?.movie || 0).toLocaleString()}
             </span>
           </div>
           <div className={`rounded-lg py-1 px-1 ${seriesReady ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`}>
-            <span className="block text-[10px] text-zinc-400 font-bold">
+            <span className="block text-[10px] text-zinc-400 font-medium">
               {t('series')} {seriesReady ? '✓' : ''}
             </span>
-            <span className="text-xs font-black text-white font-mono">
+            <span className="text-xs font-semibold text-white font-sans tabular-nums">
               {(counts?.series || 0).toLocaleString()}
             </span>
           </div>
@@ -166,7 +166,7 @@ export default function ExtractionProgressModal({
                 onClick={onWatchLive}
                 data-tv-focusable="true"
                 tabIndex={0}
-                className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs flex items-center justify-center gap-1.5 transition-colors focus:outline-none cursor-pointer"
+                className="flex-1 min-w-[140px] px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-medium text-xs flex items-center justify-center gap-1.5 transition-colors focus:outline-none cursor-pointer"
               >
                 <Tv className="w-3.5 h-3.5" />
                 <span>{t('watch_live_now')}</span>
@@ -177,7 +177,7 @@ export default function ExtractionProgressModal({
                 onClick={onMinimize}
                 data-tv-focusable="true"
                 tabIndex={0}
-                className="px-3 py-2 rounded-xl bg-gold/20 hover:bg-gold/30 border border-gold/40 text-gold font-bold text-xs transition-colors focus:outline-none cursor-pointer"
+                className="px-3 py-2 rounded-xl achour-glossy-surface border border-gold/40 text-gold font-medium text-xs transition-colors focus:outline-none cursor-pointer"
               >
                 {t('minimize_background')}
               </button>
@@ -187,7 +187,7 @@ export default function ExtractionProgressModal({
                 onClick={onPause}
                 data-tv-focusable="true"
                 tabIndex={0}
-                className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-zinc-200 font-bold text-xs flex items-center gap-1 transition-colors focus:outline-none cursor-pointer"
+                className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-zinc-200 font-medium text-xs flex items-center gap-1 transition-colors focus:outline-none cursor-pointer"
               >
                 <Pause className="w-3.5 h-3.5" />
                 <span>{t('pause')}</span>
@@ -203,7 +203,7 @@ export default function ExtractionProgressModal({
                 onClick={onWatchLive}
                 data-tv-focusable="true"
                 tabIndex={0}
-                className="px-3 py-1.5 rounded-xl bg-emerald-500 text-black font-black text-xs hover:bg-emerald-400 transition-colors focus:outline-none cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-emerald-500 text-black font-medium text-xs hover:bg-emerald-400 transition-colors focus:outline-none cursor-pointer"
               >
                 {t('watch_live')}
               </button>
@@ -213,7 +213,7 @@ export default function ExtractionProgressModal({
                 onClick={onResume}
                 data-tv-focusable="true"
                 tabIndex={0}
-                className="px-3 py-1.5 rounded-xl bg-gold text-black font-black text-xs hover:bg-yellow-400 transition-colors focus:outline-none cursor-pointer"
+                className="px-3 py-1.5 rounded-xl achour-glossy-pill font-medium text-xs hover:brightness-110 transition-all focus:outline-none cursor-pointer"
               >
                 {t('resume_extraction')}
               </button>
@@ -223,7 +223,7 @@ export default function ExtractionProgressModal({
                 onClick={onRetry}
                 data-tv-focusable="true"
                 tabIndex={0}
-                className="px-3 py-1.5 rounded-xl bg-gold text-black font-black text-xs hover:bg-yellow-400 transition-colors focus:outline-none cursor-pointer"
+                className="px-3 py-1.5 rounded-xl achour-glossy-pill font-medium text-xs hover:brightness-110 transition-all focus:outline-none cursor-pointer"
               >
                 {t('retry')}
               </button>

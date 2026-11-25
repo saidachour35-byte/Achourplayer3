@@ -591,7 +591,7 @@ export default function SplashScreen({
           {BRAND_LETTERS.map((item, index) => (
             <span
               key={index}
-              className={`text-lg sm:text-2xl md:text-3xl font-black tracking-wide sm:tracking-wider mx-[1px] sm:mx-1 inline-block achour-splash-letter ${
+              className={`text-lg sm:text-2xl md:text-3xl font-semibold tracking-wide sm:tracking-wider mx-[1px] sm:mx-1 inline-block achour-splash-letter ${
                 item.char === ' ' ? 'w-2 sm:w-3' : ''
               }`}
               style={{
@@ -647,7 +647,7 @@ export default function SplashScreen({
           </svg>
           <div className="flex flex-col items-center justify-center z-10">
             <span
-              className="text-xl sm:text-2xl font-black font-mono leading-none"
+              className="text-xl sm:text-2xl font-semibold font-sans tabular-nums leading-none"
               style={{
                 color: NUMBER_COLORS[timeLeft % NUMBER_COLORS.length],
                 textShadow: `0 0 12px ${NUMBER_COLORS[timeLeft % NUMBER_COLORS.length]}`,
@@ -655,7 +655,7 @@ export default function SplashScreen({
             >
               {timeLeft}
             </span>
-            <span className="text-[7px] sm:text-[8px] uppercase tracking-widest text-white/60 font-bold mt-0.5">
+            <span className="text-[7px] sm:text-[8px] uppercase tracking-widest text-white/60 font-medium mt-0.5">
               SEC
             </span>
           </div>

@@ -43,7 +43,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   royalThemeColor: 'pure-metallic-gold',
   customThemeColor: null,
   icon3DStyle: 'style-gold-3d',
-  iconDisplayMode: 'with-frames',
+  iconDisplayMode: 'icons-only',
   iconPack: 'pack-3d',
   frameShape: 'rounded-square',
   glassOpacity: 16,
@@ -56,7 +56,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   iconScale: 'md',
   frameScale: 'md',
   tileSpacing: 'md',
-  dashboardAlignment: 'center',
+  dashboardAlignment: 'bottom',
   dashboardHorizontalAlignment: 'center',
   zoomScale: 85,
   windowScales: {
@@ -70,7 +70,8 @@ const DEFAULT_SETTINGS: AppSettings = {
   multiViewFullSplit: false,
   liveBarSize: 'default',
   seekStep: 10,
-  dashboardFocusMode: 'frame',
+  dashboardFocusMode: 'both',
+  focusVisualStyle: 'lamp-halo',
   dashboardLabelColorMode: 'theme',
   dashboardLabelCustomColor: null,
 };
@@ -117,8 +118,10 @@ export default function App() {
     const langInitialized = localStorage.getItem('achour_lang_initialized_v3');
     const userSelectedLang = localStorage.getItem('achour_user_selected_lang');
     const userSetViewMode = localStorage.getItem('achour_viewmode_user_set');
+    const dockV1Migrated = localStorage.getItem('achour_glossy_dock_v1');
     if (!saved) {
       localStorage.setItem('achour_lang_initialized_v3', 'true');
+      localStorage.setItem('achour_glossy_dock_v1', 'true');
       return DEFAULT_SETTINGS;
     }
     try {
@@ -133,14 +136,35 @@ export default function App() {
         ? 'grid'
         : (parsed.viewMode || DEFAULT_SETTINGS.viewMode);
       const resolvedDesign = resolveDesignSettings(parsed);
+      let migratedDisplayMode = resolvedDesign.iconDisplayMode;
+      let migratedAlignment = parsed.dashboardAlignment || DEFAULT_SETTINGS.dashboardAlignment;
+      let migratedFocusMode = parsed.dashboardFocusMode || DEFAULT_SETTINGS.dashboardFocusMode;
+      if (!dockV1Migrated) {
+        localStorage.setItem('achour_glossy_dock_v1', 'true');
+        const wasPreviousDefault =
+          resolvedDesign.iconPack === 'pack-3d' &&
+          resolvedDesign.frameShape === 'rounded-square' &&
+          resolvedDesign.iconDisplayMode === 'with-frames';
+        if (wasPreviousDefault) {
+          migratedDisplayMode = 'icons-only';
+        }
+        if (!parsed.dashboardAlignment || parsed.dashboardAlignment === 'center') {
+          migratedAlignment = 'bottom';
+        }
+        if (!parsed.dashboardFocusMode || parsed.dashboardFocusMode === 'frame') {
+          migratedFocusMode = 'both';
+        }
+      }
       return {
         ...DEFAULT_SETTINGS,
         ...parsed,
-        iconDisplayMode: resolvedDesign.iconDisplayMode,
+        iconDisplayMode: migratedDisplayMode,
         iconPack: resolvedDesign.iconPack,
         frameShape: resolvedDesign.frameShape,
         glassOpacity: resolvedDesign.glassOpacity,
         glassBlur: resolvedDesign.glassBlur,
+        dashboardAlignment: migratedAlignment,
+        dashboardFocusMode: migratedFocusMode,
         viewMode: resolvedViewMode,
         language: lang || 'en',
         backgroundStyle: bgValid ? parsed.backgroundStyle : DEFAULT_SETTINGS.backgroundStyle,
@@ -338,6 +362,11 @@ export default function App() {
       settings.glassOpacity,
       settings.glassBlur
     );
+
+    const nextFocusShape = settings.focusVisualStyle || 'lamp-halo';
+    if (document.documentElement.getAttribute('data-focus-shape') !== nextFocusShape) {
+      document.documentElement.setAttribute('data-focus-shape', nextFocusShape);
+    }
   }, [settings]);
 
   useEffect(() => {
@@ -452,10 +481,10 @@ export default function App() {
             <div className="w-24 h-24 rounded-full bg-red-500/20 flex items-center justify-center mb-6 border border-red-500/40">
               <Smartphone size={48} className="text-red-500" />
             </div>
-            <h1 className="text-2xl font-black uppercase tracking-widest text-white mb-4">
+            <h1 className="text-2xl font-semibold uppercase tracking-widest achour-glossy-title mb-4">
               {settings.language === 'ar' ? 'الجهاز غير مدعوم' : 'Device Not Supported'}
             </h1>
-            <div className="max-w-md space-y-4 text-zinc-400 font-bold">
+            <div className="max-w-md space-y-4 text-zinc-300 font-normal">
               <p className="text-sm">
                 {settings.language === 'ar' 
                   ? 'عذراً، هذا التطبيق مصمم حصرياً للعمل على أجهزة Fire TV و Android Box.' 
@@ -470,7 +499,7 @@ export default function App() {
                 </p>
               </div>
             </div>
-            <div className="mt-8 text-[10px] font-mono text-zinc-600 uppercase tracking-widest">
+            <div className="mt-8 text-[10px] font-sans font-normal achour-glossy-info uppercase tracking-widest">
               Achour Player • TV Edition Only
             </div>
           </motion.div>

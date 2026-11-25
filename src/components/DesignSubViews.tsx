@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import {
   AppSettings,
+  FocusVisualStyle,
   FrameShapeId,
   IconDisplayMode,
   IconPackId,
@@ -251,7 +252,7 @@ export default function DesignSubViewContent({
                 <SunMoon size={22} />
               </div>
               <div>
-                <h2 className="text-base sm:text-lg font-black text-white">
+                <h2 className="text-base sm:text-lg font-semibold achour-glossy-title">
                   {t('background_opacity')}
                 </h2>
                 <p className="text-xs text-zinc-300 mt-0.5">
@@ -263,7 +264,7 @@ export default function DesignSubViewContent({
             <div className="px-5 py-2.5 rounded-2xl bg-black/50 border border-gold/50 text-center min-w-[104px]">
               <span
                 data-testid="bg-opacity-value"
-                className="text-3xl sm:text-4xl font-mono font-black text-gold tabular-nums"
+                className="text-3xl sm:text-4xl font-sans font-semibold achour-glossy-text tabular-nums"
               >
                 {bgOpacity}%
               </span>
@@ -280,7 +281,7 @@ export default function DesignSubViewContent({
                 aria-label="Decrease Background Opacity by 1%"
                 onClick={() => setOpacityClamped(bgOpacity - 1)}
                 disabled={bgOpacity <= 0}
-                className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xl font-black border border-white/15 transition-colors cursor-pointer flex items-center justify-center shrink-0"
+                className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xl font-medium border border-white/15 transition-colors cursor-pointer flex items-center justify-center shrink-0"
               >
                 −
               </button>
@@ -298,7 +299,7 @@ export default function DesignSubViewContent({
                   onChange={(e) => setOpacityClamped(Number(e.target.value))}
                   className="w-full h-3 accent-[var(--theme-primary)] cursor-pointer"
                 />
-                <div className="flex items-center justify-between text-[11px] font-mono text-zinc-300 px-0.5">
+                <div className="flex items-center justify-between text-[11px] font-sans tabular-nums text-zinc-300 px-0.5">
                   <span>0% ({t('bg_opacity_natural_short')})</span>
                   <span>62% ({t('bg_opacity_default_short')})</span>
                   <span>100% ({t('bg_opacity_full_short')})</span>
@@ -312,7 +313,7 @@ export default function DesignSubViewContent({
                 aria-label="Increase Background Opacity by 1%"
                 onClick={() => setOpacityClamped(bgOpacity + 1)}
                 disabled={bgOpacity >= 100}
-                className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xl font-black border border-white/15 transition-colors cursor-pointer flex items-center justify-center shrink-0"
+                className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-35 text-white text-xl font-medium border border-white/15 transition-colors cursor-pointer flex items-center justify-center shrink-0"
               >
                 +
               </button>
@@ -347,13 +348,13 @@ export default function DesignSubViewContent({
 
   // 2. ICON DISPLAY MODE (Icons Only vs With Frames)
   if (subView === 'design-display') {
-    const currentMode: IconDisplayMode = settings.iconDisplayMode || 'with-frames';
+    const currentMode: IconDisplayMode = settings.iconDisplayMode || 'icons-only';
     return (
       <div className="space-y-4 pb-4">
         <div className="flex items-center gap-2.5">
           <Eye size={18} className="text-gold" />
           <div>
-            <h3 className="text-sm sm:text-base font-black text-white">
+            <h3 className="text-sm sm:text-base font-semibold achour-glossy-title">
               {t('icon_display_mode')}
             </h3>
             <p className="text-xs text-zinc-400">
@@ -392,7 +393,7 @@ export default function DesignSubViewContent({
                 } ${isRtl ? 'text-right' : 'text-left'}`}
               >
                 <div className="flex items-center justify-between w-full">
-                  <span className="text-sm font-black text-white">
+                  <span className="text-sm font-medium text-white">
                     {opt.title}
                   </span>
                   {active && (
@@ -446,7 +447,7 @@ export default function DesignSubViewContent({
         <div className="flex items-center gap-2.5">
           <Sparkles size={18} className="text-gold" />
           <div>
-            <h3 className="text-sm sm:text-base font-black text-white">
+            <h3 className="text-sm sm:text-base font-semibold achour-glossy-title">
               {t('icon_styles_heading', { count: ICON_PACKS.length })}
             </h3>
             <p className="text-xs text-zinc-400">
@@ -479,7 +480,7 @@ export default function DesignSubViewContent({
           <div className="flex items-center gap-2.5">
             <Frame size={18} className="text-gold" />
             <div>
-              <h3 className="text-sm sm:text-base font-black text-white">
+              <h3 className="text-sm sm:text-base font-semibold achour-glossy-title">
                 {t('frame_shapes_heading', { count: FRAME_SHAPES.length })}
               </h3>
               <p className="text-xs text-zinc-400">
@@ -487,13 +488,13 @@ export default function DesignSubViewContent({
               </p>
             </div>
           </div>
-          {(settings.iconDisplayMode || 'with-frames') === 'icons-only' && (
+          {(settings.iconDisplayMode || 'icons-only') === 'icons-only' && (
             <button
               type="button"
               data-tv-focusable="true"
               tabIndex={0}
               onClick={() => updateField('iconDisplayMode', 'with-frames')}
-              className="px-3 py-1.5 rounded-xl bg-gold text-black text-xs font-black cursor-pointer whitespace-nowrap"
+              className="px-3 py-1.5 rounded-xl achour-glossy-pill text-xs font-medium cursor-pointer whitespace-nowrap"
             >
               {t('enable_frames_now')}
             </button>
@@ -527,11 +528,11 @@ export default function DesignSubViewContent({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <Maximize2 size={18} className="text-gold" />
-              <span className="text-sm sm:text-base font-black text-white">
+              <span className="text-sm sm:text-base font-semibold achour-glossy-title">
                 {t('icon_size_label')}
               </span>
             </div>
-            <span className="text-sm font-mono font-bold text-gold uppercase">{cur}</span>
+            <span className="text-sm font-sans font-medium achour-glossy-text uppercase">{cur}</span>
           </div>
           <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
             {(['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'] as const).map((sz) => (
@@ -541,9 +542,9 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('iconScale', sz)}
-                className={`py-3 rounded-2xl border text-sm font-mono font-bold uppercase cursor-pointer transition-colors ${
+                className={`py-3 rounded-2xl border text-sm font-sans font-medium uppercase cursor-pointer transition-colors ${
                   cur === sz
-                    ? 'bg-gold text-black border-gold'
+                    ? 'achour-glossy-pill border-gold'
                     : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
                 }`}
               >
@@ -565,11 +566,11 @@ export default function DesignSubViewContent({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <Frame size={18} className="text-gold" />
-              <span className="text-sm sm:text-base font-black text-white">
+              <span className="text-sm sm:text-base font-semibold achour-glossy-title">
                 {t('frame_size_independent')}
               </span>
             </div>
-            <span className="text-sm font-mono font-bold text-gold uppercase">{cur}</span>
+            <span className="text-sm font-sans font-medium achour-glossy-text uppercase">{cur}</span>
           </div>
           <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
             {(['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'] as const).map((sz) => (
@@ -579,9 +580,9 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('frameScale', sz)}
-                className={`py-3 rounded-2xl border text-sm font-mono font-bold uppercase cursor-pointer transition-colors ${
+                className={`py-3 rounded-2xl border text-sm font-sans font-medium uppercase cursor-pointer transition-colors ${
                   cur === sz
-                    ? 'bg-gold text-black border-gold'
+                    ? 'achour-glossy-pill border-gold'
                     : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
                 }`}
               >
@@ -601,10 +602,10 @@ export default function DesignSubViewContent({
       <div className="max-w-3xl mx-auto py-3 space-y-4">
         <div className="p-4 sm:p-5 rounded-3xl bg-white/[0.04] border border-white/10 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm sm:text-base font-black text-white">
+            <span className="text-sm sm:text-base font-semibold achour-glossy-title">
               {t('section_spacing')}
             </span>
-            <span className="text-sm font-mono font-bold text-gold uppercase">{cur}</span>
+            <span className="text-sm font-sans font-medium achour-glossy-text uppercase">{cur}</span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
             {(
@@ -622,9 +623,9 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('tileSpacing', sp.id)}
-                className={`py-3 px-2 rounded-2xl border text-xs sm:text-sm font-bold cursor-pointer transition-colors whitespace-nowrap ${
+                className={`py-3 px-2 rounded-2xl border text-xs sm:text-sm font-medium cursor-pointer transition-colors whitespace-nowrap ${
                   cur === sp.id
-                    ? 'bg-gold text-black border-gold'
+                    ? 'achour-glossy-pill border-gold'
                     : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
                 }`}
               >
@@ -639,13 +640,13 @@ export default function DesignSubViewContent({
 
   // 9. SCREEN ALIGNMENT POSITION (9-Zone Grid)
   if (subView === 'design-alignment') {
-    const curV = settings.dashboardAlignment || 'center';
+    const curV = settings.dashboardAlignment || 'bottom';
     const curH = settings.dashboardHorizontalAlignment || 'center';
     return (
       <div className="max-w-2xl mx-auto py-3 space-y-4">
         <div className="p-4 sm:p-5 rounded-3xl bg-white/[0.04] border border-white/10 space-y-4">
           <div>
-            <h3 className="text-sm sm:text-base font-black text-white">
+            <h3 className="text-sm sm:text-base font-semibold achour-glossy-title">
               {t('screen_alignment_heading')}
             </h3>
             <p className="text-xs text-zinc-400 mt-0.5">
@@ -719,7 +720,7 @@ export default function DesignSubViewContent({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ArrowUpDown size={18} className="text-gold" />
-              <h3 className="text-sm sm:text-base font-black text-white">
+              <h3 className="text-sm sm:text-base font-semibold achour-glossy-title">
                 {t('reorder_sections')}
               </h3>
             </div>
@@ -728,7 +729,7 @@ export default function DesignSubViewContent({
               data-tv-focusable="true"
               tabIndex={0}
               onClick={() => updateField('dashboardOrder', [...DEFAULT_DASHBOARD_ORDER])}
-              className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-xs font-bold text-zinc-200 cursor-pointer flex items-center gap-1"
+              className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-xs font-medium text-zinc-200 cursor-pointer flex items-center gap-1"
             >
               <RotateCcw size={12} />
               <span>{t('reset_label')}</span>
@@ -740,7 +741,7 @@ export default function DesignSubViewContent({
                 key={kind}
                 className="flex items-center justify-between px-4 py-2.5 rounded-2xl bg-black/35 border border-white/10"
               >
-                <span className="text-sm font-bold text-white">
+                <span className="text-sm font-medium text-white">
                   {idx + 1}. {nameMap[kind] || kind}
                 </span>
                 <div className="flex items-center gap-2">
@@ -750,7 +751,7 @@ export default function DesignSubViewContent({
                     tabIndex={0}
                     disabled={idx === 0}
                     onClick={() => moveOrderItem(idx, -1)}
-                    className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-30 text-sm font-black cursor-pointer"
+                    className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-30 text-sm font-medium cursor-pointer"
                   >
                     ↑
                   </button>
@@ -760,7 +761,7 @@ export default function DesignSubViewContent({
                     tabIndex={0}
                     disabled={idx === order.length - 1}
                     onClick={() => moveOrderItem(idx, 1)}
-                    className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-30 text-sm font-black cursor-pointer"
+                    className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black disabled:opacity-30 text-sm font-medium cursor-pointer"
                   >
                     ↓
                   </button>
@@ -780,7 +781,7 @@ export default function DesignSubViewContent({
         <div className="flex items-center gap-2.5">
           <Palette size={18} className="text-gold" />
           <div>
-            <h3 className="text-sm sm:text-base font-black text-white">
+            <h3 className="text-sm sm:text-base font-semibold achour-glossy-title">
               {t('app_theme_colors_heading')}
             </h3>
             <p className="text-xs text-zinc-400">
@@ -815,10 +816,10 @@ export default function DesignSubViewContent({
               }}
             />
             <div className="min-w-0 text-start">
-              <span className="block text-sm font-black text-gold truncate">
+              <span className="block text-sm font-semibold achour-glossy-text truncate">
                 {t('true_gold_full_app')}
               </span>
-              <span className="block text-[11px] font-mono text-zinc-300 truncate mt-0.5">
+              <span className="block text-[11px] font-sans tabular-nums text-zinc-300 truncate mt-0.5">
                 #8C6A1D · #D4AF37 · #F5E6A8 · #B8860B
               </span>
             </div>
@@ -858,7 +859,7 @@ export default function DesignSubViewContent({
                     className="w-5 h-5 rounded-full border border-white/25"
                     style={{ backgroundColor: theme.primary }}
                   />
-                  <span className="text-[10px] font-mono text-zinc-400">
+                  <span className="text-[10px] font-sans tabular-nums text-zinc-400">
                     {theme.primary}
                   </span>
                 </div>
@@ -879,7 +880,7 @@ export default function DesignSubViewContent({
       <div className="max-w-2xl mx-auto py-3 space-y-4">
         <div className="p-5 rounded-3xl bg-white/[0.04] border border-white/15 space-y-4">
           <div>
-            <h3 className="text-sm sm:text-base font-black text-white">
+            <h3 className="text-sm sm:text-base font-semibold achour-glossy-title">
               {t('custom_color_heading')}
             </h3>
             <p className="text-xs text-zinc-400 mt-1">
@@ -903,7 +904,7 @@ export default function DesignSubViewContent({
                 }}
                 className="w-9 h-9 rounded-lg border-0 bg-transparent cursor-pointer"
               />
-              <span className="text-xs font-bold text-zinc-200 whitespace-nowrap">
+              <span className="text-xs font-medium text-zinc-200 whitespace-nowrap">
                 {t('pick_color')}
               </span>
             </label>
@@ -921,7 +922,7 @@ export default function DesignSubViewContent({
                   updateField('customThemeColor', norm);
                 }
               }}
-              className="flex-1 min-w-[140px] px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/20 text-sm font-mono font-bold text-gold uppercase"
+              className="flex-1 min-w-[140px] px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/20 text-sm font-sans tabular-nums font-medium text-gold uppercase"
             />
           </div>
 
@@ -931,9 +932,9 @@ export default function DesignSubViewContent({
                 className="w-7 h-7 rounded-full border border-white/30"
                 style={{ backgroundColor: activePalette.primary }}
               />
-              <span className="text-xs font-mono text-zinc-300">
+              <span className="text-xs font-sans tabular-nums text-zinc-300">
                 {t('active_color')}{' '}
-                <strong className="text-gold">{activePalette.primary}</strong>
+                <strong className="achour-glossy-text font-medium">{activePalette.primary}</strong>
               </span>
             </div>
             {settings.customThemeColor && (
@@ -942,7 +943,7 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('customThemeColor', null)}
-                className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-xs font-bold text-zinc-200 cursor-pointer"
+                className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-xs font-medium text-zinc-200 cursor-pointer"
               >
                 {t('clear_custom_color')}
               </button>
@@ -960,11 +961,11 @@ export default function DesignSubViewContent({
       <div className="max-w-2xl mx-auto py-3 space-y-4">
         <div className="p-5 rounded-3xl bg-white/[0.04] border border-white/15 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm sm:text-base font-bold text-gold flex items-center gap-2">
+            <span className="text-sm sm:text-base font-semibold achour-glossy-text flex items-center gap-2">
               <Sliders size={18} />
               <span>{t('glass_opacity_heading')}</span>
             </span>
-            <span className="text-lg font-mono font-black text-white">{val}%</span>
+            <span className="text-lg font-sans tabular-nums font-semibold text-white">{val}%</span>
           </div>
           <div dir="ltr" className="flex items-center gap-3">
             <button
@@ -972,7 +973,7 @@ export default function DesignSubViewContent({
               data-tv-focusable="true"
               tabIndex={0}
               onClick={() => updateField('glassOpacity', Math.max(0, val - 2))}
-              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-base font-black cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-base font-medium cursor-pointer"
             >
               −
             </button>
@@ -991,7 +992,7 @@ export default function DesignSubViewContent({
               data-tv-focusable="true"
               tabIndex={0}
               onClick={() => updateField('glassOpacity', Math.min(85, val + 2))}
-              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-base font-black cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-base font-medium cursor-pointer"
             >
               +
             </button>
@@ -1004,9 +1005,9 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('glassOpacity', v)}
-                className={`py-2 rounded-xl border text-xs font-mono font-bold cursor-pointer ${
+                className={`py-2 rounded-xl border text-xs font-sans tabular-nums font-medium cursor-pointer ${
                   val === v
-                    ? 'bg-gold text-black border-gold'
+                    ? 'achour-glossy-pill border-gold'
                     : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
                 }`}
               >
@@ -1026,11 +1027,11 @@ export default function DesignSubViewContent({
       <div className="max-w-2xl mx-auto py-3 space-y-4">
         <div className="p-5 rounded-3xl bg-white/[0.04] border border-white/15 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm sm:text-base font-bold text-gold flex items-center gap-2">
+            <span className="text-sm sm:text-base font-semibold achour-glossy-text flex items-center gap-2">
               <Layers size={18} />
               <span>{t('frosted_glass_blur_heading')}</span>
             </span>
-            <span className="text-lg font-mono font-black text-white">{val}px</span>
+            <span className="text-lg font-sans tabular-nums font-semibold text-white">{val}px</span>
           </div>
           <div dir="ltr" className="flex items-center gap-3">
             <button
@@ -1038,7 +1039,7 @@ export default function DesignSubViewContent({
               data-tv-focusable="true"
               tabIndex={0}
               onClick={() => updateField('glassBlur', Math.max(0, val - 2))}
-              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-base font-black cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-base font-medium cursor-pointer"
             >
               −
             </button>
@@ -1057,7 +1058,7 @@ export default function DesignSubViewContent({
               data-tv-focusable="true"
               tabIndex={0}
               onClick={() => updateField('glassBlur', Math.min(24, val + 2))}
-              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-base font-black cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-base font-medium cursor-pointer"
             >
               +
             </button>
@@ -1070,9 +1071,9 @@ export default function DesignSubViewContent({
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateField('glassBlur', v)}
-                className={`py-2 rounded-xl border text-xs font-mono font-bold cursor-pointer ${
+                className={`py-2 rounded-xl border text-xs font-sans tabular-nums font-medium cursor-pointer ${
                   val === v
-                    ? 'bg-gold text-black border-gold'
+                    ? 'achour-glossy-pill border-gold'
                     : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
                 }`}
               >
@@ -1085,13 +1086,71 @@ export default function DesignSubViewContent({
     );
   }
 
-  // 15. DASHBOARD TV FOCUS MODE
+  // 15. DASHBOARD TV FOCUS MODE & GLOBAL FOCUS SHAPES
   if (subView === 'design-focus-mode') {
-    const mode = settings.dashboardFocusMode || 'frame';
+    const mode = settings.dashboardFocusMode || 'both';
+    const focusStyle: FocusVisualStyle = settings.focusVisualStyle || 'lamp-halo';
+    const shapeOptions: Array<{
+      id: FocusVisualStyle;
+      title: string;
+      desc: string;
+      previewClass: string;
+    }> = [
+      {
+        id: 'lamp-halo',
+        title: t('focus_style_lamp_halo_title'),
+        desc: t('focus_style_lamp_halo_desc'),
+        previewClass:
+          'rounded-xl border border-white/85 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.85)_0%,rgba(var(--theme-rgb),0.75)_45%,transparent_85%)] shadow-[0_0_16px_rgba(var(--theme-rgb),0.85)]',
+      },
+      {
+        id: 'double-neon',
+        title: t('focus_style_double_neon_title'),
+        desc: t('focus_style_double_neon_desc'),
+        previewClass:
+          'rounded-xl border-2 border-white outline outline-2 outline-[var(--theme-primary)] outline-offset-2 bg-[rgba(var(--theme-rgb),0.22)] shadow-[0_0_14px_rgba(var(--theme-rgb),0.85)]',
+      },
+      {
+        id: 'spotlight-pillar',
+        title: t('focus_style_spotlight_pillar_title'),
+        desc: t('focus_style_spotlight_pillar_desc'),
+        previewClass:
+          'rounded-t-2xl rounded-b-lg border border-white/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.72)_0%,rgba(var(--theme-rgb),0.68)_50%,rgba(var(--theme-rgb),0.2)_100%)]',
+      },
+      {
+        id: 'diamond-prism',
+        title: t('focus_style_diamond_prism_title'),
+        desc: t('focus_style_diamond_prism_desc'),
+        previewClass:
+          'rounded-lg border-2 border-white/90 bg-[linear-gradient(135deg,rgba(255,255,255,0.68)_0%,rgba(var(--theme-rgb),0.36)_45%,rgba(var(--theme-rgb),0.75)_100%)] shadow-[0_0_14px_rgba(var(--theme-rgb),0.8)]',
+      },
+      {
+        id: 'cyber-brackets',
+        title: t('focus_style_cyber_brackets_title'),
+        desc: t('focus_style_cyber_brackets_desc'),
+        previewClass:
+          'rounded-md border border-[var(--theme-primary)] bg-[radial-gradient(circle,rgba(var(--theme-rgb),0.55)_0%,transparent_80%)] shadow-[inset_0_0_0_2px_rgba(255,255,255,0.65)]',
+      },
+      {
+        id: 'aurora-capsule',
+        title: t('focus_style_aurora_capsule_title'),
+        desc: t('focus_style_aurora_capsule_desc'),
+        previewClass:
+          'rounded-full border-2 border-white/90 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.55)_0%,rgba(var(--theme-rgb),0.65)_65%,transparent_100%)] shadow-[0_0_16px_rgba(var(--theme-rgb),0.85)]',
+      },
+      {
+        id: 'classic-ring',
+        title: t('focus_style_classic_ring_title'),
+        desc: t('focus_style_classic_ring_desc'),
+        previewClass:
+          'rounded-xl border-2 border-[var(--theme-primary)] bg-[rgba(var(--theme-rgb),0.14)]',
+      },
+    ];
+
     return (
-      <div className="space-y-4 pb-4">
+      <div className="space-y-6 pb-4">
         <div>
-          <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
+          <h3 className="text-sm sm:text-base font-semibold achour-glossy-title flex items-center gap-2">
             <Target size={18} className="text-gold" />
             <span>{t('tv_focus_mode_heading')}</span>
           </h3>
@@ -1142,11 +1201,11 @@ export default function DesignSubViewContent({
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
-                  <span className="font-bold text-xs sm:text-sm text-white">
+                  <span className="font-semibold text-xs sm:text-sm text-white">
                     {opt.title}
                   </span>
                   {active && (
-                    <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-bold text-xs shrink-0">
+                    <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-semibold text-xs shrink-0">
                       ✓
                     </span>
                   )}
@@ -1158,6 +1217,60 @@ export default function DesignSubViewContent({
             );
           })}
         </div>
+
+        <div className="pt-4 border-t border-white/10 space-y-3">
+          <div>
+            <h3 className="text-sm sm:text-base font-semibold achour-glossy-title flex items-center gap-2">
+              <Sparkles size={18} className="text-gold" />
+              <span>{t('focus_shape_heading')}</span>
+            </h3>
+            <p className="text-xs text-zinc-400 mt-1">
+              {t('focus_shape_desc')}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {shapeOptions.map((opt) => {
+              const active = focusStyle === opt.id;
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  data-tv-focusable="true"
+                  tabIndex={0}
+                  onClick={() => updateField('focusVisualStyle', opt.id)}
+                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3 ${
+                    isRtl ? 'text-right' : 'text-left'
+                  } ${
+                    active
+                      ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
+                      : 'border-white/10 bg-white/[0.03] hover:border-white/30'
+                  }`}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`w-10 h-10 shrink-0 ${opt.previewClass}`}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-semibold text-xs sm:text-sm text-white truncate">
+                        {opt.title}
+                      </span>
+                      {active && (
+                        <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-semibold text-xs shrink-0">
+                          ✓
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-zinc-400 mt-0.5 line-clamp-2">
+                      {opt.desc}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
     );
   }
@@ -1168,7 +1281,7 @@ export default function DesignSubViewContent({
     return (
       <div className="space-y-4 pb-4">
         <div>
-          <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
+          <h3 className="text-sm sm:text-base font-semibold achour-glossy-title flex items-center gap-2">
             <Type size={18} className="text-gold" />
             <span>
               {t('section_label_colors_heading')}
@@ -1226,7 +1339,7 @@ export default function DesignSubViewContent({
                   className="w-6 h-6 rounded-full border border-white/30"
                   style={{ backgroundColor: opt.swatch }}
                 />
-                <span className="text-xs sm:text-sm font-bold text-white mt-1">
+                <span className="text-xs sm:text-sm font-medium text-white mt-1">
                   {opt.title}
                 </span>
                 <span className="text-[11px] text-zinc-400">
@@ -1250,7 +1363,7 @@ export default function DesignSubViewContent({
               value={settings.dashboardLabelCustomColor || '#FFD700'}
               onChange={(e) => updateField('dashboardLabelCustomColor', e.target.value.toUpperCase())}
               placeholder="#RRGGBB"
-              className="px-3 py-2 rounded-xl bg-black/40 border border-white/15 text-white font-mono text-xs uppercase w-32"
+              className="px-3 py-2 rounded-xl bg-black/40 border border-white/15 text-white font-sans tabular-nums text-xs uppercase w-32"
             />
             <span className="text-xs text-zinc-300">
               {t('pick_label_color')}
@@ -1339,7 +1452,7 @@ export default function DesignSubViewContent({
         {/* Header & Reset All */}
         <div className="p-4 rounded-3xl bg-white/[0.04] border border-white/15 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-sm sm:text-base font-black text-white">
+            <h2 className="text-sm sm:text-base font-semibold achour-glossy-title">
               {t('all_windows_control_title')}
             </h2>
             <p className="text-xs text-zinc-300 mt-0.5">
@@ -1352,9 +1465,9 @@ export default function DesignSubViewContent({
             tabIndex={0}
             onClick={resetAllWindowSizes}
             disabled={!hasAnyCustom}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-medium flex items-center gap-1.5 cursor-pointer transition-colors ${
               hasAnyCustom
-                ? 'bg-gold text-black hover:brightness-110'
+                ? 'achour-glossy-pill hover:brightness-110'
                 : 'bg-white/10 text-zinc-400 opacity-60 cursor-default'
             }`}
           >
@@ -1367,14 +1480,14 @@ export default function DesignSubViewContent({
         <div className="p-4 rounded-3xl bg-gold/10 border border-gold/40 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h3 className="text-sm font-black text-gold">
+              <h3 className="text-sm font-semibold achour-glossy-text">
                 {t('global_scale_title')}
               </h3>
               <p className="text-[11px] text-zinc-300">
                 {t('global_scale_desc')}
               </p>
             </div>
-            <span className="text-lg font-mono font-black text-gold px-3 py-1 rounded-xl bg-black/40 border border-gold/30">
+            <span className="text-lg font-sans tabular-nums font-semibold achour-glossy-text px-3 py-1 rounded-xl bg-black/40 border border-gold/30">
               {globalVal}%
             </span>
           </div>
@@ -1385,7 +1498,7 @@ export default function DesignSubViewContent({
               data-tv-focusable="true"
               tabIndex={0}
               onClick={() => setWindowScale('global', globalVal - 5)}
-              className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/15 hover:border-gold text-xs font-mono font-bold text-white cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/15 hover:border-gold text-xs font-sans tabular-nums font-medium text-white cursor-pointer"
             >
               -5%
             </button>
@@ -1394,7 +1507,7 @@ export default function DesignSubViewContent({
               data-tv-focusable="true"
               tabIndex={0}
               onClick={() => setWindowScale('global', globalVal - 1)}
-              className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/15 hover:border-gold text-xs font-mono font-bold text-white cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/15 hover:border-gold text-xs font-sans tabular-nums font-medium text-white cursor-pointer"
             >
               -1%
             </button>
@@ -1413,7 +1526,7 @@ export default function DesignSubViewContent({
               data-tv-focusable="true"
               tabIndex={0}
               onClick={() => setWindowScale('global', globalVal + 1)}
-              className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/15 hover:border-gold text-xs font-mono font-bold text-white cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/15 hover:border-gold text-xs font-sans tabular-nums font-medium text-white cursor-pointer"
             >
               +1%
             </button>
@@ -1422,7 +1535,7 @@ export default function DesignSubViewContent({
               data-tv-focusable="true"
               tabIndex={0}
               onClick={() => setWindowScale('global', globalVal + 5)}
-              className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/15 hover:border-gold text-xs font-mono font-bold text-white cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/15 hover:border-gold text-xs font-sans tabular-nums font-medium text-white cursor-pointer"
             >
               +5%
             </button>
@@ -1431,9 +1544,9 @@ export default function DesignSubViewContent({
               data-tv-focusable="true"
               tabIndex={0}
               onClick={() => setWindowScale('global', 100)}
-              className={`px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl border text-xs font-medium cursor-pointer ${
                 globalVal === 100
-                  ? 'bg-gold text-black border-gold'
+                  ? 'achour-glossy-pill border-gold'
                   : 'bg-black/40 border-white/15 text-zinc-200 hover:border-gold'
               }`}
             >
@@ -1454,7 +1567,7 @@ export default function DesignSubViewContent({
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="min-w-0">
-                    <h4 className="text-xs sm:text-sm font-bold text-white">
+                    <h4 className="text-xs sm:text-sm font-medium text-white">
                       {cat.title}
                     </h4>
                     <p className="text-[11px] text-zinc-400 truncate">
@@ -1462,9 +1575,9 @@ export default function DesignSubViewContent({
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-sm font-mono font-black text-gold">{val}%</span>
+                    <span className="text-sm font-sans tabular-nums font-semibold achour-glossy-text">{val}%</span>
                     {globalVal !== 100 && (
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-white/10 text-zinc-300">
+                      <span className="text-[10px] font-sans tabular-nums px-2 py-0.5 rounded-lg bg-white/10 text-zinc-300">
                         {t('net_scale_pct', { pct: effectivePct })}
                       </span>
                     )}
@@ -1477,7 +1590,7 @@ export default function DesignSubViewContent({
                     data-tv-focusable="true"
                     tabIndex={0}
                     onClick={() => setWindowScale(cat.key, val - 5)}
-                    className="px-2.5 py-1.5 rounded-xl bg-black/40 border border-white/10 hover:border-gold text-xs font-mono font-bold text-white cursor-pointer"
+                    className="px-2.5 py-1.5 rounded-xl bg-black/40 border border-white/10 hover:border-gold text-xs font-sans tabular-nums font-medium text-white cursor-pointer"
                   >
                     -5%
                   </button>
@@ -1486,7 +1599,7 @@ export default function DesignSubViewContent({
                     data-tv-focusable="true"
                     tabIndex={0}
                     onClick={() => setWindowScale(cat.key, val - 1)}
-                    className="px-2.5 py-1.5 rounded-xl bg-black/40 border border-white/10 hover:border-gold text-xs font-mono font-bold text-white cursor-pointer"
+                    className="px-2.5 py-1.5 rounded-xl bg-black/40 border border-white/10 hover:border-gold text-xs font-sans tabular-nums font-medium text-white cursor-pointer"
                   >
                     -1%
                   </button>
@@ -1497,9 +1610,9 @@ export default function DesignSubViewContent({
                       data-tv-focusable="true"
                       tabIndex={0}
                       onClick={() => setWindowScale(cat.key, preset)}
-                      className={`px-2.5 py-1.5 rounded-xl border text-xs font-mono font-bold cursor-pointer ${
+                      className={`px-2.5 py-1.5 rounded-xl border text-xs font-sans tabular-nums font-medium cursor-pointer ${
                         val === preset
-                          ? 'bg-gold text-black border-gold'
+                          ? 'achour-glossy-pill border-gold'
                           : 'bg-white/[0.04] border-white/10 text-zinc-300 hover:border-gold/50'
                       }`}
                     >
@@ -1511,7 +1624,7 @@ export default function DesignSubViewContent({
                     data-tv-focusable="true"
                     tabIndex={0}
                     onClick={() => setWindowScale(cat.key, val + 1)}
-                    className="px-2.5 py-1.5 rounded-xl bg-black/40 border border-white/10 hover:border-gold text-xs font-mono font-bold text-white cursor-pointer"
+                    className="px-2.5 py-1.5 rounded-xl bg-black/40 border border-white/10 hover:border-gold text-xs font-sans tabular-nums font-medium text-white cursor-pointer"
                   >
                     +1%
                   </button>
@@ -1520,7 +1633,7 @@ export default function DesignSubViewContent({
                     data-tv-focusable="true"
                     tabIndex={0}
                     onClick={() => setWindowScale(cat.key, val + 5)}
-                    className="px-2.5 py-1.5 rounded-xl bg-black/40 border border-white/10 hover:border-gold text-xs font-mono font-bold text-white cursor-pointer"
+                    className="px-2.5 py-1.5 rounded-xl bg-black/40 border border-white/10 hover:border-gold text-xs font-sans tabular-nums font-medium text-white cursor-pointer"
                   >
                     +5%
                   </button>

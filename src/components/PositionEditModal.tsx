@@ -147,7 +147,7 @@ export default function PositionEditModal({
       >
         {/* Modal Header */}
         <div className={`flex items-center justify-between gap-3 pb-2.5 border-b border-white/10 shrink-0 ${isRtl ? 'flex-row-reverse' : ''}`}>
-          <h3 className="text-sm sm:text-base font-black text-white uppercase tracking-wider truncate">
+          <h3 className="text-sm sm:text-base font-semibold achour-glossy-title uppercase tracking-wider truncate">
             {type === 'category' ? (isRtl ? 'ترتيب المجموعات' : 'Category Order') : (isRtl ? 'ترتيب القنوات' : 'Channel Order')}: {name}
           </h3>
           <button
@@ -168,10 +168,10 @@ export default function PositionEditModal({
           {/* Left Column: Current Index + Position Input Controls */}
           <div className="flex flex-col justify-between gap-2.5">
             <div className="text-center py-2.5 px-3 bg-white/[0.05] rounded-xl border border-white/10">
-              <span className="text-[11px] font-bold text-gold uppercase tracking-widest block">
+              <span className="text-[11px] font-semibold achour-glossy-text uppercase tracking-wider block">
                 {isRtl ? 'الترتيب الحالي' : 'Current Position'}
               </span>
-              <div className="text-2xl font-black text-white mt-0.5 font-mono">
+              <div className="text-2xl font-semibold text-white mt-0.5 font-sans tabular-nums">
                 #{currentIndex + 1}{maxPosition ? ` / ${maxPosition}` : ''}
               </div>
             </div>
@@ -200,7 +200,7 @@ export default function PositionEditModal({
                 data-tv-modal="reorder"
                 data-tv-focusable="true"
                 tabIndex={0}
-                className="flex-1 min-w-0 bg-white/[0.06] border border-gold/40 rounded-lg py-1.5 px-2 text-center text-lg text-white font-bold font-mono outline-none focus:border-gold"
+                className="flex-1 min-w-0 bg-white/[0.06] border border-gold/40 rounded-lg py-1.5 px-2 text-center text-lg text-white font-semibold font-sans tabular-nums outline-none focus:border-gold"
                 placeholder={String(currentIndex + 1)}
               />
 
@@ -228,7 +228,7 @@ export default function PositionEditModal({
                 data-tv-modal="reorder"
                 data-tv-focusable="true"
                 tabIndex={0}
-                className="py-2.5 px-3 bg-red-950/40 hover:bg-red-600 text-red-300 hover:text-white rounded-xl flex items-center justify-center gap-1.5 font-bold text-xs transition-colors border border-red-500/30 outline-none cursor-pointer"
+                className="py-2.5 px-3 bg-red-950/40 hover:bg-red-600 text-red-300 hover:text-white rounded-xl flex items-center justify-center gap-1.5 font-medium text-xs transition-colors border border-red-500/30 outline-none cursor-pointer"
               >
                 <Trash2 size={14} />
                 <span>{isRtl ? 'مسح' : 'Clear'}</span>
@@ -239,7 +239,7 @@ export default function PositionEditModal({
                 data-tv-modal="reorder"
                 data-tv-focusable="true"
                 tabIndex={0}
-                className="py-2.5 px-3 bg-gold hover:bg-gold/80 text-black rounded-xl flex items-center justify-center gap-1.5 font-bold text-xs transition-colors outline-none cursor-pointer shadow-md"
+                className="py-2.5 px-3 bg-gold hover:bg-gold/80 text-black rounded-xl flex items-center justify-center gap-1.5 font-medium text-xs transition-colors outline-none cursor-pointer shadow-md"
               >
                 <Check size={14} />
                 <span>{isRtl ? 'تطبيق الترتيب' : 'Save'}</span>
@@ -253,7 +253,7 @@ export default function PositionEditModal({
                 data-tv-modal="reorder"
                 data-tv-focusable="true"
                 tabIndex={0}
-                className={`w-full py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 font-bold text-xs uppercase transition-colors outline-none cursor-pointer ${
+                className={`w-full py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 font-medium text-xs uppercase transition-colors outline-none cursor-pointer ${
                   isFavorite
                     ? 'bg-gold/20 text-gold border border-gold'
                     : 'bg-white/5 text-zinc-300 hover:text-white border border-white/10'

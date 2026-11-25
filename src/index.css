@@ -3,13 +3,13 @@
 @theme {
   --color-gold: #d4af37;
   --color-gold-dark: #997b2c;
-  --font-sans: "Tajawal", "Cairo", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-sans: "Montserrat", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
   --font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 @layer base {
   :root {
-    --font-sans: "Tajawal", "Cairo", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    --font-sans: "Montserrat", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
     --font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
 
@@ -42,21 +42,161 @@
   }
 
   .achour-glass-modal {
-    background: linear-gradient(rgba(14, 17, 25, 0.84) 0%, rgba(9, 11, 17, 0.78) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(14, 17, 25, 0.88) 14%, rgba(9, 11, 17, 0.84) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26), 0 12px 30px rgba(0, 0, 0, 0.52), 0 0 24px -10px var(--theme-glow, rgba(212, 175, 55, 0.28));
   }
 
   .achour-glass-bar {
     background: linear-gradient(135deg, var(--theme-primary, #e5a00d), rgba(10, 12, 18, 0.82));
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.42);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 8px 22px rgba(0, 0, 0, 0.44), 0 0 18px -8px var(--theme-glow, rgba(212, 175, 55, 0.25));
     border: 0 solid transparent !important;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
     .achour-glass-bar {
-      background: linear-gradient(135deg, color-mix(in srgb, var(--theme-primary, #e5a00d) 14%, rgba(13, 15, 22, 0.8)), rgba(10, 12, 18, 0.82));
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.13) 0%,
+        color-mix(in srgb, var(--theme-primary, #e5a00d) 16%, rgba(13, 15, 22, 0.82)) 36%,
+        rgba(10, 12, 18, 0.86) 100%
+      );
     }
+  }
+
+  /* Global Glossy 3D White-Blended Text & Surface System */
+  .achour-glossy-title {
+    color: var(--theme-soft-white, #ffffff);
+    background-image: var(
+      --theme-glossy-heading-grad,
+      linear-gradient(180deg, #ffffff 0%, #ffffff 18%, var(--theme-accent, #f5e6a8) 44%, var(--theme-primary, #d4af37) 78%, var(--theme-secondary, #8c6a1d) 100%)
+    ) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    text-shadow: none !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.65));
+    padding-block: 0.04em;
+  }
+
+  .achour-glossy-text {
+    color: var(--theme-luminous, #f5e6a8);
+    background-image: var(
+      --theme-glossy-text-grad,
+      linear-gradient(180deg, #ffffff 0%, #ffffff 14%, var(--theme-accent, #f5e6a8) 42%, var(--theme-primary, #d4af37) 78%, var(--theme-secondary, #8c6a1d) 100%)
+    ) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    text-shadow: none !important;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.58));
+    padding-block: 0.03em;
+  }
+
+  .achour-glossy-info {
+    color: var(--theme-soft-white, #ffffff);
+    background-image: var(
+      --theme-glossy-info-grad,
+      linear-gradient(180deg, #ffffff 0%, var(--theme-soft-white, #fff6d6) 44%, var(--theme-accent, #f5e6a8) 78%, var(--theme-primary, #d4af37) 100%)
+    ) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    text-shadow: none !important;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+    padding-block: 0.03em;
+  }
+
+  .achour-glossy-surface {
+    background-image: var(
+      --theme-glossy-surface-grad,
+      linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(212, 175, 55, 0.2) 50%, rgba(212, 175, 55, 0.08) 100%)
+    ) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 6px 18px rgba(0, 0, 0, 0.32);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .achour-glossy-pill {
+    background-color: var(--theme-primary, #d4af37) !important;
+    background-image: var(
+      --theme-glossy-btn-grad,
+      linear-gradient(180deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.16) 38%, var(--theme-primary, #d4af37) 64%, var(--theme-secondary, #8c6a1d) 100%)
+    ) !important;
+    color: var(--theme-on-primary, #090b10) !important;
+    -webkit-text-fill-color: var(--theme-on-primary, #090b10) !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65), inset 0 -2px 4px rgba(0, 0, 0, 0.36), 0 4px 16px var(--theme-glow, rgba(212, 175, 55, 0.4));
+    border: 1px solid rgba(255, 255, 255, 0.38);
+  }
+
+  .achour-glossy-badge {
+    background-color: var(--theme-primary, #d4af37) !important;
+    background-image: var(
+      --theme-glossy-btn-grad,
+      linear-gradient(180deg, rgba(255, 255, 255, 0.46) 0%, rgba(255, 255, 255, 0.14) 40%, var(--theme-primary, #d4af37) 66%, var(--theme-secondary, #8c6a1d) 100%)
+    ) !important;
+    color: var(--theme-on-primary, #090b10) !important;
+    -webkit-text-fill-color: var(--theme-on-primary, #090b10) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 3px 10px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.42);
+  }
+
+  .achour-header-glass-card {
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .achour-brand-neon-title {
+    color: var(--theme-soft-white, #ffffff);
+    background-image: var(
+      --theme-glossy-heading-grad,
+      linear-gradient(180deg, #ffffff 0%, #ffffff 22%, var(--theme-accent, #f5e6a8) 52%, var(--theme-primary, #d4af37) 84%, var(--theme-secondary, #8c6a1d) 100%)
+    ) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    letter-spacing: 0.12em;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 14px rgba(var(--theme-rgb, 212, 175, 55), 0.62));
+    padding-block: 0.05em;
+  }
+
+  .achour-brand-light-flare {
+    position: relative;
+    width: min(88%, 270px);
+    height: 3px;
+    margin-top: 4px;
+    border-radius: 9999px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.35) 18%,
+      rgba(255, 255, 255, 0.94) 50%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.35) 82%,
+      transparent 100%
+    );
+    box-shadow:
+      0 0 12px 2px rgba(var(--theme-rgb, 212, 175, 55), 0.75),
+      0 0 24px 4px rgba(var(--theme-rgb, 212, 175, 55), 0.35);
+    pointer-events: none;
+  }
+
+  .achour-brand-light-flare::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 46px;
+    height: 11px;
+    transform: translate(-50%, -50%);
+    border-radius: 9999px;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.7) 48%,
+      transparent 80%
+    );
   }
 
   html.native-player-active,
@@ -83,7 +223,7 @@
 }
 
 .font-cairo {
-  font-family: "Cairo", "Tajawal", system-ui, -apple-system, sans-serif;
+  font-family: "Montserrat", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
 }
 
 .no-scrollbar {
@@ -112,9 +252,17 @@ a[href] {
 }
 
 [data-tv-active-focus="true"] {
-  box-shadow: 0 0 0 3px var(--theme-primary, #d4af37) !important;
-  border-color: var(--theme-primary, #d4af37) !important;
+  border-color: rgba(255, 255, 255, 0.88) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 0 18px rgba(var(--theme-rgb, 212, 175, 55), 0.44),
+    0 0 0 2.5px var(--theme-primary, #d4af37),
+    0 0 18px rgba(var(--theme-rgb, 212, 175, 55), 0.78) !important;
   outline: none !important;
+}
+
+[data-tv-active-focus="true"]:not([data-dashboard-kind]):not([data-tv-vod-poster="true"]):not(input):not(textarea):not(select) {
+  text-shadow: 0 0 10px rgba(var(--theme-rgb, 212, 175, 55), 0.75);
 }
 
 button[data-dashboard-kind][data-tv-active-focus="true"],
@@ -122,6 +270,7 @@ button[data-dashboard-kind][data-preview-focused="true"] {
   box-shadow: none !important;
   border-color: transparent !important;
   outline: none !important;
+  z-index: 20 !important;
 }
 
 button[data-dashboard-kind][data-tv-active-focus="true"] .dashboard-frame-wrap,
@@ -131,110 +280,483 @@ button[data-dashboard-kind][data-preview-focused="true"] div[class*="shrink-0"] 
   outline: none !important;
 }
 
+/* Radiant Lamp Backlight Orb Behind Icon */
+.dashboard-lamp-orb {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 128%;
+  max-width: 184px;
+  height: 118px;
+  transform: translate(-50%, -50%) scale(0.76);
+  border-radius: 9999px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(255, 255, 255, 0.62) 18%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.78) 40%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.34) 64%,
+    transparent 82%
+  );
+  opacity: 0;
+  transition: opacity 0.16s ease-out, transform 0.2s ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Open Dock Halo Frame (Cinematic Rounded Glow Enclosure) */
+.dashboard-focus-halo {
+  position: absolute;
+  inset: -6px 2px 18px 2px;
+  border-radius: 22px;
+  border: 1.5px solid rgba(255, 255, 255, 0.86);
+  background:
+    radial-gradient(
+      ellipse at 50% 42%,
+      rgba(255, 255, 255, 0.34) 0%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.44) 36%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.14) 68%,
+      transparent 90%
+    );
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.94),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 0 24px rgba(var(--theme-rgb, 212, 175, 55), 0.56),
+    0 0 20px rgba(var(--theme-rgb, 212, 175, 55), 0.92),
+    0 0 42px rgba(var(--theme-rgb, 212, 175, 55), 0.55);
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.16s ease-out, transform 0.18s ease-out;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dashboard-focus-halo::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 58px;
+  height: 9px;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background: radial-gradient(
+    ellipse at center,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.92) 30%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.85) 62%,
+    transparent 100%
+  );
+  box-shadow: 0 0 16px 3px rgba(var(--theme-rgb, 212, 175, 55), 0.9);
+}
+
+.dashboard-focus-halo::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 68%;
+  height: 8px;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.88) 0%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.72) 55%,
+    transparent 100%
+  );
+}
+
+/* Icon Stage Smooth Scale */
+.dashboard-icon-stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), filter 0.18s ease-out;
+}
+
+/* Concentric Glowing Pedestal Rings & Floor Spotlight */
+.dashboard-focus-rings {
+  position: absolute;
+  left: 50%;
+  bottom: 30px;
+  width: 122%;
+  max-width: 204px;
+  height: 48px;
+  transform: translateX(-50%) scale(0.86);
+  opacity: 0;
+  transition: opacity 0.18s ease-out, transform 0.2s ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dashboard-focus-rings .ring-outer {
+  position: absolute;
+  inset: 4px 0 0 0;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.86);
+  box-shadow:
+    inset 0 0 14px rgba(var(--theme-rgb, 212, 175, 55), 0.65),
+    0 0 18px rgba(var(--theme-rgb, 212, 175, 55), 0.95),
+    0 0 34px rgba(var(--theme-rgb, 212, 175, 55), 0.55);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.34) 0%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.62) 38%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.18) 68%,
+    transparent 86%
+  );
+}
+
+.dashboard-focus-rings .ring-inner {
+  position: absolute;
+  left: 13%;
+  right: 13%;
+  top: 0;
+  bottom: 12px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.94);
+  box-shadow:
+    0 0 14px rgba(var(--theme-rgb, 212, 175, 55), 0.95),
+    inset 0 0 10px rgba(255, 255, 255, 0.45);
+}
+
+/* 3D Glossy Capsule Pill Button */
+.dashboard-pill-btn {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: min(100%, 118px);
+  max-width: 100%;
+  padding: 5px 16px;
+  border-radius: 9999px;
+  border: 1px solid rgba(var(--theme-rgb, 212, 175, 55), 0.55);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.24) 0%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.26) 24%,
+    rgba(8, 10, 17, 0.92) 72%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.36) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.52),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.72),
+    0 5px 14px rgba(0, 0, 0, 0.58),
+    0 0 12px -2px rgba(var(--theme-rgb, 212, 175, 55), 0.35);
+  transition: transform 0.16s ease-out, box-shadow 0.16s ease-out, background 0.16s ease-out, border-color 0.16s ease-out;
+}
+
+/* Floor Mirror Reflection beneath Pill */
+.dashboard-floor-reflection {
+  position: relative;
+  z-index: 1;
+  height: 16px;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.32;
+  transition: opacity 0.18s ease-out, transform 0.18s ease-out;
+}
+
+.dashboard-floor-reflection::before {
+  content: '';
+  position: absolute;
+  inset: -4px -22px -8px -22px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.52) 45%,
+    transparent 78%
+  );
+  opacity: 0.48;
+  transition: opacity 0.18s ease-out;
+}
+
+.dashboard-floor-reflection-text {
+  transform: scaleY(-1);
+  color: rgba(255, 255, 255, 0.72);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.04) 10%, rgba(0, 0, 0, 0.72) 100%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.04) 10%, rgba(0, 0, 0, 0.72) 100%);
+  filter: blur(0.4px);
+}
+
+/* Focused Dock States — Respecting dashboardFocusMode (frame / icon / label / both) */
+button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"], [data-dashboard-focus-mode="icon"]) .dashboard-focus-halo {
+  opacity: 1;
+  transform: scale(1);
+}
+
+button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"], [data-dashboard-focus-mode="icon"]) .dashboard-lamp-orb {
+  opacity: 0.96;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]) .dashboard-focus-rings {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="icon"], [data-dashboard-focus-mode="both"], [data-dashboard-focus-mode="frame"]) .dashboard-icon-stage {
+  transform: scale(1.13) translateY(-4px);
+  filter:
+    drop-shadow(0 0 10px rgba(255, 255, 255, 0.65))
+    drop-shadow(0 0 18px rgba(var(--theme-rgb, 212, 175, 55), 0.95))
+    drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
+}
+
+button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
+  background-color: var(--theme-primary, #d4af37) !important;
+  background-image: var(
+    --theme-glossy-btn-grad,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.56) 0%, rgba(255, 255, 255, 0.16) 34%, var(--theme-primary, #d4af37) 66%, var(--theme-secondary, #8c6a1d) 100%)
+  ) !important;
+  border-color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.88),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.42),
+    0 0 24px rgba(var(--theme-rgb, 212, 175, 55), 0.96),
+    0 0 42px rgba(var(--theme-rgb, 212, 175, 55), 0.55),
+    0 6px 16px rgba(0, 0, 0, 0.72) !important;
+  transform: scale(1.06);
+}
+
+button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn .dashboard-tile-label {
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  -webkit-text-fill-color: var(--theme-on-primary, #ffffff) !important;
+  color: var(--theme-on-primary, #ffffff) !important;
+  filter: none !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+}
+
+button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-floor-reflection {
+  opacity: 0.82;
+}
+
+button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-floor-reflection::before {
+  opacity: 1;
+}
+
+/* ===================================================================== */
+/* 7 SELECTABLE FOCUS GLOW & SHAPE PRESETS (Dashboard + Global UI)       */
+/* ===================================================================== */
+
+/* 2. Double Neon Tube */
+[data-focus-shape="double-neon"] .dashboard-focus-halo {
+  border: 2px solid #ffffff;
+  outline: 2.5px solid var(--theme-primary, #d4af37);
+  outline-offset: 4px;
+  border-radius: 24px;
+  box-shadow:
+    inset 0 0 0 2px rgba(var(--theme-rgb, 212, 175, 55), 0.88),
+    inset 0 0 24px rgba(var(--theme-rgb, 212, 175, 55), 0.58),
+    0 0 26px rgba(var(--theme-rgb, 212, 175, 55), 0.95);
+}
+
+/* 3. Stage Spotlight Beam */
+[data-focus-shape="spotlight-pillar"] .dashboard-focus-halo {
+  inset: -14px 4px 16px 4px;
+  border-radius: 30px 30px 14px 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.82);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.56) 0%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.52) 34%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.24) 72%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.42) 100%
+  );
+}
+
+[data-focus-shape="spotlight-pillar"] .dashboard-lamp-orb {
+  top: 34%;
+  height: 144px;
+  border-radius: 42% 42% 50% 50%;
+}
+
+/* 4. Diamond Glass Prism */
+[data-focus-shape="diamond-prism"] .dashboard-focus-halo {
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.42) 0%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.22) 35%,
+      transparent 55%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.42) 100%
+    ),
+    radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, 0.36) 0%, rgba(var(--theme-rgb, 212, 175, 55), 0.35) 60%, transparent 90%);
+  box-shadow:
+    inset 0 0 20px rgba(255, 255, 255, 0.4),
+    0 0 22px rgba(var(--theme-rgb, 212, 175, 55), 0.94),
+    0 0 40px rgba(var(--theme-rgb, 212, 175, 55), 0.5);
+}
+
+/* 5. Luminous Corner Brackets */
+[data-focus-shape="cyber-brackets"] .dashboard-focus-halo {
+  border-radius: 14px;
+  border: 1px solid rgba(var(--theme-rgb, 212, 175, 55), 0.45);
+  background:
+    linear-gradient(90deg, #ffffff 0 18px, transparent 18px) top left / 100% 3px no-repeat,
+    linear-gradient(180deg, #ffffff 0 18px, transparent 18px) top left / 3px 100% no-repeat,
+    linear-gradient(-90deg, #ffffff 0 18px, transparent 18px) top right / 100% 3px no-repeat,
+    linear-gradient(180deg, #ffffff 0 18px, transparent 18px) top right / 3px 100% no-repeat,
+    linear-gradient(90deg, var(--theme-primary, #d4af37) 0 18px, transparent 18px) bottom left / 100% 3px no-repeat,
+    linear-gradient(0deg, var(--theme-primary, #d4af37) 0 18px, transparent 18px) bottom left / 3px 100% no-repeat,
+    linear-gradient(-90deg, var(--theme-primary, #d4af37) 0 18px, transparent 18px) bottom right / 100% 3px no-repeat,
+    linear-gradient(0deg, var(--theme-primary, #d4af37) 0 18px, transparent 18px) bottom right / 3px 100% no-repeat,
+    radial-gradient(ellipse at 50% 45%, rgba(var(--theme-rgb, 212, 175, 55), 0.42) 0%, transparent 78%);
+}
+
+/* 6. Full Aurora Capsule */
+[data-focus-shape="aurora-capsule"] .dashboard-focus-halo {
+  inset: -7px 0px 4px 0px;
+  border-radius: 28px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: radial-gradient(
+    ellipse at 50% 44%,
+    rgba(255, 255, 255, 0.32) 0%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.48) 44%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.22) 78%,
+    transparent 98%
+  );
+}
+
+/* 7. Classic Clean Outline */
+[data-focus-shape="classic-ring"] .dashboard-focus-halo {
+  border-radius: 18px;
+  border: 2px solid var(--theme-primary, #d4af37);
+  background: rgba(var(--theme-rgb, 212, 175, 55), 0.14);
+  box-shadow: 0 0 12px rgba(var(--theme-rgb, 212, 175, 55), 0.5);
+}
+
+[data-focus-shape="classic-ring"] button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-lamp-orb {
+  opacity: 0.28;
+}
+
+[data-focus-shape="classic-ring"] .dashboard-focus-halo::before,
+[data-focus-shape="classic-ring"] .dashboard-focus-halo::after {
+  display: none;
+}
+
+/* Custom Frame Shape Focus Overrides (when iconDisplayMode === 'with-frames') */
 button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] svg.dashboard-frame-svg,
 button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] svg.dashboard-frame-svg,
 button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-preview-focused="true"] svg.dashboard-frame-svg,
 button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-preview-focused="true"] svg.dashboard-frame-svg {
-  filter: drop-shadow(0 0 5px var(--theme-primary, #d4af37)) drop-shadow(0 0 14px var(--theme-glow, rgba(212, 175, 55, 0.9))) drop-shadow(0 0 24px var(--theme-primary, #d4af37)) !important;
+  filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 16px var(--theme-glow, rgba(212, 175, 55, 0.92))) drop-shadow(0 0 26px var(--theme-primary, #d4af37)) !important;
   transition: transform 0.15s, filter 0.15s !important;
-  transform: scale(1.08) !important;
+  transform: scale(1.06) !important;
 }
 
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] svg.dashboard-frame-svg polygon,
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] svg.dashboard-frame-svg path,
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] svg.dashboard-frame-svg circle,
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] svg.dashboard-frame-svg rect,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] svg.dashboard-frame-svg polygon,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] svg.dashboard-frame-svg path,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] svg.dashboard-frame-svg circle,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] svg.dashboard-frame-svg rect,
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-preview-focused="true"] svg.dashboard-frame-svg polygon,
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-preview-focused="true"] svg.dashboard-frame-svg path,
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-preview-focused="true"] svg.dashboard-frame-svg circle,
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-preview-focused="true"] svg.dashboard-frame-svg rect,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-preview-focused="true"] svg.dashboard-frame-svg polygon,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-preview-focused="true"] svg.dashboard-frame-svg path,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-preview-focused="true"] svg.dashboard-frame-svg circle,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-preview-focused="true"] svg.dashboard-frame-svg rect {
+button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] svg.dashboard-frame-svg :is(polygon, path, circle, rect),
+button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] svg.dashboard-frame-svg :is(polygon, path, circle, rect),
+button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-preview-focused="true"] svg.dashboard-frame-svg :is(polygon, path, circle, rect),
+button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-preview-focused="true"] svg.dashboard-frame-svg :is(polygon, path, circle, rect) {
   stroke: var(--theme-accent, #f5e6a8) !important;
-  stroke-width: 3.8px !important;
+  stroke-width: 3.6px !important;
 }
 
 button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] .dashboard-frame-wrap[data-frame-kind="box"],
 button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] .dashboard-frame-wrap[data-frame-kind="box"],
 button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-preview-focused="true"] .dashboard-frame-wrap[data-frame-kind="box"],
 button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-preview-focused="true"] .dashboard-frame-wrap[data-frame-kind="box"] {
-  filter: drop-shadow(0 0 5px var(--theme-primary, #d4af37)) drop-shadow(0 0 14px var(--theme-glow, rgba(212, 175, 55, 0.9))) drop-shadow(0 0 24px var(--theme-primary, #d4af37)) !important;
+  filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 16px var(--theme-glow, rgba(212, 175, 55, 0.92))) drop-shadow(0 0 26px var(--theme-primary, #d4af37)) !important;
   transition: transform 0.15s, filter 0.15s !important;
-  transform: scale(1.08) !important;
-}
-
-button[data-dashboard-kind][data-dashboard-focus-mode="label"][data-tv-active-focus="true"] .dashboard-tile-label,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] .dashboard-tile-label,
-button[data-dashboard-kind][data-dashboard-focus-mode="label"][data-preview-focused="true"] .dashboard-tile-label,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-preview-focused="true"] .dashboard-tile-label {
-  background-color: var(--theme-primary, #d4af37) !important;
-  color: var(--theme-on-primary, #090b10) !important;
-  box-shadow: 0 0 0 2.5px rgba(255, 255, 255, 0.65), 0 0 24px var(--theme-glow, rgba(212, 175, 55, 0.9)), 0 4px 16px rgba(0, 0, 0, 0.7) !important;
-  text-shadow: none !important;
-  border-radius: 9999px !important;
-  margin-top: 2px !important;
-  padding: 4px 14px !important;
-  font-weight: 800 !important;
-  display: inline-block !important;
-  transform: scale(1.1) !important;
-}
-
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] .dashboard-tile-label,
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-preview-focused="true"] .dashboard-tile-label {
-  text-shadow: 0 0 12px var(--theme-glow, rgba(212, 175, 55, 0.85)) !important;
   transform: scale(1.06) !important;
 }
 
-button[data-dashboard-kind][data-dashboard-focus-mode="icon"][data-tv-active-focus="true"] .dashboard-icon-wrap,
-button[data-dashboard-kind][data-dashboard-focus-mode="icon"][data-tv-active-focus="true"] svg:not(.dashboard-frame-svg),
-button[data-dashboard-kind][data-dashboard-icons-only="true"][data-tv-active-focus="true"] .dashboard-icon-wrap,
-button[data-dashboard-kind][data-dashboard-icons-only="true"][data-tv-active-focus="true"] svg:not(.dashboard-frame-svg),
-button[data-dashboard-kind][data-dashboard-focus-mode="icon"][data-preview-focused="true"] .dashboard-icon-wrap,
-button[data-dashboard-kind][data-dashboard-focus-mode="icon"][data-preview-focused="true"] svg:not(.dashboard-frame-svg),
-button[data-dashboard-kind][data-dashboard-icons-only="true"][data-preview-focused="true"] .dashboard-icon-wrap,
-button[data-dashboard-kind][data-dashboard-icons-only="true"][data-preview-focused="true"] svg:not(.dashboard-frame-svg) {
-  filter: drop-shadow(0 0 16px var(--theme-glow, rgba(212, 175, 55, 0.95))) drop-shadow(0 0 28px var(--theme-primary, #d4af37)) !important;
-  transition: transform 0.15s, filter 0.15s !important;
-  transform: scale(1.2) !important;
-}
-
-button[data-dashboard-kind][data-dashboard-focus-mode="icon"][data-tv-active-focus="true"] .dashboard-tile-label,
-button[data-dashboard-kind][data-dashboard-focus-mode="icon"][data-preview-focused="true"] .dashboard-tile-label {
-  text-shadow: 0 0 14px var(--theme-glow, rgba(212, 175, 55, 0.9)) !important;
-  transform: scale(1.08) !important;
+/* Non-open mode fallback label highlight (row/pill/wide layouts) */
+button[data-dashboard-kind][data-dashboard-mode-pill="false"]:is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-tile-label {
+  background-color: var(--theme-primary, #d4af37) !important;
+  background-image: var(--theme-glossy-btn-grad) !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  -webkit-text-fill-color: var(--theme-on-primary, #090b10) !important;
+  color: var(--theme-on-primary, #090b10) !important;
+  border-radius: 9999px !important;
+  padding: 3px 12px !important;
 }
 
 .achour-icon-svg {
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.48));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.62));
 }
 
 .achour-icon-svg-glow {
   filter: drop-shadow(0 0 7px var(--theme-glow, rgba(212, 175, 55, 0.68)));
 }
 
+/* Lightweight Fire TV & Low-End TV Performance Fallbacks (Keep Gradient Lamp Bright!) */
 html.achour-tv-perf .achour-icon-svg,
-html.achour-tv-perf .achour-icon-svg-glow {
+html.achour-tv-perf .achour-icon-svg-glow,
+html.achour-tv-perf .achour-glossy-title,
+html.achour-tv-perf .achour-glossy-text,
+html.achour-tv-perf .achour-glossy-info,
+html.achour-tv-perf .achour-brand-neon-title {
   filter: none !important;
 }
 
-html.achour-tv-perf button[data-dashboard-kind] .dashboard-tile-label {
-  border-radius: 9999px !important;
-  margin-top: 2px !important;
-  padding: 3px 12px !important;
-  display: inline-block !important;
+html.achour-tv-perf .achour-header-glass-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html.achour-tv-perf .dashboard-focus-halo {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88), 0 0 0 1.5px rgba(255, 255, 255, 0.82), 0 0 14px rgba(var(--theme-rgb, 212, 175, 55), 0.72) !important;
+  transition: opacity 80ms ease-out, transform 80ms ease-out !important;
+}
+
+html.achour-tv-perf .dashboard-lamp-orb {
+  transition: opacity 80ms ease-out, transform 80ms ease-out !important;
+}
+
+html.achour-tv-perf .dashboard-focus-rings {
+  transition: opacity 80ms ease-out, transform 80ms ease-out !important;
+}
+
+html.achour-tv-perf .dashboard-focus-rings .ring-outer,
+html.achour-tv-perf .dashboard-focus-rings .ring-inner {
+  box-shadow: 0 0 10px rgba(var(--theme-rgb, 212, 175, 55), 0.68) !important;
+}
+
+html.achour-tv-perf .dashboard-icon-stage {
+  filter: none !important;
+  transition: transform 80ms ease-out !important;
+}
+
+html.achour-tv-perf button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-icon-stage {
+  filter: none !important;
+  transform: scale(1.1) translateY(-2px) !important;
+}
+
+html.achour-tv-perf .dashboard-pill-btn {
+  transition: transform 80ms ease-out !important;
+}
+
+html.achour-tv-perf button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85), 0 0 14px rgba(var(--theme-rgb, 212, 175, 55), 0.82) !important;
+}
+
+html.achour-tv-perf .dashboard-floor-reflection-text {
+  filter: none !important;
 }
 
 html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] svg.dashboard-frame-svg,
 html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] svg.dashboard-frame-svg {
   filter: none !important;
   transition: transform 70ms ease-out !important;
-  transform: scale(1.08) !important;
+  transform: scale(1.06) !important;
 }
 
 html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] .dashboard-frame-wrap[data-frame-kind="box"],
@@ -242,22 +764,7 @@ html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="both"
   filter: none !important;
   box-shadow: 0 0 0 2.5px var(--theme-accent, #f5e6a8) !important;
   transition: transform 70ms ease-out !important;
-  transform: scale(1.08) !important;
-}
-
-html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="icon"][data-tv-active-focus="true"] .dashboard-icon-wrap,
-html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="icon"][data-tv-active-focus="true"] svg:not(.dashboard-frame-svg),
-html.achour-tv-perf button[data-dashboard-kind][data-dashboard-icons-only="true"][data-tv-active-focus="true"] .dashboard-icon-wrap,
-html.achour-tv-perf button[data-dashboard-kind][data-dashboard-icons-only="true"][data-tv-active-focus="true"] svg:not(.dashboard-frame-svg) {
-  filter: none !important;
-  transition: transform 70ms ease-out !important;
-  transform: scale(1.18) !important;
-}
-
-html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="label"][data-tv-active-focus="true"] .dashboard-tile-label,
-html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] .dashboard-tile-label {
-  transform: scale(1.08) !important;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.72) !important;
+  transform: scale(1.06) !important;
 }
 
 .achour-perf-grid-item {
@@ -265,74 +772,217 @@ html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="both"
 }
 
 [data-tv-theme-block="true"][data-tv-active-focus="true"] {
-  box-shadow: 0 0 0 2px #020205, 0 0 0 5px var(--theme-accent, #ffffff) !important;
+  box-shadow: 0 0 0 2px #020205, 0 0 0 4.5px var(--theme-accent, #ffffff), 0 0 18px rgba(var(--theme-rgb, 212, 175, 55), 0.78) !important;
   border-color: var(--theme-accent, #ffffff) !important;
   outline: none !important;
 }
 
-[data-tv-focus-inset="true"][data-tv-active-focus="true"] {
-  box-shadow: inset 0 0 0 3px var(--theme-primary, #d4af37) !important;
-  border-color: var(--theme-primary, #d4af37) !important;
+/* ===================================================================== */
+/* ILLUMINATED FOCUS FOR CATEGORIES, CHANNELS, VOD LISTS & UI CONTROLS   */
+/* ===================================================================== */
+
+[data-tv-pane="categories"][data-tv-active-focus="true"],
+[data-tv-pane="channels"][data-tv-focus-inset="true"]:not([data-tv-vod-poster="true"])[data-tv-active-focus="true"] {
+  background-color: rgba(var(--theme-rgb, 212, 175, 55), 0.24) !important;
+  background-image:
+    radial-gradient(
+      ellipse at 28% 50%,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.56) 44%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.18) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.22) 0%,
+      transparent 48%,
+      rgba(0, 0, 0, 0.24) 100%
+    ) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.86) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.74),
+    inset 0 0 18px rgba(var(--theme-rgb, 212, 175, 55), 0.58),
+    0 0 18px rgba(var(--theme-rgb, 212, 175, 55), 0.78) !important;
+  border-radius: 14px !important;
   outline: none !important;
+  z-index: 4 !important;
 }
 
-[data-tv-pane="categories"][data-tv-active-focus="true"] {
-  box-shadow: inset 0 0 0 2.5px var(--theme-primary, #d4af37) !important;
-  background-color: rgba(255, 255, 255, 0.08) !important;
-  border-radius: 12px !important;
+[data-tv-pane="categories"][data-tv-active-focus="true"] span,
+[data-tv-pane="channels"][data-tv-focus-inset="true"]:not([data-tv-vod-poster="true"])[data-tv-active-focus="true"] span {
+  color: #ffffff !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  -webkit-text-fill-color: #ffffff !important;
+  filter: none !important;
+  text-shadow:
+    0 0 10px rgba(var(--theme-rgb, 212, 175, 55), 0.98),
+    0 0 18px rgba(255, 255, 255, 0.48),
+    0 1px 2px rgba(0, 0, 0, 0.88) !important;
+}
+
+[data-tv-focus-inset="true"]:not([data-tv-pane="categories"]):not([data-tv-pane="channels"]):not([data-tv-vod-poster="true"])[data-tv-active-focus="true"] {
+  background-image: linear-gradient(
+    90deg,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.42) 0%,
+    rgba(255, 255, 255, 0.16) 50%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.28) 100%
+  ) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.84) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 0 14px rgba(var(--theme-rgb, 212, 175, 55), 0.48),
+    0 0 14px rgba(var(--theme-rgb, 212, 175, 55), 0.72) !important;
   outline: none !important;
 }
 
 .achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"] {
   z-index: 50 !important;
-  box-shadow: 0 0 0 3px var(--theme-primary, #d4af37), 0 12px 24px rgba(0, 0, 0, 0.7) !important;
-  border-color: var(--theme-primary, #d4af37) !important;
+  border: 2px solid rgba(255, 255, 255, 0.92) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 0 0 2px var(--theme-primary, #d4af37),
+    0 0 22px rgba(var(--theme-rgb, 212, 175, 55), 0.96),
+    0 0 40px rgba(var(--theme-rgb, 212, 175, 55), 0.55),
+    0 14px 28px rgba(0, 0, 0, 0.78) !important;
   outline: none !important;
-  transform: scale(1.03) !important;
+  transform: scale(1.035) !important;
+}
+
+.achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"] span {
+  color: #ffffff !important;
+  background-image: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(var(--theme-rgb, 212, 175, 55), 0.95), 0 1px 2px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Global Focus Shape Variations Applied to Categories & Channels */
+html[data-focus-shape="double-neon"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
+  border: 2px solid #ffffff !important;
+  box-shadow:
+    inset 0 0 0 2px var(--theme-primary, #d4af37),
+    inset 0 0 18px rgba(var(--theme-rgb, 212, 175, 55), 0.65),
+    0 0 20px rgba(var(--theme-rgb, 212, 175, 55), 0.92) !important;
+}
+
+html[data-focus-shape="spotlight-pillar"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.34) 0%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.62) 22%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.24) 72%,
+      rgba(255, 255, 255, 0.14) 100%
+    ) !important;
+}
+
+html[data-focus-shape="diamond-prism"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
+  background-image:
+    linear-gradient(
+      125deg,
+      rgba(255, 255, 255, 0.36) 0%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.44) 38%,
+      rgba(255, 255, 255, 0.16) 54%,
+      rgba(var(--theme-rgb, 212, 175, 55), 0.52) 100%
+    ) !important;
+}
+
+html[data-focus-shape="cyber-brackets"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
+  border-radius: 10px !important;
+  border: 1px solid rgba(var(--theme-rgb, 212, 175, 55), 0.6) !important;
+  background-image:
+    linear-gradient(90deg, #ffffff 0 14px, transparent 14px),
+    linear-gradient(180deg, #ffffff 0 14px, transparent 14px),
+    linear-gradient(-90deg, #ffffff 0 14px, transparent 14px),
+    linear-gradient(0deg, #ffffff 0 14px, transparent 14px),
+    linear-gradient(90deg, rgba(var(--theme-rgb, 212, 175, 55), 0.48) 0%, rgba(var(--theme-rgb, 212, 175, 55), 0.2) 100%) !important;
+  background-position: top left, top left, bottom right, bottom right, center !important;
+  background-size: 100% 2.5px, 2.5px 100%, 100% 2.5px, 2.5px 100%, 100% 100% !important;
+  background-repeat: no-repeat !important;
+}
+
+html[data-focus-shape="aurora-capsule"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
+  border-radius: 9999px !important;
+}
+
+html[data-focus-shape="classic-ring"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
+  background-image: none !important;
+  background-color: rgba(var(--theme-rgb, 212, 175, 55), 0.16) !important;
+  box-shadow: inset 0 0 0 2.5px var(--theme-primary, #d4af37) !important;
+  border-color: var(--theme-primary, #d4af37) !important;
 }
 
 [data-season-tab="true"][data-tv-active-focus="true"] {
-  box-shadow: inset 0 0 0 2.5px var(--theme-primary, #d4af37) !important;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.46) 100%
+  ) !important;
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.85),
+    0 0 14px rgba(var(--theme-rgb, 212, 175, 55), 0.78) !important;
   border-color: var(--theme-primary, #d4af37) !important;
+  color: #ffffff !important;
   outline: none !important;
 }
 
 [data-episode-item="true"][data-tv-active-focus="true"] {
-  background-color: var(--theme-primary, #d4af37) !important;
-  border-color: var(--theme-primary, #d4af37) !important;
-  box-shadow: inset 0 0 0 2.5px var(--theme-primary, #d4af37) !important;
+  background-color: rgba(var(--theme-rgb, 212, 175, 55), 0.34) !important;
+  background-image: linear-gradient(
+    90deg,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.48) 0%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.28) 100%
+  ) !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
+  box-shadow:
+    inset 0 0 0 2px var(--theme-primary, #d4af37),
+    0 0 16px rgba(var(--theme-rgb, 212, 175, 55), 0.75) !important;
   outline: none !important;
 }
 
-@supports (color: color-mix(in lab, red, red)) {
-  [data-episode-item="true"][data-tv-active-focus="true"] {
-    background-color: color-mix(in srgb, var(--theme-primary, #d4af37) 22%, rgba(15, 18, 28, 0.94)) !important;
-  }
-}
-
 [data-episode-item="true"][data-tv-active-focus="true"] p {
-  color: var(--theme-primary, #d4af37) !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(var(--theme-rgb, 212, 175, 55), 0.95) !important;
 }
 
-input[data-tv-active-focus="true"]:not(#channel-search-input),
+input[data-tv-active-focus="true"]:not(#channel-search-input):not(#vod-search-input),
 textarea[data-tv-active-focus="true"],
 select[data-tv-active-focus="true"] {
-  box-shadow: 0 0 0 2.5px var(--theme-primary, #d4af37) !important;
-  border-color: var(--theme-primary, #d4af37) !important;
+  box-shadow: 0 0 0 2.5px var(--theme-primary, #d4af37), 0 0 14px rgba(var(--theme-rgb, 212, 175, 55), 0.65) !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
   outline: none !important;
 }
 
 #channel-search-input,
-#channel-search-input[data-tv-active-focus="true"] {
+#channel-search-input[data-tv-active-focus="true"],
+#vod-search-input,
+#vod-search-input[data-tv-active-focus="true"] {
   box-shadow: none !important;
   background: transparent !important;
   border: 0 solid transparent !important;
   outline: none !important;
+  color: var(--theme-luminous, var(--theme-primary, #d4af37)) !important;
+  caret-color: var(--theme-primary, #d4af37) !important;
 }
 
+#channel-search-input::placeholder,
+#vod-search-input::placeholder {
+  color: var(--theme-luminous, var(--theme-primary, #d4af37)) !important;
+  opacity: 0.9 !important;
+}
+
+#channel-search-input:focus,
 #channel-search-input[data-tv-active-focus="true"],
-#channel-search-input[data-tv-active-focus="true"]::placeholder {
-  color: var(--theme-primary, #d4af37) !important;
+#vod-search-input:focus,
+#vod-search-input[data-tv-active-focus="true"] {
+  color: var(--theme-accent, var(--theme-primary, #d4af37)) !important;
+  text-shadow: 0 0 10px rgba(var(--theme-rgb, 212, 175, 55), 0.78);
+}
+
+#channel-search-input[data-tv-active-focus="true"]::placeholder,
+#vod-search-input[data-tv-active-focus="true"]::placeholder {
+  color: var(--theme-accent, var(--theme-primary, #d4af37)) !important;
   opacity: 1 !important;
 }
 
@@ -679,7 +1329,7 @@ html.achour-tv-ui [data-achour-window-cat="playlists"] {
 
 [data-dashboard-layout-stage="true"][data-dashboard-v="bottom"] {
   justify-content: flex-end !important;
-  padding-bottom: 0.65rem !important;
+  padding-bottom: 0.75rem !important;
 }
 
 [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"]) > div {
@@ -688,13 +1338,13 @@ html.achour-tv-ui [data-achour-window-cat="playlists"] {
 
 [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"]) button[data-dashboard-kind] {
   min-height: 0 !important;
-  padding-top: 0.5rem !important;
-  padding-bottom: 0.5rem !important;
+  padding-top: 0.55rem !important;
+  padding-bottom: 0.35rem !important;
 }
 
 @media (max-width: 639px) {
   [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] .grid {
-    gap: 0.35rem !important;
+    gap: 0.3rem !important;
   }
 
   [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] .grid.grid-cols-2.sm\:grid-cols-5 {
@@ -703,17 +1353,31 @@ html.achour-tv-ui [data-achour-window-cat="playlists"] {
 
   [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] button[data-dashboard-kind] {
     gap: 0.25rem !important;
-    padding: 0.4rem 0.35rem !important;
+    padding: 0.35rem 0.25rem !important;
   }
 
   [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] button[data-dashboard-kind] svg {
-    max-width: 26px !important;
-    max-height: 26px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+  }
+
+  [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] button[data-dashboard-kind] .dashboard-pill-btn {
+    min-width: 0 !important;
+    padding: 2px 7px !important;
   }
 
   [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] button[data-dashboard-kind] span {
     font-size: 9px !important;
     line-height: 1.1 !important;
+  }
+
+  [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] .dashboard-focus-rings {
+    bottom: 20px !important;
+    height: 28px !important;
+  }
+
+  [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] .dashboard-floor-reflection {
+    height: 10px !important;
   }
 }
 
@@ -778,6 +1442,21 @@ html.achour-tv-ui [data-achour-window-cat="playlists"] {
 [data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) button[data-dashboard-kind] svg {
   max-width: 28px !important;
   max-height: 28px !important;
+}
+
+[data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) .dashboard-focus-rings,
+[data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) .dashboard-floor-reflection {
+  display: none !important;
+}
+
+[data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) .dashboard-focus-halo {
+  inset: -2px !important;
+  border-radius: 16px !important;
+}
+
+[data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) .dashboard-pill-btn {
+  min-width: 0 !important;
+  padding: 4px 12px !important;
 }
 
 .achour-modal-backdrop:not([data-modal-fullscreen="true"]) {

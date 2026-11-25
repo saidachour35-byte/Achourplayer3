@@ -122,10 +122,10 @@ export default function ExitConfirmModal({
 
               {/* Title & Description */}
               <div className="min-w-0 flex-1">
-                <h2 className="text-lg sm:text-xl font-black text-white mb-1 tracking-tight">
+                <h2 className="text-lg sm:text-xl font-semibold achour-glossy-title mb-1 tracking-tight">
                   {t('exit_modal_title')}
                 </h2>
-                <p className="text-zinc-300 text-xs sm:text-sm font-medium leading-relaxed">
+                <p className="text-zinc-300 text-xs sm:text-sm font-normal leading-relaxed">
                   {t('exit_modal_desc')}
                 </p>
               </div>
@@ -141,9 +141,9 @@ export default function ExitConfirmModal({
                 tabIndex={0}
                 onClick={onCancel}
                 onFocus={() => setSelectedAction('no')}
-                className={`py-3.5 px-4 rounded-xl font-black text-sm uppercase transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer outline-none ${
+                className={`py-3.5 px-4 rounded-xl font-medium text-sm uppercase transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer outline-none ${
                   selectedAction === 'no'
-                    ? 'bg-gold text-black scale-[1.02] ring-2 ring-white/40'
+                    ? 'achour-glossy-pill scale-[1.02] ring-2 ring-white/40'
                     : 'bg-white/[0.06] text-zinc-300 border border-white/10 hover:border-gold/40 hover:text-white'
                 }`}
               >
@@ -161,17 +161,14 @@ export default function ExitConfirmModal({
                 onFocus={() => setSelectedAction('yes')}
                 style={
                   selectedAction === 'yes'
-                    ? {
-                        backgroundColor: 'var(--theme-primary, #D4AF37)',
-                        color: 'var(--theme-on-primary, #090b10)'
-                      }
+                    ? undefined
                     : {
                         color: 'var(--theme-primary, #D4AF37)'
                       }
                 }
-                className={`py-3.5 px-4 rounded-xl font-black text-sm uppercase transition-colors duration-150 flex items-center justify-center gap-2 cursor-pointer outline-none ${
+                className={`py-3.5 px-4 rounded-xl font-medium text-sm uppercase transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer outline-none ${
                   selectedAction === 'yes'
-                    ? 'scale-[1.02] ring-2 ring-white/40'
+                    ? 'achour-glossy-pill scale-[1.02] ring-2 ring-white/40'
                     : 'bg-white/[0.06] border border-gold/30 hover:border-gold'
                 }`}
               >

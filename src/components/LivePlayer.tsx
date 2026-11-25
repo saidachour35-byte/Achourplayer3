@@ -202,21 +202,23 @@ const CategoryButton = React.memo(({ cat, catIdx, isSelected, onSelect, onFocusI
       }}
       className={`w-full h-[44px] flex items-center justify-between px-3.5 rounded-xl text-xs sm:text-sm md:text-base font-medium cursor-pointer outline-none relative bg-transparent transition-colors ${
         isSelected
-          ? 'text-gold font-bold'
+          ? 'achour-glossy-surface font-semibold'
           : 'text-zinc-300 hover:text-white'
       }`}
     >
       <div className="flex items-center gap-2 min-w-0 flex-1 pr-1">
         {isSelected && <span className="w-1.5 h-4 rounded-full bg-gold shrink-0" />}
         {showNumber && (
-          <span className="text-[11px] font-mono font-bold text-gold/80 shrink-0 min-w-[1.5rem] text-center select-none">
+          <span className="text-[11px] font-sans font-normal tabular-nums achour-glossy-info shrink-0 min-w-[1.5rem] text-center select-none">
             {catIdx + 1}
           </span>
         )}
-        <span className="truncate text-xs sm:text-sm md:text-base font-medium leading-snug">{cat.category_name}</span>
+        <span className={`truncate text-xs sm:text-sm md:text-base leading-snug ${isSelected ? 'font-semibold achour-glossy-text' : 'font-medium'}`}>
+          {cat.category_name}
+        </span>
       </div>
       {cat.count > 0 && (
-        <span className="text-[10px] sm:text-xs font-mono font-bold text-zinc-400 shrink-0">{cat.count}</span>
+        <span className="text-[10px] sm:text-xs font-sans font-normal tabular-nums achour-glossy-info shrink-0">{cat.count}</span>
       )}
     </div>
   );
@@ -497,14 +499,14 @@ const LiveHeaderClock: React.FC<{ language?: string; timeFormat?: string }> = Re
   const loc = language === 'ar' ? 'ar-EG' : language;
   return (
     <div className="flex flex-col items-end shrink-0">
-      <span className="text-xs sm:text-sm font-black font-mono text-gold leading-none">
+      <span className="text-xs sm:text-sm font-normal font-sans tabular-nums achour-glossy-title leading-none">
         {now.toLocaleTimeString(loc, {
           hour: '2-digit',
           minute: '2-digit',
           hour12: timeFormat === '12h'
         })}
       </span>
-      <span className="text-[10px] font-medium text-gold opacity-85 font-sans mt-0.5 whitespace-nowrap" style={{ color: 'var(--theme-primary)' }}>
+      <span className="text-[10px] font-normal font-sans achour-glossy-info mt-0.5 whitespace-nowrap">
         {now.toLocaleDateString(loc, {
           weekday: 'short',
           day: 'numeric',
@@ -582,9 +584,9 @@ const LiveMiniEpgCard: React.FC<{
               onError={() => setFailedIconUrl(channelIconUrl)}
             />
           )}
-          <span className="text-xs font-bold text-white truncate">{selectedChannel.name}</span>
+          <span className="text-xs font-semibold achour-glossy-text truncate">{selectedChannel.name}</span>
         </div>
-        <span className="text-[9px] font-medium text-gold/90 shrink-0">
+        <span className="text-[9px] font-medium achour-glossy-info shrink-0">
           {isRtl ? 'دليل البرامج' : 'Program Guide'}
         </span>
       </div>
@@ -592,10 +594,10 @@ const LiveMiniEpgCard: React.FC<{
       {curProg ? (
         <div className="rounded-xl bg-transparent p-2 space-y-1.5">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[9px] font-bold text-gold uppercase">
+            <span className="text-[9px] font-semibold achour-glossy-text uppercase">
               {isRtl ? 'البرنامج الحالي' : 'Now Playing'}
             </span>
-            <span className="text-[9px] font-mono font-bold text-zinc-300" dir="ltr">
+            <span className="text-[9px] font-sans font-normal tabular-nums achour-glossy-info" dir="ltr">
               {fmtTime(curProg.start)} - {fmtTime(curProg.stop)}
             </span>
           </div>
@@ -609,13 +611,13 @@ const LiveMiniEpgCard: React.FC<{
             />
           </div>
           {remainingMins !== null && (
-            <div className="text-[9px] font-medium text-zinc-400">
+            <div className="text-[9px] font-normal font-sans tabular-nums achour-glossy-info">
               {isRtl ? `متبقي ${remainingMins} دقيقة` : `${remainingMins} min remaining`}
             </div>
           )}
         </div>
       ) : (
-        <div className="rounded-xl bg-transparent p-2 text-[10px] font-medium text-zinc-400">
+        <div className="rounded-xl bg-transparent p-2 text-[10px] font-normal text-zinc-400">
           {isRtl ? 'لا تتوفر بيانات البرنامج الحالي لهذه القناة' : 'No current program guide available for this channel'}
         </div>
       )}
@@ -623,14 +625,14 @@ const LiveMiniEpgCard: React.FC<{
       {nextProg && (
         <div className="rounded-xl bg-transparent px-2 py-1.5 flex items-center justify-between gap-2">
           <div className="min-w-0">
-            <span className="block text-[9px] font-bold text-zinc-400 uppercase mb-0.5">
+            <span className="block text-[9px] font-semibold achour-glossy-info uppercase mb-0.5">
               {isRtl ? 'البرنامج التالي' : 'Up Next'}
             </span>
             <p className="text-[10px] font-medium text-zinc-200 truncate">
               {nextProg.title}
             </p>
           </div>
-          <span className="text-[10px] font-mono font-bold text-gold shrink-0" dir="ltr">
+          <span className="text-[10px] font-sans font-normal tabular-nums achour-glossy-info shrink-0" dir="ltr">
             {fmtTime(nextProg.start)}
           </span>
         </div>
@@ -1464,8 +1466,8 @@ const MultiViewSlotPlayerComponent: React.FC<MultiViewSlotPlayerProps> = ({
       {!isFullscreenSlot && (
       <div dir={isRtl ? 'rtl' : 'ltr'} className={`absolute top-1.5 inset-x-1.5 flex items-center justify-between gap-1.5 z-20 transition-opacity duration-300 ${showFocusBorder ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} bg-transparent`}>
         <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-transparent border-0 text-white min-w-0 max-w-[62%] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]">
-          <span className={`text-[10px] font-mono font-black ${isActive ? 'text-gold' : 'text-gold/80'}`}>#{badgeNum}</span>
-          <span className={`text-xs font-bold truncate ${isActive ? 'text-white' : 'text-white/90'}`}>{channel.name}</span>
+          <span className={`text-[10px] font-sans font-semibold tabular-nums ${isActive ? 'achour-glossy-text' : 'achour-glossy-info'}`}>#{badgeNum}</span>
+          <span className={`text-xs font-semibold truncate ${isActive ? 'achour-glossy-title' : 'text-white/95'}`}>{channel.name}</span>
         </div>
 
         <div className="flex items-center gap-1 bg-transparent">
@@ -1489,7 +1491,7 @@ const MultiViewSlotPlayerComponent: React.FC<MultiViewSlotPlayerProps> = ({
             aria-label={isRtl ? 'نسبة عرض الصورة' : 'Aspect ratio'}
             className="p-1 bg-transparent border-0 shadow-none outline-none text-white/90 hover:text-gold focus:text-gold transition-transform cursor-pointer drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]"
           >
-            <span className="text-[9px] font-black">AR</span>
+            <span className="text-[9px] font-semibold">AR</span>
           </button>
           {onChangeChannel && (
             <button
@@ -1632,8 +1634,8 @@ const EmptyMultiViewSlotButton = React.memo(({
         showFocusBorder ? 'z-30' : ''
       } ${spanClass}`}
     >
-      <Plus size={28} />
-      <span className="text-xs font-bold">
+      <Plus size={28} className="text-gold" />
+      <span className="text-xs font-medium achour-glossy-text">
         {isRtl ? `اختر قناة للخانة ${displayNumber}` : `Select channel for slot ${displayNumber}`}
       </span>
     </button>
@@ -5751,14 +5753,14 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
         <div className="grid grid-cols-3 items-center w-full gap-4">
           {/* Left Column: App name only (logo is splash-screen-only) */}
           <div dir="ltr" className="flex items-center justify-start min-w-0">
-            <h1 className="text-sm sm:text-base font-black text-gold tracking-tighter uppercase italic leading-none drop-shadow-md whitespace-nowrap">ACHOUR PLAYER</h1>
+            <h1 className="text-sm sm:text-base font-semibold tracking-tight uppercase leading-none whitespace-nowrap achour-glossy-title">ACHOUR PLAYER</h1>
           </div>
 
           {/* Center Column: Multi View layouts and display controls */}
           <div className="flex items-center justify-center min-w-0 gap-3">
             {(mediaType === 'live' || mediaType === 'favorites') && (
-              <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-bold text-gold" style={{ color: 'var(--theme-primary)' }}>
-                <span className="select-none text-gold font-bold" style={{ color: 'var(--theme-primary)' }}>Multi View</span>
+              <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
+                <span className="select-none font-semibold achour-glossy-text">Multi View</span>
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   {([1, 2, 3, 4] as const).map((modeNum, idx) => (
                     <button
@@ -5825,14 +5827,13 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                           if (el) setTVFocus(el, { scroll: false });
                         });
                       }}
-                      style={{ color: 'var(--theme-primary)' }}
-                      className={`px-2.5 py-1 rounded-md flex items-center justify-center font-mono font-black text-sm sm:text-base transition-colors cursor-pointer outline-none ${
+                      className={`px-2.5 py-1 rounded-md flex items-center justify-center font-sans tabular-nums font-medium text-sm sm:text-base transition-colors cursor-pointer outline-none ${
                         multiViewActive && multiViewMode === modeNum
-                          ? 'text-gold bg-gold/20 border border-gold/60 shadow-[0_0_12px_var(--theme-glow)] scale-105 opacity-100'
-                          : 'bg-transparent text-gold opacity-85 hover:opacity-100'
+                          ? 'achour-glossy-pill font-semibold scale-105 opacity-100'
+                          : 'bg-transparent text-zinc-200 hover:text-white opacity-90 hover:opacity-100'
                       }`}
                     >
-                      {modeNum}
+                      <span className={multiViewActive && multiViewMode === modeNum ? '' : 'achour-glossy-text'}>{modeNum}</span>
                     </button>
                   ))}
                   {multiViewActive && (
@@ -5844,10 +5845,10 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                       tabIndex={0}
                       onClick={toggleMultiViewFullSplit}
                       title={isRtl ? 'التبديل بين تقسيم ملء شاشة التلفاز والوضع العادي' : 'Toggle Full-TV-Screen Split Mode'}
-                      className={`px-2.5 py-1 rounded-lg border text-[11px] sm:text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer outline-none whitespace-nowrap ${
+                      className={`px-2.5 py-1 rounded-lg border text-[11px] sm:text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer outline-none whitespace-nowrap ${
                         multiViewFullSplit
-                          ? 'bg-gold text-[var(--theme-on-primary,#090b10)] border-gold shadow-[0_0_12px_var(--theme-glow)]'
-                          : 'bg-gold/15 text-gold border-gold/45 hover:bg-gold/25 hover:border-gold'
+                          ? 'achour-glossy-pill'
+                          : 'achour-glossy-surface text-white hover:border-gold'
                       }`}
                     >
                       <Maximize size={13} />
@@ -5864,12 +5865,12 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                       onClick={() => setMultiViewThreeReverse((reversed) => !reversed)}
                       title={isRtl ? 'عكس ترتيب الشاشات' : 'Reverse screen order'}
                       aria-pressed={multiViewThreeReverse}
-                      className={`px-2 py-1 rounded-lg bg-transparent border-0 text-[11px] sm:text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer outline-none whitespace-nowrap ${
+                      className={`px-2 py-1 rounded-lg bg-transparent border-0 text-[11px] sm:text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer outline-none whitespace-nowrap ${
                         multiViewThreeReverse ? 'text-gold' : 'text-white/90 hover:text-gold focus:text-gold'
                       }`}
                     >
                       <ArrowUpDown size={13} />
-                      <span>{isRtl ? 'عكس' : 'Reverse'}</span>
+                      <span className={multiViewThreeReverse ? 'achour-glossy-text' : ''}>{isRtl ? 'عكس' : 'Reverse'}</span>
                     </button>
                   )}
                 </div>
@@ -5889,17 +5890,17 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
         {/* Column 1: Virtualized Categories Sidebar */}
         <aside className={`${(isMultiViewSlotFullscreen || (multiViewActive && multiViewFullSplit && multiViewPickingSlot === null)) ? 'hidden' : 'flex'} w-44 sm:w-56 md:w-64 lg:w-72 bg-transparent flex-col h-full min-h-0 shrink-0 overflow-hidden pb-0`}>
           <div className="px-3 py-2 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-2 text-gold text-xs sm:text-sm font-black uppercase">
+            <div className="flex items-center gap-2 text-gold text-xs sm:text-sm font-semibold uppercase">
               {mediaType === 'movie' ? <Film size={16} /> : mediaType === 'series' ? <Clapperboard size={16} /> : <Tv size={16} />}
-              <span>{isRtl ? (mediaType === 'movie' ? 'أقسام الأفلام' : mediaType === 'series' ? 'أقسام المسلسلات' : 'المجموعات') : t('categories')}</span>
+              <span className="achour-glossy-title">{isRtl ? (mediaType === 'movie' ? 'أقسام الأفلام' : mediaType === 'series' ? 'أقسام المسلسلات' : 'المجموعات') : t('categories')}</span>
             </div>
-            <span className="text-xs font-mono text-zinc-400 font-bold px-2 py-0.5">{visibleCategories.length}</span>
+            <span className="text-xs font-sans font-normal tabular-nums achour-glossy-info px-2 py-0.5">{visibleCategories.length}</span>
           </div>
 
           {loading && visibleCategories.length === 0 ? (
             <div className="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar py-1">
               <div className="p-3 space-y-2">
-                <div className="flex items-center gap-2 mb-3 text-gold text-xs font-bold">
+                <div className="flex items-center gap-2 mb-3 text-gold text-xs font-medium">
                   <div className="w-3.5 h-3.5 border-2 border-gold border-t-transparent rounded-full animate-spin" />
                   <span></span>
                 </div>
@@ -5932,9 +5933,9 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
         } flex flex-col h-full min-h-0 shrink-0 pb-0`}>
           
           <div className="px-2.5 py-1.5 flex items-center justify-between shrink-0 bg-transparent">
-            <div className="flex items-center gap-1.5 text-gold text-[11px] font-black uppercase">
+            <div className="flex items-center gap-1.5 text-gold text-[11px] sm:text-xs font-semibold uppercase">
               {mediaType === 'movie' ? <Film size={14} /> : mediaType === 'series' ? <Clapperboard size={14} /> : <Tv size={14} />}
-              <span>
+              <span className="achour-glossy-title">
                 {mediaType === 'movie'
                   ? t('movies')
                   : mediaType === 'series'
@@ -5958,7 +5959,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                         input.focus();
                       }
                     }}
-                    className="p-1 bg-transparent border-0 ring-0 shadow-none outline-none text-gold/90 hover:text-gold cursor-pointer"
+                    className="p-1 bg-transparent border-0 ring-0 shadow-none outline-none text-gold hover:brightness-125 cursor-pointer"
                     title={t('search')}
                     aria-label={t('search')}
                   >
@@ -5971,14 +5972,14 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder={t('search')}
                     aria-label={t('search')}
-                    className="bg-transparent border-0 ring-0 shadow-none outline-none text-xs text-white px-1.5 py-0.5 w-24 sm:w-32 placeholder:text-white/75"
+                    className="bg-transparent border-0 ring-0 shadow-none outline-none text-xs font-medium text-gold px-1.5 py-0.5 w-24 sm:w-32"
                   />
                   {search && (
                     <button
                       type="button"
                       data-vod-search-btn="true"
                       onClick={() => setSearch('')}
-                      className="p-0.5 bg-transparent border-0 ring-0 shadow-none outline-none text-zinc-300 hover:text-white cursor-pointer ml-1"
+                      className="p-0.5 bg-transparent border-0 ring-0 shadow-none outline-none text-gold/80 hover:text-gold cursor-pointer ml-1"
                       aria-label={t('close')}
                     >
                       <X size={12} />
@@ -5987,7 +5988,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                 </div>
               )}
 
-              <span className="text-[10px] font-mono text-zinc-500 font-bold">
+              <span className="text-[10px] font-sans font-normal tabular-nums achour-glossy-info">
                 {loading && filteredChannels.length === 0 ? '...' : (recentChannelItems ? recentChannelItems.length : `${filteredChannels.length}${categoryHasMore ? '+' : ''}`)}
               </span>
             </div>
@@ -6294,10 +6295,10 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                         {mediaType === 'movie' ? <Film size={15} /> : <Clapperboard size={15} />}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h2 className="text-xs sm:text-sm font-black text-white uppercase tracking-wider truncate">
+                        <h2 className="text-xs sm:text-sm font-semibold uppercase tracking-wider truncate achour-glossy-title">
                           {movieDetailsModal.name}
                         </h2>
-                        <p className="text-[10px] text-gold/85 font-bold uppercase truncate">
+                        <p className="text-[10px] font-normal achour-glossy-info uppercase truncate">
                           {(movieDetailsModal?.category_name && movieDetailsModal.category_name.toLowerCase() !== 'general' ? movieDetailsModal.category_name : '') || (mediaType === 'movie' ? (isRtl ? 'فيلم سينمائي' : 'Movie') : (isRtl ? 'مسلسل تلفزيوني' : 'TV Series'))}
                         </p>
                       </div>
@@ -6334,24 +6335,24 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                     {/* Fixed Details & Story Column */}
                     <div className="flex-1 flex flex-col gap-1 min-w-0">
                       {(resolvedRating || resolvedRelease || resolvedGenre || resolvedDuration) && (
-                        <div className="flex items-center flex-wrap gap-1 text-[10px] sm:text-[11px] font-bold">
+                        <div className="flex items-center flex-wrap gap-1 text-[10px] sm:text-[11px] font-normal font-sans tabular-nums">
                           {resolvedRating && (
-                            <span className="px-1.5 py-0.5 rounded-md bg-gold/20 text-gold border border-gold/30">
-                              ★ {resolvedRating}
+                            <span className="px-1.5 py-0.5 rounded-md achour-glossy-surface border border-gold/30 font-medium">
+                              <span className="achour-glossy-text">★ {resolvedRating}</span>
                             </span>
                           )}
                           {resolvedRelease && (
-                            <span className="px-1.5 py-0.5 rounded-md bg-white/10 text-zinc-200 border border-white/10">
-                              {resolvedRelease}
+                            <span className="px-1.5 py-0.5 rounded-md bg-white/10 border border-white/10">
+                              <span className="achour-glossy-info">{resolvedRelease}</span>
                             </span>
                           )}
                           {!hasSeasonsSection && resolvedDuration && (
-                            <span className="px-1.5 py-0.5 rounded-md bg-white/10 text-zinc-200 border border-white/10">
-                              {resolvedDuration}
+                            <span className="px-1.5 py-0.5 rounded-md bg-white/10 border border-white/10">
+                              <span className="achour-glossy-info">{resolvedDuration}</span>
                             </span>
                           )}
                           {resolvedGenre && (
-                            <span className="px-1.5 py-0.5 rounded-md bg-white/10 text-zinc-300 border border-white/10 truncate max-w-[200px]">
+                            <span className="px-1.5 py-0.5 rounded-md bg-white/10 text-zinc-200 border border-white/10 truncate max-w-[200px]">
                               {resolvedGenre}
                             </span>
                           )}
@@ -6360,17 +6361,17 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
 
                       <div>
                         {!hasSeasonsSection && (
-                          <h3 className="text-[11px] sm:text-xs font-black uppercase text-gold tracking-widest mb-0.5">
+                          <h3 className="text-[11px] sm:text-xs font-semibold uppercase tracking-widest mb-0.5 achour-glossy-text">
                             {isRtl ? 'قصة العمل' : 'Synopsis & Plot'}
                           </h3>
                         )}
                         {detailLoading && !resolvedPlot ? (
-                          <div className="flex items-center gap-2 py-1 text-gold text-xs font-bold">
+                          <div className="flex items-center gap-2 py-1 text-gold text-xs font-medium">
                             <div className="w-3.5 h-3.5 border-2 border-gold border-t-transparent rounded-full animate-spin" />
                             <span>{isRtl ? 'جاري تحميل التفاصيل...' : 'Loading details...'}</span>
                           </div>
                         ) : (
-                          <p className={`text-[11px] sm:text-xs text-zinc-200 leading-snug font-medium ${hasSeasonsSection ? 'line-clamp-1 sm:line-clamp-2' : 'max-h-32 overflow-y-auto no-scrollbar'}`}>
+                          <p className={`text-[11px] sm:text-xs text-zinc-200 leading-snug font-normal ${hasSeasonsSection ? 'line-clamp-1 sm:line-clamp-2' : 'max-h-32 overflow-y-auto no-scrollbar'}`}>
                             {resolvedPlot || (isRtl ? 'لا تتوفر قصة لهذا العمل في بيانات الاشتراك.' : 'No synopsis provided by the playlist.')}
                           </p>
                         )}
@@ -6379,16 +6380,16 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                       {!hasSeasonsSection && (resolvedCast || resolvedDirector) && (
                         <div className="space-y-0.5 text-xs">
                           {resolvedCast && (
-                            <p className="line-clamp-2 text-zinc-300">
-                              <span className="font-black uppercase text-gold tracking-wider">
+                            <p className="line-clamp-2 text-zinc-300 font-normal">
+                              <span className="font-semibold uppercase tracking-wider achour-glossy-text">
                                 {isRtl ? 'طاقم التمثيل: ' : 'Cast: '}
                               </span>
                               {resolvedCast}
                             </p>
                           )}
                           {resolvedDirector && (
-                            <p className="truncate text-zinc-300">
-                              <span className="font-black uppercase text-gold tracking-wider">
+                            <p className="truncate text-zinc-300 font-normal">
+                              <span className="font-semibold uppercase tracking-wider achour-glossy-text">
                                 {isRtl ? 'الإخراج: ' : 'Director: '}
                               </span>
                               {resolvedDirector}
@@ -6454,7 +6455,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                   <div className="flex-1 min-h-0 flex flex-col border-t border-white/10 pt-1.5 overflow-hidden">
                     {/* Fixed Seasons Header & Tabs (Compact & elevated) */}
                     <div className="shrink-0 flex items-center gap-2.5 pb-1.5">
-                      <h3 className="text-[11px] sm:text-xs font-black uppercase text-gold tracking-wider shrink-0">
+                      <h3 className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider shrink-0 achour-glossy-title">
                         {isRtl ? 'المواسم' : 'Seasons'} ({seriesSeasonsData.length})
                       </h3>
                       <div
@@ -6472,9 +6473,9 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                               data-season-active={isSelected ? 'true' : 'false'}
                               tabIndex={0}
                               onClick={() => setSelectedSeasonNum(s.seasonNumber)}
-                              className={`px-3 py-1 rounded-lg text-[11px] sm:text-xs font-bold whitespace-nowrap transition-colors border outline-none shrink-0 ${
+                              className={`px-3 py-1 rounded-lg text-[11px] sm:text-xs font-medium whitespace-nowrap transition-colors border outline-none shrink-0 ${
                                 isSelected
-                                  ? 'bg-gold text-black border-gold'
+                                  ? 'achour-glossy-pill font-semibold border-gold'
                                   : 'bg-white/[0.06] border-white/15 text-zinc-200 hover:text-white hover:border-gold/50'
                               }`}
                             >
@@ -6557,25 +6558,27 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                                   : 'bg-white/[0.05] border-white/15 hover:border-gold/60 hover:bg-gold/15'
                               }`}
                             >
-                              <div className="w-7 h-7 rounded-lg bg-gold/20 flex items-center justify-center text-gold font-mono font-bold text-xs shrink-0">
-                                {ep.episode || epIdx + 1}
+                              <div className="w-7 h-7 rounded-lg achour-glossy-surface border border-gold/35 flex items-center justify-center font-sans font-semibold tabular-nums text-xs shrink-0">
+                                <span className="achour-glossy-text">{ep.episode || epIdx + 1}</span>
                               </div>
                               <div className={`min-w-0 flex-1 ${isRtl ? 'mr-2.5' : 'ml-2.5'}`}>
                                 <div className="flex items-center gap-2 min-w-0">
-                                  <p className="text-xs sm:text-sm font-bold text-white group-hover:text-gold transition-colors truncate flex-1 leading-tight">
+                                  <p className="text-xs sm:text-sm font-medium text-white group-hover:text-gold transition-colors truncate flex-1 leading-tight">
                                     {ep.name}
                                   </p>
                                   {isEpCompleted && (
-                                    <span className="px-1.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold shrink-0 flex items-center gap-1">
+                                    <span className="px-1.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-medium shrink-0 flex items-center gap-1">
                                       <Check size={10} />
                                       {isRtl ? 'تمت المشاهدة' : 'Watched'}
                                     </span>
                                   )}
                                   {hasEpResume && epProg && (
-                                    <span className="px-1.5 py-0.5 rounded-md bg-gold/20 border border-gold/40 text-gold text-[10px] font-mono font-bold shrink-0">
-                                      {isRtl
-                                        ? `توقفت عند ${formatPlaybackClock(epProg.positionSec)}`
-                                        : `Paused ${formatPlaybackClock(epProg.positionSec)}`}
+                                    <span className="px-1.5 py-0.5 rounded-md achour-glossy-surface border border-gold/40 text-[10px] font-sans font-normal tabular-nums shrink-0">
+                                      <span className="achour-glossy-info">
+                                        {isRtl
+                                          ? `توقفت عند ${formatPlaybackClock(epProg.positionSec)}`
+                                          : `Paused ${formatPlaybackClock(epProg.positionSec)}`}
+                                      </span>
                                     </span>
                                   )}
                                 </div>
@@ -6617,9 +6620,9 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                           setMovieDetailsModal(null);
                         }
                       }}
-                      className="px-4 py-1.5 bg-gold hover:bg-gold/90 text-black rounded-lg text-xs sm:text-sm font-black flex items-center justify-center gap-1.5 focus:outline-none transition-colors"
+                      className="px-4 py-1.5 achour-glossy-pill hover:brightness-110 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5 focus:outline-none transition-all cursor-pointer"
                     >
-                      <Play size={14} className="fill-black" />
+                      <Play size={14} className="fill-current" />
                       <span>{isRtl ? 'تشغيل' : 'Play'}</span>
                     </button>
                   ) : mediaType === 'movie' ? (
@@ -6642,9 +6645,9 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                           setMovieDetailsModal(null);
                         }
                       }}
-                      className="px-4 py-1.5 bg-gold hover:bg-gold/90 text-black rounded-lg text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 focus:outline-none transition-colors"
+                      className="px-4 py-1.5 achour-glossy-pill hover:brightness-110 rounded-lg text-xs sm:text-sm font-medium uppercase tracking-wider flex items-center justify-center gap-1.5 focus:outline-none transition-all cursor-pointer"
                     >
-                      <Play size={14} className="fill-black" />
+                      <Play size={14} className="fill-current" />
                       <span>{isRtl ? 'تشغيل' : 'Play'}</span>
                     </button>
                   ) : (
@@ -6656,12 +6659,12 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                     data-modal-role="favorite"
                     tabIndex={0}
                     onClick={() => toggleFavorite(movieDetailsModal.stream_id)}
-                    className={`px-3 py-1.5 rounded-lg border transition-colors outline-none focus:outline-none flex items-center justify-center gap-1.5 text-xs sm:text-sm font-bold ${
-                      vodFavorites.includes(movieDetailsModal.stream_id) ? 'bg-gold text-black border-gold' : 'bg-white/[0.06] border-white/15 text-zinc-200 hover:border-gold'
+                    className={`px-3 py-1.5 rounded-lg border transition-all outline-none focus:outline-none flex items-center justify-center gap-1.5 text-xs sm:text-sm font-medium cursor-pointer ${
+                      vodFavorites.includes(movieDetailsModal.stream_id) ? 'achour-glossy-pill border-gold' : 'bg-white/[0.06] border-white/15 text-zinc-200 hover:border-gold'
                     }`}
                     title={t('favorites')}
                   >
-                    <Star size={14} className={vodFavorites.includes(movieDetailsModal.stream_id) ? 'fill-black' : ''} />
+                    <Star size={14} className={vodFavorites.includes(movieDetailsModal.stream_id) ? 'fill-current' : ''} />
                     {hasSeasonsSection && (
                       <span>{vodFavorites.includes(movieDetailsModal.stream_id) ? (isRtl ? 'في المفضلة' : 'Favorited') : (isRtl ? 'المفضلة' : 'Favorite')}</span>
                     )}
@@ -6928,10 +6931,10 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                         <AlertTriangle size={22} />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="text-base sm:text-lg font-black text-white leading-snug">
+                        <h3 className="text-base sm:text-lg font-semibold leading-snug achour-glossy-title">
                           {titleText}
                         </h3>
-                        <p className="text-xs text-amber-300/90 font-mono mt-0.5 truncate">
+                        <p className="text-xs font-sans font-normal achour-glossy-info mt-0.5 truncate">
                           {playerLabel}{pkgLabel ? ` • ${pkgLabel}` : ''}
                         </p>
                       </div>
@@ -6949,7 +6952,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                     </button>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed bg-white/[0.04] border border-white/10 rounded-2xl p-3.5">
+                  <p className="text-xs sm:text-sm font-normal text-zinc-200 leading-relaxed bg-white/[0.04] border border-white/10 rounded-2xl p-3.5">
                     {descText}
                   </p>
 
@@ -6963,9 +6966,9 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                           data-external-primary="true"
                           tabIndex={0}
                           onClick={() => startInternalFallback(false)}
-                          className="w-full py-3 px-4 rounded-xl bg-gold hover:bg-gold/90 text-black font-black text-sm flex items-center justify-center gap-2 transition-colors outline-none"
+                          className="w-full py-3 px-4 rounded-xl achour-glossy-pill hover:brightness-110 font-medium text-sm flex items-center justify-center gap-2 transition-all outline-none cursor-pointer"
                         >
-                          <Play size={16} className="fill-black" />
+                          <Play size={16} className="fill-current" />
                           <span>{isRtl ? 'تشغيل بالمشغّل الداخلي الآن' : 'Play with Internal Player Now'}</span>
                         </button>
 
@@ -6982,7 +6985,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                                 }
                               });
                             }}
-                            className="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors outline-none"
+                            className="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors outline-none"
                           >
                             <RotateCcw size={15} className="text-gold" />
                             <span>{isRtl ? `إعادة المحاولة عبر ${playerLabel}` : `Retry with ${playerLabel}`}</span>
@@ -6995,7 +6998,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                           data-tv-modal="external-launch"
                           tabIndex={0}
                           onClick={() => startInternalFallback(true)}
-                          className="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors outline-none"
+                          className="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors outline-none"
                         >
                           <MonitorPlay size={15} className="text-gold" />
                           <span>{isRtl ? 'اعتماد المشغّل الداخلي وحفظه في الإعدادات' : 'Switch & Save Internal Player in Settings'}</span>
@@ -7014,7 +7017,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                               }
                             } catch {}
                           }}
-                          className="w-full py-2 px-4 rounded-xl bg-white/[0.04] hover:bg-white/10 border border-white/10 text-zinc-300 font-bold text-xs flex items-center justify-center gap-2 transition-colors outline-none"
+                          className="w-full py-2 px-4 rounded-xl bg-white/[0.04] hover:bg-white/10 border border-white/10 text-zinc-300 font-medium text-xs flex items-center justify-center gap-2 transition-colors outline-none"
                         >
                           {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
                           <span>
@@ -7032,7 +7035,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                       data-tv-modal="external-launch"
                       tabIndex={0}
                       onClick={() => setExternalLaunchModal(null)}
-                      className="w-full py-2 px-4 rounded-xl bg-transparent hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white font-bold text-xs transition-colors outline-none"
+                      className="w-full py-2 px-4 rounded-xl bg-transparent hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white font-medium text-xs transition-colors outline-none"
                     >
                       {isRtl ? 'إغلاق' : 'Close'}
                     </button>
@@ -7179,10 +7182,10 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                         <RotateCcw size={18} />
                       </div>
                       <div className="min-w-0">
-                        <h2 className="text-sm sm:text-base font-black text-white uppercase tracking-wider truncate">
+                        <h2 className="text-sm sm:text-base font-semibold uppercase tracking-wider truncate achour-glossy-title">
                           {isRtl ? 'استئناف المشاهدة' : 'Resume Playback'}
                         </h2>
-                        <span className="text-[10px] sm:text-xs text-gold font-bold">Watch It</span>
+                        <span className="text-[10px] sm:text-xs font-medium achour-glossy-text">Watch It</span>
                       </div>
                     </div>
                     <button
@@ -7209,19 +7212,19 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                       </div>
                     )}
                     <div className="flex-1 min-w-0 flex flex-col gap-1.5">
-                      <h3 className="text-sm sm:text-base font-bold text-white truncate">
+                      <h3 className="text-sm sm:text-base font-semibold text-white truncate">
                         {channel.name}
                       </h3>
                       {epSubtitle && (
-                        <p className="text-xs text-gold/90 font-semibold truncate">
+                        <p className="text-xs font-normal achour-glossy-info truncate">
                           {epSubtitle}
                         </p>
                       )}
-                      <div className="flex items-center gap-1.5 text-xs text-zinc-300 font-medium">
+                      <div className="flex items-center gap-1.5 text-xs text-zinc-300 font-normal">
                         <Clock size={13} className="text-gold shrink-0" />
                         <span>
                           {isRtl ? `توقفت عند الدقيقة ` : `Paused at `}
-                          <strong className="text-gold font-mono font-bold">{timeFormatted}</strong>
+                          <strong className="font-sans font-normal tabular-nums achour-glossy-text">{timeFormatted}</strong>
                         </span>
                       </div>
                       {pct > 0 && (
@@ -7239,7 +7242,7 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                       data-tv-modal="watch-it-action"
                       tabIndex={0}
                       onClick={handleStartOver}
-                      className="flex-1 py-2.5 px-4 rounded-xl bg-white/[0.08] hover:bg-white/15 border border-white/15 text-zinc-200 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-colors outline-none"
+                      className="flex-1 py-2.5 px-4 rounded-xl bg-white/[0.08] hover:bg-white/15 border border-white/15 text-zinc-200 text-xs sm:text-sm font-medium flex items-center justify-center gap-2 transition-colors outline-none cursor-pointer"
                     >
                       <RotateCcw size={15} />
                       <span>{isRtl ? 'بدء من البداية' : 'Start Over'}</span>
@@ -7250,9 +7253,9 @@ export default function LivePlayer({ onBack, settings, onUpdateSettings, userId,
                       data-tv-modal="watch-it-action"
                       tabIndex={0}
                       onClick={handleContinueWatching}
-                      className="flex-1 py-2.5 px-4 rounded-xl bg-gold hover:bg-gold/90 text-black text-xs sm:text-sm font-black flex items-center justify-center gap-2 transition-colors shadow-lg shadow-gold/20 outline-none"
+                      className="flex-1 py-2.5 px-4 rounded-xl achour-glossy-pill hover:brightness-110 text-xs sm:text-sm font-medium flex items-center justify-center gap-2 transition-all outline-none cursor-pointer"
                     >
-                      <Play size={16} className="fill-black" />
+                      <Play size={16} className="fill-current" />
                       <span>{isRtl ? 'استكمال المشاهدة' : 'Continue Watching'}</span>
                     </button>
                   </div>

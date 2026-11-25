@@ -78,7 +78,7 @@ export default function PinUnlockModal({
               <Lock size={24} />
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-black text-white uppercase tracking-wider mb-1">{t('enter_pin')}</h3>
+              <h3 className="text-base sm:text-lg font-semibold achour-glossy-title uppercase tracking-wider mb-1">{t('enter_pin')}</h3>
               <p className="text-xs text-zinc-400">
                 {isRtl ? `هذه القائمة (${playlistName}) محمية برمز مرور للرقابة الأبوية.` : `This playlist (${playlistName}) is password-protected.`}
               </p>
@@ -96,11 +96,11 @@ export default function PinUnlockModal({
                 setError('');
               }}
               placeholder="••••"
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 text-center text-xl font-mono tracking-[0.6em] text-white focus:border-gold/60 outline-none transition-colors"
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 text-center text-xl font-sans tabular-nums tracking-[0.6em] text-white focus:border-gold/60 outline-none transition-colors"
             />
 
             {error && (
-              <div className="flex items-center justify-center gap-1.5 text-red-400 text-xs font-bold">
+              <div className="flex items-center justify-center gap-1.5 text-red-400 text-xs font-medium">
                 <AlertCircle size={14} />
                 <span>{error}</span>
               </div>
@@ -111,14 +111,14 @@ export default function PinUnlockModal({
                 type="button"
                 data-tv-focusable="true"
                 onClick={onClose}
-                className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-zinc-300 rounded-xl text-xs font-bold transition-colors"
+                className="flex-1 py-2.5 bg-white/5 hover:bg-white/10 text-zinc-300 rounded-xl text-xs font-medium transition-colors"
               >
                 {t('cancel')}
               </button>
               <button
                 type="submit"
                 data-tv-focusable="true"
-                className="flex-1 py-2.5 bg-gold hover:bg-gold/90 text-black font-black uppercase tracking-wider rounded-xl text-xs transition-colors flex items-center justify-center gap-1"
+                className="flex-1 py-2.5 bg-gold hover:bg-gold/90 text-black font-medium uppercase tracking-wider rounded-xl text-xs transition-colors flex items-center justify-center gap-1"
               >
                 <Check size={16} />
                 <span>{t('unlocked')}</span>

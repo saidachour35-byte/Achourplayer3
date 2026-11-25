@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import {
   AppSettings,
+  FocusVisualStyle,
   FrameShapeId,
   IconDisplayMode,
   IconPackId,
@@ -74,14 +75,15 @@ export default function DashboardDesignStudio({
       iconScale: src.iconScale || 'md',
       frameScale: src.frameScale || 'md',
       tileSpacing: src.tileSpacing || 'md',
-      dashboardAlignment: src.dashboardAlignment || 'center',
+      dashboardAlignment: src.dashboardAlignment || 'bottom',
       dashboardHorizontalAlignment: src.dashboardHorizontalAlignment || 'center',
       dashboardOrder: src.dashboardOrder?.length ? [...src.dashboardOrder] : [...DEFAULT_ORDER],
       royalThemeColor: src.royalThemeColor || 'pure-metallic-gold',
       customThemeColor: src.customThemeColor ?? null,
       glassOpacity: typeof src.glassOpacity === 'number' ? src.glassOpacity : 16,
       glassBlur: typeof src.glassBlur === 'number' ? src.glassBlur : 10,
-      dashboardFocusMode: src.dashboardFocusMode || 'frame',
+      dashboardFocusMode: src.dashboardFocusMode || 'both',
+      focusVisualStyle: src.focusVisualStyle || 'lamp-halo',
       dashboardLabelColorMode: src.dashboardLabelColorMode || 'theme',
       dashboardLabelCustomColor: src.dashboardLabelCustomColor ?? null,
     };
@@ -141,6 +143,7 @@ export default function DashboardDesignStudio({
       (draft.glassOpacity ?? 16) !== (base.glassOpacity ?? 16) ||
       (draft.glassBlur ?? 10) !== (base.glassBlur ?? 10) ||
       draft.dashboardFocusMode !== base.dashboardFocusMode ||
+      draft.focusVisualStyle !== base.focusVisualStyle ||
       draft.dashboardLabelColorMode !== base.dashboardLabelColorMode ||
       (draft.dashboardLabelCustomColor || null) !== (base.dashboardLabelCustomColor || null)
     );
@@ -167,6 +170,7 @@ export default function DashboardDesignStudio({
       glassOpacity: draft.glassOpacity,
       glassBlur: draft.glassBlur,
       dashboardFocusMode: draft.dashboardFocusMode,
+      focusVisualStyle: draft.focusVisualStyle,
       dashboardLabelColorMode: draft.dashboardLabelColorMode,
       dashboardLabelCustomColor: draft.dashboardLabelCustomColor ?? null,
     });
@@ -189,20 +193,21 @@ export default function DashboardDesignStudio({
     setJustApplied(false);
     setDraft((prev) => ({
       ...prev,
-      iconDisplayMode: 'with-frames',
+      iconDisplayMode: 'icons-only',
       iconPack: 'pack-3d',
       frameShape: 'rounded-square',
       iconScale: 'md',
       frameScale: 'md',
       tileSpacing: 'md',
-      dashboardAlignment: 'center',
+      dashboardAlignment: 'bottom',
       dashboardHorizontalAlignment: 'center',
       dashboardOrder: [...DEFAULT_ORDER],
       royalThemeColor: 'pure-metallic-gold',
       customThemeColor: '#D4AF37',
       glassOpacity: 16,
       glassBlur: 10,
-      dashboardFocusMode: 'frame',
+      dashboardFocusMode: 'both',
+      focusVisualStyle: 'lamp-halo',
       dashboardLabelColorMode: 'theme',
       dashboardLabelCustomColor: null,
     }));
@@ -281,10 +286,10 @@ export default function DashboardDesignStudio({
             <ChevronLeft size={18} className={isRtl ? 'rotate-180' : ''} />
           </button>
           <div className="min-w-0">
-            <h2 className="text-sm sm:text-lg font-black text-gold truncate">
+            <h2 className="text-sm sm:text-lg font-semibold achour-glossy-title truncate">
               {isRtl ? 'استوديو تصميم واجهة Achour Player' : 'Achour Player UI Design Studio'}
             </h2>
-            <p className="text-[11px] text-zinc-300 truncate">
+            <p className="text-[11px] font-normal achour-glossy-info truncate">
               {isRtl
                 ? 'خصص الأيقونات والإطارات والتوزيع والألوان مع معاينة فورية قبل الاعتماد'
                 : 'Mix & match icons, frames, layouts, gold tones & glass with live preview'}
@@ -321,13 +326,11 @@ export default function DashboardDesignStudio({
             data-tv-focusable="true"
             tabIndex={0}
             onClick={handleApplyConfirm}
-            style={{
-              background:
-                justApplied
-                  ? '#10B981'
-                  : 'var(--theme-metallic-grad, linear-gradient(135deg, #8C6A1D 0%, #D4AF37 40%, #F5E6A8 65%, #B8860B 100%))',
-            }}
-            className="px-4 py-2 rounded-xl text-[#090b10] text-xs sm:text-sm font-black flex items-center gap-1.5 shadow-[0_6px_20px_var(--theme-glow)] hover:brightness-110 transition-all cursor-pointer whitespace-nowrap"
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-1.5 hover:brightness-110 transition-all cursor-pointer whitespace-nowrap ${
+              justApplied
+                ? 'bg-emerald-500 text-black'
+                : 'achour-glossy-pill'
+            }`}
           >
             <Check size={16} strokeWidth={3} />
             <span>
@@ -349,14 +352,14 @@ export default function DashboardDesignStudio({
         <section className="lg:col-span-5 flex flex-col gap-2 min-h-[210px] sm:min-h-[245px] lg:min-h-0">
           <div className="flex items-center justify-between px-1 shrink-0">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs font-bold text-white">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="text-xs font-medium achour-glossy-text">
                 {isRtl ? 'معاينة مباشرة فورية' : 'Live Interactive Preview'}
               </span>
             </div>
             {hasUnsavedChanges && (
-              <span className="px-2 py-0.5 rounded-lg bg-gold/20 border border-gold/50 text-gold text-[10px] font-bold">
-                {isRtl ? 'تعديلات غير محفوظة' : 'Draft Active'}
+              <span className="px-2 py-0.5 rounded-lg achour-glossy-surface border border-gold/50 text-[10px] font-medium">
+                <span className="achour-glossy-text">{isRtl ? 'تعديلات غير محفوظة' : 'Draft Active'}</span>
               </span>
             )}
           </div>
@@ -385,13 +388,13 @@ export default function DashboardDesignStudio({
               dir="ltr"
               className="relative z-10 flex items-center justify-between px-4 pt-2.5 pb-1 shrink-0"
             >
-              <span className="text-[10px] font-mono text-gold/90 font-semibold">
+              <span className="text-[10px] font-sans font-normal achour-glossy-info">
                 {isRtl ? 'اشتراك نشط' : 'ACTIVE'}
               </span>
-              <span className="text-xs font-black tracking-widest text-gold uppercase">
+              <span className="text-xs font-semibold tracking-widest achour-glossy-title uppercase">
                 ACHOUR PLAYER
               </span>
-              <span className="text-[10px] font-mono text-gold font-bold">21:45</span>
+              <span className="text-[10px] font-sans font-normal tabular-nums achour-glossy-info">21:45</span>
             </div>
 
             {/* Live Rendered 5 Sections */}
@@ -418,6 +421,7 @@ export default function DashboardDesignStudio({
                   glassOpacity={draft.glassOpacity}
                   glassBlur={draft.glassBlur}
                   dashboardFocusMode={draft.dashboardFocusMode}
+                  focusVisualStyle={draft.focusVisualStyle}
                   dashboardLabelColorMode={draft.dashboardLabelColorMode}
                   dashboardLabelCustomColor={draft.dashboardLabelCustomColor}
                   language={settings.language}
@@ -433,7 +437,7 @@ export default function DashboardDesignStudio({
           <div className="p-2.5 rounded-2xl bg-white/[0.04] border border-white/10 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-1.5 text-[11px] shrink-0">
             <div className="truncate">
               <span className="text-zinc-400">{isRtl ? 'العرض: ' : 'Mode: '}</span>
-              <strong className="text-gold">
+              <strong className="achour-glossy-text font-medium">
                 {draft.iconDisplayMode === 'icons-only'
                   ? isRtl
                     ? 'أيقونات فقط'
@@ -445,13 +449,13 @@ export default function DashboardDesignStudio({
             </div>
             <div className="truncate">
               <span className="text-zinc-400">{isRtl ? 'الأيقونات: ' : 'Pack: '}</span>
-              <strong className="text-white">
+              <strong className="text-white font-medium">
                 {ICON_PACKS.find((p) => p.id === draft.iconPack)?.[isRtl ? 'nameAr' : 'nameEn']}
               </strong>
             </div>
             <div className="truncate">
               <span className="text-zinc-400">{isRtl ? 'الإطار: ' : 'Frame: '}</span>
-              <strong className="text-white">
+              <strong className="text-white font-medium">
                 {draft.iconDisplayMode === 'icons-only'
                   ? isRtl
                     ? 'موقوف'
@@ -466,7 +470,7 @@ export default function DashboardDesignStudio({
                 className="w-3 h-3 rounded-full border border-white/30 shrink-0"
                 style={{ backgroundColor: activePalette.primary }}
               />
-              <strong className="font-mono text-gold truncate">{activePalette.primary}</strong>
+              <strong className="font-sans font-normal tabular-nums achour-glossy-info truncate">{activePalette.primary}</strong>
             </div>
           </div>
         </section>
@@ -485,14 +489,14 @@ export default function DashboardDesignStudio({
                   data-tv-focusable="true"
                   tabIndex={0}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-3 py-2 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                  className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                     isActive
-                      ? 'bg-gold/20 border-gold text-gold shadow-[0_0_12px_var(--theme-glow)]'
+                      ? 'achour-glossy-surface border-gold text-gold shadow-[0_0_12px_var(--theme-glow)]'
                       : 'bg-white/[0.04] border-white/10 text-zinc-300 hover:border-gold/40 hover:text-white'
                   }`}
                 >
-                  <Icon size={14} />
-                  <span>{isRtl ? tab.labelAr : tab.labelEn}</span>
+                  <Icon size={14} className="shrink-0" />
+                  <span className={isActive ? 'achour-glossy-text' : ''}>{isRtl ? tab.labelAr : tab.labelEn}</span>
                 </button>
               );
             })}
@@ -506,7 +510,7 @@ export default function DashboardDesignStudio({
             {activeTab === 'display' && (
               <div className="space-y-3">
                 <div>
-                  <h3 className="text-sm font-black text-white">
+                  <h3 className="text-sm font-semibold achour-glossy-title">
                     {isRtl ? 'الخيار الأول: طريقة عرض الأيقونات' : 'Option 1: Icon Display Mode'}
                   </h3>
                   <p className="text-xs text-zinc-400 mt-0.5">
@@ -554,7 +558,7 @@ export default function DashboardDesignStudio({
                         } ${isRtl ? 'text-right' : 'text-left'}`}
                       >
                         <div className="flex items-center justify-between w-full">
-                          <span className="text-sm font-black text-white">
+                          <span className="text-sm font-medium text-white">
                             {isRtl ? opt.titleAr : opt.titleEn}
                           </span>
                           {active && (
@@ -605,7 +609,7 @@ export default function DashboardDesignStudio({
             {activeTab === 'icons' && (
               <div className="space-y-3">
                 <div>
-                  <h3 className="text-sm font-black text-white">
+                  <h3 className="text-sm font-semibold achour-glossy-title">
                     {isRtl ? `الخيار الثاني: شكل الأيقونات (${ICON_PACKS.length} أشكال مختلفة)` : `Option 2: Icon Artwork (${ICON_PACKS.length} Distinct Styles)`}
                   </h3>
                   <p className="text-xs text-zinc-400 mt-0.5">
@@ -670,7 +674,7 @@ export default function DashboardDesignStudio({
               <div className="space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <h3 className="text-sm font-black text-white">
+                    <h3 className="text-sm font-semibold achour-glossy-title">
                       {isRtl
                         ? `الخيار الثالث: شكل الإطارات (${FRAME_SHAPES.length} شكلاً مستقلاً)`
                         : `Option 3: Independent Frame Shapes (${FRAME_SHAPES.length})`}
@@ -687,7 +691,7 @@ export default function DashboardDesignStudio({
                       data-tv-focusable="true"
                       tabIndex={0}
                       onClick={() => updateDraft('iconDisplayMode', 'with-frames')}
-                      className="px-3 py-1.5 rounded-xl bg-gold text-black text-xs font-black cursor-pointer whitespace-nowrap"
+                      className="px-3 py-1.5 rounded-xl achour-glossy-pill text-xs font-medium cursor-pointer whitespace-nowrap"
                     >
                       {isRtl ? 'تفعيل عرض الإطارات الآن' : 'Enable Frames Now'}
                     </button>
@@ -757,10 +761,10 @@ export default function DashboardDesignStudio({
                 {/* Icon Size */}
                 <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gold">
+                    <span className="text-xs font-medium achour-glossy-text">
                       {isRtl ? 'حجم الأيقونات' : 'Icon Size'}
                     </span>
-                    <span className="text-[11px] font-mono text-zinc-300 uppercase">
+                    <span className="text-[11px] font-sans tabular-nums text-zinc-300 uppercase">
                       {draft.iconScale || 'md'}
                     </span>
                   </div>
@@ -772,9 +776,9 @@ export default function DashboardDesignStudio({
                         data-tv-focusable="true"
                         tabIndex={0}
                         onClick={() => updateDraft('iconScale', sz)}
-                        className={`py-2 rounded-xl border text-xs font-mono font-bold uppercase cursor-pointer transition-colors ${
+                        className={`py-2 rounded-xl border text-xs font-sans font-medium uppercase cursor-pointer transition-colors ${
                           (draft.iconScale || 'md') === sz
-                            ? 'bg-gold text-black border-gold'
+                            ? 'achour-glossy-pill border-gold'
                             : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
                         }`}
                       >
@@ -787,10 +791,10 @@ export default function DashboardDesignStudio({
                 {/* Frame Size */}
                 <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gold">
+                    <span className="text-xs font-medium achour-glossy-text">
                       {isRtl ? 'حجم الإطارات (مستقل)' : 'Frame Size (Independent)'}
                     </span>
-                    <span className="text-[11px] font-mono text-zinc-300 uppercase">
+                    <span className="text-[11px] font-sans tabular-nums text-zinc-300 uppercase">
                       {draft.frameScale || 'md'}
                     </span>
                   </div>
@@ -802,9 +806,9 @@ export default function DashboardDesignStudio({
                         data-tv-focusable="true"
                         tabIndex={0}
                         onClick={() => updateDraft('frameScale', sz)}
-                        className={`py-2 rounded-xl border text-xs font-mono font-bold uppercase cursor-pointer transition-colors ${
+                        className={`py-2 rounded-xl border text-xs font-sans font-medium uppercase cursor-pointer transition-colors ${
                           (draft.frameScale || 'md') === sz
-                            ? 'bg-gold text-black border-gold'
+                            ? 'achour-glossy-pill border-gold'
                             : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
                         }`}
                       >
@@ -817,10 +821,10 @@ export default function DashboardDesignStudio({
                 {/* Section Spacing */}
                 <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gold">
+                    <span className="text-xs font-medium achour-glossy-text">
                       {isRtl ? 'المسافة بين الأقسام' : 'Section Spacing'}
                     </span>
-                    <span className="text-[11px] font-mono text-zinc-300 uppercase">
+                    <span className="text-[11px] font-sans tabular-nums text-zinc-300 uppercase">
                       {draft.tileSpacing || 'md'}
                     </span>
                   </div>
@@ -840,7 +844,7 @@ export default function DashboardDesignStudio({
                         data-tv-focusable="true"
                         tabIndex={0}
                         onClick={() => updateDraft('tileSpacing', sp.id)}
-                        className={`py-2 px-1 rounded-xl border text-[11px] font-bold cursor-pointer transition-colors whitespace-nowrap ${
+                        className={`py-2 px-1 rounded-xl border text-[11px] font-medium cursor-pointer transition-colors whitespace-nowrap ${
                           (draft.tileSpacing || 'md') === sp.id
                             ? 'bg-gold text-black border-gold'
                             : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
@@ -854,7 +858,7 @@ export default function DashboardDesignStudio({
 
                 {/* Screen Alignment (9-Zone Grid) */}
                 <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2">
-                  <span className="text-xs font-bold text-gold block">
+                  <span className="text-xs font-semibold achour-glossy-text block">
                     {isRtl ? 'محاذاة الأقسام على الشاشة' : 'Screen Alignment Position'}
                   </span>
                   <div dir="ltr" className="grid grid-cols-3 gap-1.5">
@@ -872,7 +876,7 @@ export default function DashboardDesignStudio({
                       ] as const
                     ).map((cell) => {
                       const active =
-                        (draft.dashboardAlignment || 'center') === cell.v &&
+                        (draft.dashboardAlignment || 'bottom') === cell.v &&
                         (draft.dashboardHorizontalAlignment || 'center') === cell.h;
                       return (
                         <button
@@ -888,7 +892,7 @@ export default function DashboardDesignStudio({
                               dashboardHorizontalAlignment: cell.h,
                             }));
                           }}
-                          className={`py-1.5 px-2 rounded-xl border text-[11px] font-bold cursor-pointer transition-colors ${
+                          className={`py-1.5 px-2 rounded-xl border text-[11px] font-medium cursor-pointer transition-colors ${
                             active
                               ? 'bg-gold/25 border-gold text-gold'
                               : 'bg-white/[0.04] border-white/10 text-zinc-300 hover:border-gold/45'
@@ -903,7 +907,7 @@ export default function DashboardDesignStudio({
 
                 {/* Section Order (Live, Movies, Series, Playlist, Settings) */}
                 <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2">
-                  <span className="text-xs font-bold text-gold block">
+                  <span className="text-xs font-semibold achour-glossy-text block">
                     {isRtl ? 'ترتيب الأقسام الخمسة' : 'Reorder 5 Sections'}
                   </span>
                   <div className="space-y-1.5">
@@ -920,7 +924,7 @@ export default function DashboardDesignStudio({
                           key={kind}
                           className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-black/35 border border-white/10"
                         >
-                          <span className="text-xs font-bold text-white">
+                          <span className="text-xs font-medium text-white">
                             {idx + 1}. {nameMap[kind] || kind}
                           </span>
                           <div className="flex items-center gap-1.5">
@@ -930,7 +934,7 @@ export default function DashboardDesignStudio({
                               tabIndex={0}
                               disabled={idx === 0}
                               onClick={() => moveOrderItem(idx, -1)}
-                              className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-gold hover:text-black disabled:opacity-30 text-xs font-black cursor-pointer"
+                              className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-gold hover:text-black disabled:opacity-30 text-xs font-semibold cursor-pointer"
                             >
                               ↑
                             </button>
@@ -940,7 +944,7 @@ export default function DashboardDesignStudio({
                               tabIndex={0}
                               disabled={idx === (draft.dashboardOrder || DEFAULT_ORDER).length - 1}
                               onClick={() => moveOrderItem(idx, 1)}
-                              className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-gold hover:text-black disabled:opacity-30 text-xs font-black cursor-pointer"
+                              className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-gold hover:text-black disabled:opacity-30 text-xs font-semibold cursor-pointer"
                             >
                               ↓
                             </button>
@@ -987,12 +991,12 @@ export default function DashboardDesignStudio({
                       }}
                     />
                     <div className="min-w-0">
-                      <span className="block text-sm font-black text-gold truncate">
+                      <span className="block text-sm font-semibold achour-glossy-text truncate">
                         {isRtl
                           ? 'الذهب المعدني الحقيقي (#D4AF37) — لكامل التطبيق'
                           : 'True 24K Metallic Gold (#D4AF37) — Full App'}
                       </span>
-                      <span className="block text-[11px] font-mono text-zinc-300 truncate mt-0.5">
+                      <span className="block text-[11px] font-sans tabular-nums text-zinc-300 truncate mt-0.5">
                         #8C6A1D · #D4AF37 · #F5E6A8 · #B8860B
                       </span>
                     </div>
@@ -1006,7 +1010,7 @@ export default function DashboardDesignStudio({
 
                 {/* Manual Color Picker + HEX Input */}
                 <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/15 space-y-2.5">
-                  <span className="text-xs font-bold text-white block">
+                  <span className="text-xs font-semibold text-white block">
                     {isRtl
                       ? 'اختيار اللون يدوياً أو إدخال كود HEX'
                       : 'Manual Color Picker & HEX Code'}
@@ -1027,7 +1031,7 @@ export default function DashboardDesignStudio({
                         }}
                         className="w-8 h-8 rounded-lg border-0 bg-transparent cursor-pointer"
                       />
-                      <span className="text-xs font-bold text-zinc-200 whitespace-nowrap">
+                      <span className="text-xs font-medium text-zinc-200 whitespace-nowrap">
                         {isRtl ? 'منتقي' : 'Pick'}
                       </span>
                     </label>
@@ -1045,7 +1049,7 @@ export default function DashboardDesignStudio({
                           updateDraft('customThemeColor', norm);
                         }
                       }}
-                      className="flex-1 min-w-[120px] px-3 py-2 rounded-xl bg-black/50 border border-white/20 text-sm font-mono font-bold text-gold uppercase"
+                      className="flex-1 min-w-[120px] px-3 py-2 rounded-xl bg-black/50 border border-white/20 text-sm font-sans tabular-nums font-medium text-gold uppercase"
                     />
 
                     <button
@@ -1060,7 +1064,7 @@ export default function DashboardDesignStudio({
                           updateDraft('customThemeColor', norm);
                         }
                       }}
-                      className="px-3.5 py-2 rounded-xl bg-gold text-black font-black text-xs disabled:opacity-40 cursor-pointer whitespace-nowrap"
+                      className="px-3.5 py-2 rounded-xl bg-gold text-black font-medium text-xs disabled:opacity-40 cursor-pointer whitespace-nowrap"
                     >
                       {isRtl ? 'معاينة HEX' : 'Use HEX'}
                     </button>
@@ -1098,7 +1102,7 @@ export default function DashboardDesignStudio({
                             className="w-4 h-4 rounded-full border border-white/25"
                             style={{ backgroundColor: theme.primary }}
                           />
-                          <span className="text-[10px] font-mono text-zinc-400">
+                          <span className="text-[10px] font-sans tabular-nums text-zinc-400">
                             {theme.primary}
                           </span>
                         </div>
@@ -1119,7 +1123,7 @@ export default function DashboardDesignStudio({
               <div className="space-y-6">
                 {/* 1. FOCUS TARGET / CONTOUR MODE */}
                 <div>
-                  <h3 className="text-sm font-black text-white flex items-center gap-2">
+                  <h3 className="text-sm font-semibold achour-glossy-title flex items-center gap-2">
                     <Target size={16} className="text-gold" />
                     <span>{isRtl ? 'نمط الفوكس على الشاشة الرئيسية (40 شكلاً)' : 'Dashboard TV Focus Target'}</span>
                   </h3>
@@ -1136,17 +1140,17 @@ export default function DashboardDesignStudio({
                       data-tv-focusable="true"
                       onClick={() => updateDraft('dashboardFocusMode', 'frame')}
                       className={`p-3 rounded-2xl border text-right transition-all cursor-pointer flex flex-col gap-1.5 ${
-                        (draft.dashboardFocusMode || 'frame') === 'frame'
+                        draft.dashboardFocusMode === 'frame'
                           ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
                           : 'border-white/10 bg-white/[0.03] hover:border-white/30'
                       }`}
                     >
                       <div className="flex items-center justify-between w-full">
-                        <span className="font-bold text-xs text-white">
+                        <span className="font-medium text-xs text-white">
                           {isRtl ? '🔷 على الإطار بشكله الدقيق (توهج انسيابي)' : '🔷 Exact Frame Shape Contour'}
                         </span>
-                        {(draft.dashboardFocusMode || 'frame') === 'frame' && (
-                          <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-bold text-xs">✓</span>
+                        {draft.dashboardFocusMode === 'frame' && (
+                          <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-semibold text-xs">✓</span>
                         )}
                       </div>
                       <span className="text-[11px] text-zinc-400">
@@ -1168,11 +1172,11 @@ export default function DashboardDesignStudio({
                       }`}
                     >
                       <div className="flex items-center justify-between w-full">
-                        <span className="font-bold text-xs text-white">
+                        <span className="font-medium text-xs text-white">
                           {isRtl ? '🏷️ على الأسماء في الأسفل (شارة فوكس مضيئة)' : '🏷️ Section Name Badge Pill'}
                         </span>
                         {draft.dashboardFocusMode === 'label' && (
-                          <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-bold text-xs">✓</span>
+                          <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-semibold text-xs">✓</span>
                         )}
                       </div>
                       <span className="text-[11px] text-zinc-400">
@@ -1188,17 +1192,17 @@ export default function DashboardDesignStudio({
                       data-tv-focusable="true"
                       onClick={() => updateDraft('dashboardFocusMode', 'both')}
                       className={`p-3 rounded-2xl border text-right transition-all cursor-pointer flex flex-col gap-1.5 ${
-                        draft.dashboardFocusMode === 'both'
+                        (draft.dashboardFocusMode || 'both') === 'both'
                           ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
                           : 'border-white/10 bg-white/[0.03] hover:border-white/30'
                       }`}
                     >
                       <div className="flex items-center justify-between w-full">
-                        <span className="font-bold text-xs text-white">
+                        <span className="font-medium text-xs text-white">
                           {isRtl ? '✨ على الإطار والاسم معاً (أعلى وضوح)' : '✨ Both (Frame Contour + Name Badge)'}
                         </span>
-                        {draft.dashboardFocusMode === 'both' && (
-                          <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-bold text-xs">✓</span>
+                        {(draft.dashboardFocusMode || 'both') === 'both' && (
+                          <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-semibold text-xs">✓</span>
                         )}
                       </div>
                       <span className="text-[11px] text-zinc-400">
@@ -1220,11 +1224,11 @@ export default function DashboardDesignStudio({
                       }`}
                     >
                       <div className="flex items-center justify-between w-full">
-                        <span className="font-bold text-xs text-white">
+                        <span className="font-medium text-xs text-white">
                           {isRtl ? '🎯 على الأيقونة مباشرة (توهج الرمز)' : '🎯 Direct Icon Glyph Glow'}
                         </span>
                         {draft.dashboardFocusMode === 'icon' && (
-                          <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-bold text-xs">✓</span>
+                          <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-semibold text-xs">✓</span>
                         )}
                       </div>
                       <span className="text-[11px] text-zinc-400">
@@ -1236,9 +1240,108 @@ export default function DashboardDesignStudio({
                   </div>
                 </div>
 
+                {/* 1B. FOCUS VISUAL GLOW & SHAPES */}
+                <div className="pt-4 border-t border-white/10">
+                  <h3 className="text-sm font-semibold achour-glossy-title flex items-center gap-2">
+                    <Sparkles size={16} className="text-gold" />
+                    <span>{t('focus_shape_heading')}</span>
+                  </h3>
+                  <p className="text-xs text-zinc-400 mt-1">
+                    {t('focus_shape_desc')}
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3">
+                    {(
+                      [
+                        {
+                          id: 'lamp-halo' as FocusVisualStyle,
+                          title: t('focus_style_lamp_halo_title'),
+                          desc: t('focus_style_lamp_halo_desc'),
+                          swatch:
+                            'rounded-xl border border-white/85 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.85)_0%,rgba(var(--theme-rgb),0.75)_45%,transparent_85%)] shadow-[0_0_14px_rgba(var(--theme-rgb),0.85)]',
+                        },
+                        {
+                          id: 'double-neon' as FocusVisualStyle,
+                          title: t('focus_style_double_neon_title'),
+                          desc: t('focus_style_double_neon_desc'),
+                          swatch:
+                            'rounded-xl border-2 border-white outline outline-2 outline-[var(--theme-primary)] outline-offset-2 bg-[rgba(var(--theme-rgb),0.22)] shadow-[0_0_12px_rgba(var(--theme-rgb),0.85)]',
+                        },
+                        {
+                          id: 'spotlight-pillar' as FocusVisualStyle,
+                          title: t('focus_style_spotlight_pillar_title'),
+                          desc: t('focus_style_spotlight_pillar_desc'),
+                          swatch:
+                            'rounded-t-2xl rounded-b-lg border border-white/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.72)_0%,rgba(var(--theme-rgb),0.68)_50%,rgba(var(--theme-rgb),0.2)_100%)]',
+                        },
+                        {
+                          id: 'diamond-prism' as FocusVisualStyle,
+                          title: t('focus_style_diamond_prism_title'),
+                          desc: t('focus_style_diamond_prism_desc'),
+                          swatch:
+                            'rounded-lg border-2 border-white/90 bg-[linear-gradient(135deg,rgba(255,255,255,0.68)_0%,rgba(var(--theme-rgb),0.36)_45%,rgba(var(--theme-rgb),0.75)_100%)] shadow-[0_0_12px_rgba(var(--theme-rgb),0.8)]',
+                        },
+                        {
+                          id: 'cyber-brackets' as FocusVisualStyle,
+                          title: t('focus_style_cyber_brackets_title'),
+                          desc: t('focus_style_cyber_brackets_desc'),
+                          swatch:
+                            'rounded-md border border-[var(--theme-primary)] bg-[radial-gradient(circle,rgba(var(--theme-rgb),0.55)_0%,transparent_80%)] shadow-[inset_0_0_0_2px_rgba(255,255,255,0.65)]',
+                        },
+                        {
+                          id: 'aurora-capsule' as FocusVisualStyle,
+                          title: t('focus_style_aurora_capsule_title'),
+                          desc: t('focus_style_aurora_capsule_desc'),
+                          swatch:
+                            'rounded-full border-2 border-white/90 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.55)_0%,rgba(var(--theme-rgb),0.65)_65%,transparent_100%)] shadow-[0_0_14px_rgba(var(--theme-rgb),0.85)]',
+                        },
+                        {
+                          id: 'classic-ring' as FocusVisualStyle,
+                          title: t('focus_style_classic_ring_title'),
+                          desc: t('focus_style_classic_ring_desc'),
+                          swatch:
+                            'rounded-xl border-2 border-[var(--theme-primary)] bg-[rgba(var(--theme-rgb),0.14)]',
+                        },
+                      ] as const
+                    ).map((opt) => {
+                      const active = (draft.focusVisualStyle || 'lamp-halo') === opt.id;
+                      return (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          data-tv-focusable="true"
+                          onClick={() => updateDraft('focusVisualStyle', opt.id)}
+                          className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center gap-2.5 ${
+                            isRtl ? 'text-right' : 'text-left'
+                          } ${
+                            active
+                              ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
+                              : 'border-white/10 bg-white/[0.03] hover:border-white/30'
+                          }`}
+                        >
+                          <span aria-hidden="true" className={`w-8 h-8 shrink-0 ${opt.swatch}`} />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-1.5">
+                              <span className="font-medium text-xs text-white truncate">
+                                {opt.title}
+                              </span>
+                              {active && (
+                                <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-semibold text-xs shrink-0">✓</span>
+                              )}
+                            </div>
+                            <span className="block text-[11px] text-zinc-400 line-clamp-2 mt-0.5">
+                              {opt.desc}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 {/* 2. DASHBOARD LABELS COLOR */}
                 <div className="pt-4 border-t border-white/10">
-                  <h3 className="text-sm font-black text-white flex items-center gap-2">
+                  <h3 className="text-sm font-semibold achour-glossy-title flex items-center gap-2">
                     <Type size={16} className="text-gold" />
                     <span>{isRtl ? 'لون نصوص الشاشة الرئيسية (الكلام أسفل الأيقونات)' : 'Dashboard Section Labels Color'}</span>
                   </h3>
@@ -1261,7 +1364,7 @@ export default function DashboardDesignStudio({
                       }`}
                     >
                       <span className="w-5 h-5 rounded-full border border-white/30" style={{ backgroundColor: 'var(--theme-primary, #D4AF37)' }} />
-                      <span className="text-xs font-bold text-white mt-1">{isRtl ? 'حسب الثيم المختار' : 'Match Theme'}</span>
+                      <span className="text-xs font-medium text-white mt-1">{isRtl ? 'حسب الثيم المختار' : 'Match Theme'}</span>
                       <span className="text-[10px] text-zinc-400">{isRtl ? 'يتغير مع لون التطبيق' : 'Dynamic theme'}</span>
                     </button>
 
@@ -1277,7 +1380,7 @@ export default function DashboardDesignStudio({
                       }`}
                     >
                       <span className="w-5 h-5 rounded-full border border-white/30 bg-white" />
-                      <span className="text-xs font-bold text-white mt-1">{isRtl ? 'أبيض ناصع' : 'Classic White'}</span>
+                      <span className="text-xs font-medium text-white mt-1">{isRtl ? 'أبيض ناصع' : 'Classic White'}</span>
                       <span className="text-[10px] text-zinc-400">{isRtl ? 'كما كان سابقاً (#FFF)' : 'Classic text'}</span>
                     </button>
 
@@ -1293,8 +1396,8 @@ export default function DashboardDesignStudio({
                       }`}
                     >
                       <span className="w-5 h-5 rounded-full border border-white/30 bg-[#D4AF37]" />
-                      <span className="text-xs font-bold text-white mt-1">{isRtl ? 'ذهب ملكي دائم' : 'Permanent 24K'}</span>
-                      <span className="text-[10px] text-zinc-400">#D4AF37</span>
+                      <span className="text-xs font-medium text-white mt-1">{isRtl ? 'ذهب ملكي دائم' : 'Permanent 24K'}</span>
+                      <span className="text-[10px] font-sans tabular-nums text-zinc-400">#D4AF37</span>
                     </button>
 
                     {/* Mode: Custom */}
@@ -1309,8 +1412,8 @@ export default function DashboardDesignStudio({
                       }`}
                     >
                       <span className="w-5 h-5 rounded-full border border-white/30" style={{ backgroundColor: draft.dashboardLabelCustomColor || '#FFD700' }} />
-                      <span className="text-xs font-bold text-white mt-1">{isRtl ? 'لون مخصص' : 'Custom HEX'}</span>
-                      <span className="text-[10px] text-zinc-400">{draft.dashboardLabelCustomColor || '#HEX'}</span>
+                      <span className="text-xs font-medium text-white mt-1">{isRtl ? 'لون مخصص' : 'Custom HEX'}</span>
+                      <span className="text-[10px] font-sans tabular-nums text-zinc-400">{draft.dashboardLabelCustomColor || '#HEX'}</span>
                     </button>
                   </div>
 
@@ -1327,7 +1430,7 @@ export default function DashboardDesignStudio({
                         value={draft.dashboardLabelCustomColor || '#FFD700'}
                         onChange={(e) => updateDraft('dashboardLabelCustomColor', e.target.value)}
                         placeholder="#RRGGBB"
-                        className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/15 text-white font-mono text-xs uppercase w-32"
+                        className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/15 text-white font-sans tabular-nums text-xs uppercase w-32"
                       />
                       <span className="text-xs text-zinc-400">{isRtl ? 'اختر اللون المفضل لنصوص الواجهة' : 'Pick label color'}</span>
                     </div>
@@ -1342,7 +1445,7 @@ export default function DashboardDesignStudio({
             {activeTab === 'glass' && (
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-sm font-black text-white">
+                  <h3 className="text-sm font-semibold achour-glossy-title">
                     {isRtl
                       ? 'شفافية الخلفيات والتأثير الزجاجي'
                       : 'Background Opacity & Glass Effect'}
@@ -1357,11 +1460,11 @@ export default function DashboardDesignStudio({
                 {/* Glass Opacity Control */}
                 <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/15 space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gold flex items-center gap-1.5">
-                      <Sliders size={14} />
+                    <span className="text-xs font-semibold achour-glossy-text flex items-center gap-1.5">
+                      <Sliders size={14} style={{ color: 'var(--theme-primary, #d4af37)' }} />
                       <span>{isRtl ? 'شفافية الإطارات والخلفيات' : 'Surface Opacity'}</span>
                     </span>
-                    <span className="text-xs font-mono font-black text-white">
+                    <span className="text-xs font-sans tabular-nums font-medium text-white">
                       {draft.glassOpacity ?? 16}%
                     </span>
                   </div>
@@ -1373,7 +1476,7 @@ export default function DashboardDesignStudio({
                       onClick={() =>
                         updateDraft('glassOpacity', Math.max(0, (draft.glassOpacity ?? 16) - 6))
                       }
-                      className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-sm font-black cursor-pointer"
+                      className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-sm font-semibold cursor-pointer"
                     >
                       −
                     </button>
@@ -1393,7 +1496,7 @@ export default function DashboardDesignStudio({
                       onClick={() =>
                         updateDraft('glassOpacity', Math.min(85, (draft.glassOpacity ?? 16) + 6))
                       }
-                      className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-sm font-black cursor-pointer"
+                      className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-sm font-semibold cursor-pointer"
                     >
                       +
                     </button>
@@ -1406,7 +1509,7 @@ export default function DashboardDesignStudio({
                         data-tv-focusable="true"
                         tabIndex={0}
                         onClick={() => updateDraft('glassOpacity', v)}
-                        className={`py-1.5 rounded-xl border text-[11px] font-mono font-bold cursor-pointer ${
+                        className={`py-1.5 rounded-xl border text-[11px] font-sans tabular-nums font-medium cursor-pointer ${
                           (draft.glassOpacity ?? 16) === v
                             ? 'bg-gold text-black border-gold'
                             : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
@@ -1421,11 +1524,11 @@ export default function DashboardDesignStudio({
                 {/* Glass Blur Control */}
                 <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/15 space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gold flex items-center gap-1.5">
-                      <Layers size={14} />
+                    <span className="text-xs font-semibold achour-glossy-text flex items-center gap-1.5">
+                      <Layers size={14} style={{ color: 'var(--theme-primary, #d4af37)' }} />
                       <span>{isRtl ? 'التأثير الزجاجي الضبابي (Blur)' : 'Frosted Glass Blur'}</span>
                     </span>
-                    <span className="text-xs font-mono font-black text-white">
+                    <span className="text-xs font-sans tabular-nums font-medium text-white">
                       {draft.glassBlur ?? 10}px
                     </span>
                   </div>
@@ -1437,7 +1540,7 @@ export default function DashboardDesignStudio({
                       onClick={() =>
                         updateDraft('glassBlur', Math.max(0, (draft.glassBlur ?? 10) - 2))
                       }
-                      className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-sm font-black cursor-pointer"
+                      className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-sm font-semibold cursor-pointer"
                     >
                       −
                     </button>
@@ -1457,7 +1560,7 @@ export default function DashboardDesignStudio({
                       onClick={() =>
                         updateDraft('glassBlur', Math.min(24, (draft.glassBlur ?? 10) + 2))
                       }
-                      className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-sm font-black cursor-pointer"
+                      className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-sm font-semibold cursor-pointer"
                     >
                       +
                     </button>
@@ -1470,7 +1573,7 @@ export default function DashboardDesignStudio({
                         data-tv-focusable="true"
                         tabIndex={0}
                         onClick={() => updateDraft('glassBlur', v)}
-                        className={`py-1.5 rounded-xl border text-[11px] font-mono font-bold cursor-pointer ${
+                        className={`py-1.5 rounded-xl border text-[11px] font-sans tabular-nums font-medium cursor-pointer ${
                           (draft.glassBlur ?? 10) === v
                             ? 'bg-gold text-black border-gold'
                             : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'

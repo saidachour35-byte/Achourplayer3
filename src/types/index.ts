@@ -121,9 +121,20 @@ export interface AppSettings {
   posterSize?: PosterSize;
   showPosterTitles?: boolean;
   dashboardFocusMode?: 'frame' | 'label' | 'both' | 'icon';
+  focusVisualStyle?: FocusVisualStyle;
   dashboardLabelColorMode?: 'theme' | 'white' | 'gold' | 'custom';
   dashboardLabelCustomColor?: string | null;
 }
+
+export type FocusVisualStyle =
+  | 'lamp-halo'
+  | 'double-neon'
+  | 'spotlight-pillar'
+  | 'diamond-prism'
+  | 'cyber-brackets'
+  | 'aurora-capsule'
+  | 'classic-ring';
+
 
 export interface VodItem extends Channel {
   info?: any;

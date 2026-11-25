@@ -658,12 +658,12 @@ public class AchourNativePlayerView extends FrameLayout {
                 )
         );
 
-        if (!isMultiSlot) {
-            vlcTextureView = new TextureView(context);
-            vlcTextureView.setFocusable(false);
-            vlcTextureView.setFocusableInTouchMode(false);
-            vlcTextureView.setKeepScreenOn(true);
-            vlcTextureView.setVisibility(View.GONE);
+        // Allow vlcTextureView for multiSlot as well when libvlc is requested globally
+        vlcTextureView = new TextureView(context);
+        vlcTextureView.setFocusable(false);
+        vlcTextureView.setFocusableInTouchMode(false);
+        vlcTextureView.setKeepScreenOn(true);
+        vlcTextureView.setVisibility(View.GONE);
             vlcTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                 @Override
                 public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -1894,7 +1894,14 @@ public class AchourNativePlayerView extends FrameLayout {
             vlcVideoHeight = 0;
             vlcPendingPlay = autoPlay;
 
-            if (isLiveStream && vlcTextureView != null) {
+            if (vlcMediaPlayer != null) {
+                try {
+                    vlcMediaPlayer.stop();
+                } catch (Exception ignored) {
+                }
+            }
+
+            if (vlcTextureView != null) {
                 vlcTextureView.setAlpha(0f);
             }
 

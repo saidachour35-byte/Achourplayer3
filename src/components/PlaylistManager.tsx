@@ -743,8 +743,8 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
           {/* Saved Playlists */}
           <section className="lg:col-span-7 space-y-3">
             <div className={`flex items-center justify-between ${isRtl ? 'flex-row-reverse text-right' : 'text-left'}`}>
-              <h2 className="text-sm font-black uppercase tracking-widest text-zinc-300">
-                {isRtl ? 'قوائم القنوات المحفوظة' : 'Saved Channel Lists'} ({playlists.length})
+              <h2 className="text-sm font-semibold achour-glossy-title uppercase tracking-wider">
+                {isRtl ? 'قوائم القنوات المحفوظة' : 'Saved Channel Lists'} (<span className="font-sans tabular-nums">{playlists.length}</span>)
               </h2>
               <span className="text-[10px] text-zinc-500">
                 {isRtl ? 'انقر على أي قائمة لتفعيلها ومشاهدة محتواها' : 'Click any list to activate it'}
@@ -759,7 +759,7 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
               ) : playlists.length === 0 ? (
                 <div className="p-8 bg-white/[0.04] rounded-2xl border border-dashed border-white/15 text-center">
                   <Globe className="mx-auto text-zinc-500 mb-3" size={32} />
-                  <p className="text-zinc-400 font-bold uppercase tracking-wider text-xs">
+                  <p className="text-zinc-400 font-medium uppercase tracking-wider text-xs">
                     {isRtl ? 'لا توجد قوائم قنوات مضافة حالياً. أضف رابط M3U أو اشتراك Xtream من النموذج الجانبي' : 'No playlists saved yet. Add an M3U or Xtream link from the form.'}
                   </p>
                 </div>
@@ -806,7 +806,7 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
                               );
                             })()}
                           </div>
-                          <span className="text-xs text-zinc-400 font-mono truncate mt-0.5">
+                          <span className="text-xs text-zinc-400 font-sans truncate mt-0.5">
                             {p.url || (p.type === 'xtream' ? `${p.username} @ ${p.url}` : 'M3U Channels')}
                           </span>
                         </div>
@@ -957,7 +957,7 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
 
             <form onSubmit={handleAdd} className="space-y-2.5">
               <div className="space-y-1">
-                <label className={`text-[10px] font-black text-zinc-400 uppercase tracking-widest block ${isRtl ? 'text-right' : 'text-left'}`}>
+                <label className={`text-[10px] font-semibold text-zinc-400 uppercase tracking-wider block ${isRtl ? 'text-right' : 'text-left'}`}>
                   {isRtl ? 'اسم القائمة (اختياري)' : 'Playlist Name (Optional)'}
                 </label>
                 <input 
@@ -971,14 +971,14 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
               </div>
 
               <div className="space-y-1">
-                <label className={`text-[10px] font-black text-zinc-400 uppercase tracking-widest block ${isRtl ? 'text-right' : 'text-left'}`}>
+                <label className={`text-[10px] font-semibold text-zinc-400 uppercase tracking-wider block ${isRtl ? 'text-right' : 'text-left'}`}>
                   {type === 'xtream' ? (isRtl ? 'رابط السيرفر (Server Host)' : 'Server Host') : (isRtl ? 'رابط M3U أو نص الملاحظات' : 'M3U Link or Text')}
                 </label>
                 <input 
                   required
                   data-tv-focusable="true"
                   disabled={isSubmitting}
-                  className={`w-full bg-white/[0.05] border border-white/15 rounded-lg px-3 py-2 focus:border-gold/50 outline-none transition-colors text-xs font-mono text-white disabled:opacity-50 ${isRtl ? 'text-right' : 'text-left'}`}
+                  className={`w-full bg-white/[0.05] border border-white/15 rounded-lg px-3 py-2 focus:border-gold/50 outline-none transition-colors text-xs font-sans text-white disabled:opacity-50 ${isRtl ? 'text-right' : 'text-left'}`}
                   value={formData.url}
                   onChange={e => setFormData({ ...formData, url: e.target.value })}
                   placeholder={type === 'xtream' ? 'http://server.com:8080' : 'http://server.com/get.php?...'}
@@ -988,23 +988,23 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
               {type === 'xtream' && (
                 <div className="grid grid-cols-2 gap-2">
                   <div className="space-y-1">
-                    <label className={`text-[10px] font-black text-zinc-400 uppercase tracking-widest block ${isRtl ? 'text-right' : 'text-left'}`}>{t('username')}</label>
+                    <label className={`text-[10px] font-semibold text-zinc-400 uppercase tracking-wider block ${isRtl ? 'text-right' : 'text-left'}`}>{t('username')}</label>
                     <input 
                       data-tv-focusable="true"
                       disabled={isSubmitting}
-                      className={`w-full bg-white/[0.05] border border-white/15 rounded-lg px-3 py-2 focus:border-gold/50 outline-none transition-colors text-xs font-mono text-white disabled:opacity-50 ${isRtl ? 'text-right' : 'text-left'}`}
+                      className={`w-full bg-white/[0.05] border border-white/15 rounded-lg px-3 py-2 focus:border-gold/50 outline-none transition-colors text-xs font-sans text-white disabled:opacity-50 ${isRtl ? 'text-right' : 'text-left'}`}
                       value={formData.username}
                       onChange={e => setFormData({ ...formData, username: e.target.value })}
                       placeholder="Username"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className={`text-[10px] font-black text-zinc-400 uppercase tracking-widest block ${isRtl ? 'text-right' : 'text-left'}`}>{t('password')}</label>
+                    <label className={`text-[10px] font-semibold text-zinc-400 uppercase tracking-wider block ${isRtl ? 'text-right' : 'text-left'}`}>{t('password')}</label>
                     <input 
                       type="password"
                       data-tv-focusable="true"
                       disabled={isSubmitting}
-                      className={`w-full bg-white/[0.05] border border-white/15 rounded-lg px-3 py-2 focus:border-gold/50 outline-none transition-colors text-xs font-mono text-white disabled:opacity-50 ${isRtl ? 'text-right' : 'text-left'}`}
+                      className={`w-full bg-white/[0.05] border border-white/15 rounded-lg px-3 py-2 focus:border-gold/50 outline-none transition-colors text-xs font-sans text-white disabled:opacity-50 ${isRtl ? 'text-right' : 'text-left'}`}
                       value={formData.password}
                       onChange={e => setFormData({ ...formData, password: e.target.value })}
                       placeholder="••••"
@@ -1017,8 +1017,8 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
               {isSubmitting && (
                 <div className="p-3 rounded-xl bg-gold/10 border border-gold/40 flex items-center gap-3 text-gold">
                   <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin shrink-0" />
-                  <div className="flex flex-col text-xs font-bold text-zinc-200">
-                    <span className="text-gold font-black">{isRtl ? 'جاري فحص وتجهيز القائمة...' : 'Verifying and loading playlist...'}</span>
+                  <div className="flex flex-col text-xs font-medium text-zinc-200">
+                    <span className="text-gold font-semibold">{isRtl ? 'جاري فحص وتجهيز القائمة...' : 'Verifying and loading playlist...'}</span>
                     <span className="text-[10px] text-zinc-400">{isRtl ? 'يتم الاتصال بالسيرفر وجلب القنوات وتفعيلها' : 'Connecting to server and caching channels...'}</span>
                   </div>
                 </div>
@@ -1029,7 +1029,7 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
                 data-tv-focusable="true"
                 tabIndex={0}
                 disabled={isSubmitting}
-                className="w-full py-2.5 bg-gold hover:bg-gold/90 text-black font-black uppercase tracking-wider rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md text-xs mt-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                className="w-full py-2.5 bg-gold hover:bg-gold/90 text-black font-medium uppercase tracking-wider rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md text-xs mt-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
               >
                 {isSubmitting ? (
                   <>
@@ -1083,10 +1083,10 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
                     <Globe size={17} />
                   </div>
                   <div>
-                    <h3 className="text-sm font-black text-white uppercase tracking-wider">
+                    <h3 className="text-sm font-semibold achour-glossy-title uppercase tracking-wider">
                       {inspectPlaylist.name}
                     </h3>
-                    <span className="text-[10px] text-gold font-mono uppercase font-bold">
+                    <span className="text-[10px] text-gold font-sans uppercase font-medium">
                       {inspectPlaylist.type} Playlist
                     </span>
                   </div>
@@ -1106,7 +1106,7 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
               <div className="space-y-2.5 py-1 text-xs">
                 {/* Full Link / Host */}
                 <div className="space-y-1">
-                  <div className={`flex items-center justify-between text-zinc-400 text-[11px] font-bold ${isRtl ? 'flex-row-reverse' : ''}`}>
+                  <div className={`flex items-center justify-between text-zinc-400 text-[11px] font-medium ${isRtl ? 'flex-row-reverse' : ''}`}>
                     <span>{isRtl ? 'رابط السيرفر أو القائمة:' : 'Server / M3U Link:'}</span>
                     <button
                       data-tv-focusable="true"
@@ -1118,7 +1118,7 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
                       <span>{copiedLink ? (isRtl ? 'تم النسخ!' : 'Copied!') : (isRtl ? 'نسخ الرابط' : 'Copy')}</span>
                     </button>
                   </div>
-                  <div className="p-2.5 bg-white/[0.05] rounded-lg border border-white/10 font-mono text-gold text-[11px] break-all select-all">
+                  <div className="p-2.5 bg-white/[0.05] rounded-lg border border-white/10 font-sans text-gold text-[11px] break-all select-all">
                     {inspectPlaylist.url || 'local_file://...'}
                   </div>
                 </div>
@@ -1126,8 +1126,8 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
                 {/* EPG URL in Inspector */}
                 {inspectPlaylist.epgUrl && (
                   <div className="space-y-1">
-                    <span className="text-zinc-400 text-[11px] font-bold block">{isRtl ? 'رابط EPG:' : 'EPG URL:'}</span>
-                    <div className="p-2 bg-white/[0.05] rounded-lg border border-white/10 font-mono text-gold text-[11px] select-all truncate">
+                    <span className="text-zinc-400 text-[11px] font-medium block">{isRtl ? 'رابط EPG:' : 'EPG URL:'}</span>
+                    <div className="p-2 bg-white/[0.05] rounded-lg border border-white/10 font-sans text-gold text-[11px] select-all truncate">
                       {inspectPlaylist.epgUrl}
                     </div>
                   </div>
@@ -1137,14 +1137,14 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
                 {inspectPlaylist.type === 'xtream' && (
                   <div className="grid grid-cols-2 gap-2 pt-1">
                     <div className="space-y-1">
-                      <span className="text-zinc-400 text-[11px] font-bold block">{isRtl ? 'اسم المستخدم:' : 'Username:'}</span>
-                      <div className="p-2 bg-white/[0.05] rounded-lg border border-white/10 font-mono text-white text-[11px] select-all">
+                      <span className="text-zinc-400 text-[11px] font-medium block">{isRtl ? 'اسم المستخدم:' : 'Username:'}</span>
+                      <div className="p-2 bg-white/[0.05] rounded-lg border border-white/10 font-sans text-white text-[11px] select-all">
                         {inspectPlaylist.username || '-'}
                       </div>
                     </div>
 
                     <div className="space-y-1">
-                      <div className={`flex items-center justify-between text-zinc-400 text-[11px] font-bold ${isRtl ? 'flex-row-reverse' : ''}`}>
+                      <div className={`flex items-center justify-between text-zinc-400 text-[11px] font-medium ${isRtl ? 'flex-row-reverse' : ''}`}>
                         <span>{isRtl ? 'كلمة المرور:' : 'Password:'}</span>
                         <button
                           data-tv-focusable="true"
@@ -1155,7 +1155,7 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
                           {showPassword ? <EyeOff size={13} /> : <Eye size={13} />}
                         </button>
                       </div>
-                      <div className="p-2 bg-white/[0.05] rounded-lg border border-white/10 font-mono text-white text-[11px]">
+                      <div className="p-2 bg-white/[0.05] rounded-lg border border-white/10 font-sans text-white text-[11px]">
                         {showPassword ? (inspectPlaylist.password || '-') : '••••••••'}
                       </div>
                     </div>
@@ -1165,8 +1165,8 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
                 {/* Stalker MAC Address */}
                 {inspectPlaylist.type === 'stalker' && inspectPlaylist.macAddress && (
                   <div className="space-y-1 pt-1">
-                    <span className="text-zinc-400 text-[11px] font-bold block">{isRtl ? 'عنوان MAC:' : 'MAC Address:'}</span>
-                    <div className="p-2 bg-white/[0.05] rounded-lg border border-white/10 font-mono text-gold text-[11px] select-all">
+                    <span className="text-zinc-400 text-[11px] font-medium block">{isRtl ? 'عنوان MAC:' : 'MAC Address:'}</span>
+                    <div className="p-2 bg-white/[0.05] rounded-lg border border-white/10 font-sans tabular-nums text-gold text-[11px] select-all">
                       {inspectPlaylist.macAddress}
                     </div>
                   </div>
@@ -1183,7 +1183,7 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
                     handleSelect(inspectPlaylist);
                     setInspectPlaylist(null);
                   }}
-                  className="px-4 py-2 bg-gold text-black rounded-lg text-xs font-black uppercase hover:bg-gold/80 transition-all shadow-md cursor-pointer"
+                  className="px-4 py-2 bg-gold text-black rounded-lg text-xs font-medium uppercase hover:bg-gold/80 transition-all shadow-md cursor-pointer"
                 >
                   {isRtl ? 'تفعيل هذه القائمة الآن' : 'Activate Playlist'}
                 </button>
@@ -1191,7 +1191,7 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
                   data-tv-focusable="true"
                   tabIndex={0}
                   onClick={() => setInspectPlaylist(null)}
-                  className="px-3 py-2 bg-white/10 text-white rounded-lg text-xs font-bold hover:bg-white/20 transition-all cursor-pointer"
+                  className="px-3 py-2 bg-white/10 text-white rounded-lg text-xs font-medium hover:bg-white/20 transition-all cursor-pointer"
                 >
                   {isRtl ? 'إغلاق' : 'Close'}
                 </button>

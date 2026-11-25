@@ -141,7 +141,8 @@ const STYLE_2_TO_10_MAP: Record<string, Record<SectionIconKind, React.ComponentT
 };
 
 /**
- * Style 1 (pack-3d) — Preserved 100% verbatim from the original AchourTV artwork.
+ * Style 1 (pack-3d) — Premium 3D Glossy Metallic & Glass Neon Cinematic Icons
+ * Dynamically bound to --theme-primary / --theme-accent / --theme-secondary / --theme-soft-white.
  */
 function Style1Classic3DIcon({
   kind,
@@ -153,76 +154,165 @@ function Style1Classic3DIcon({
   className?: string;
 }) {
   const rawId = useId().replace(/:/g, '');
-  const gMain = `gMain_${rawId}`;
-  const gSub = `gSub_${rawId}`;
-
-  const fillBody = `url(#${gMain})`;
-  const fillSub = `url(#${gSub})`;
-  const fillAccent = 'var(--theme-accent, #F5E6A8)';
-  const fillDark = '#0C0F18';
-  const strokeMain = 'var(--theme-accent, #F5E6A8)';
-  const strokeAccent = '#FFFFFF';
-  const sw = 1.7;
+  const gMetal = `gMetal_${rawId}`;
+  const gBevel = `gBevel_${rawId}`;
+  const gRim = `gRim_${rawId}`;
+  const gGlass = `gGlass_${rawId}`;
+  const gScreen = `gScreen_${rawId}`;
+  const gPlay = `gPlay_${rawId}`;
 
   const renderGlyph = () => {
     if (kind === 'live') {
       return (
         <g>
-          <path d="M16 6L24 14L32 6" fill="none" stroke={strokeAccent} strokeWidth={sw + 0.4} strokeLinecap="round" strokeLinejoin="round" />
-          <rect x="5" y="14" width="38" height="23" rx="4" fill={fillBody} stroke={strokeMain} strokeWidth={sw} />
-          <rect x="9" y="18" width="22" height="15" rx="2" fill={fillDark} stroke={strokeAccent} strokeWidth={1.2} />
-          <circle cx="36" cy="21" r="1.6" fill={fillAccent} />
-          <circle cx="36" cy="27" r="1.6" fill={fillAccent} />
-          <polygon points="17,23 23,25.5 17,28" fill={fillAccent} />
-          <path d="M15 37H33" stroke={strokeMain} strokeWidth={sw} strokeLinecap="round" />
+          {/* Twin Rabbit-Ear Antennas */}
+          <path d="M16.5 6.8L24 14.5L31.5 6.8" fill="none" stroke={`url(#${gRim})`} strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="16" cy="6.4" r="1.9" fill={`url(#${gRim})`} stroke="#FFFFFF" strokeOpacity="0.8" strokeWidth="0.6" />
+          <circle cx="32" cy="6.4" r="1.9" fill={`url(#${gRim})`} stroke="#FFFFFF" strokeOpacity="0.8" strokeWidth="0.6" />
+          {/* Bottom Feet */}
+          <path d="M12 38.5H16.5L15 41.8H11L12 38.5Z" fill={`url(#${gBevel})`} stroke={`url(#${gRim})`} strokeWidth="0.6" />
+          <path d="M31.5 38.5H36L37 41.8H33L31.5 38.5Z" fill={`url(#${gBevel})`} stroke={`url(#${gRim})`} strokeWidth="0.6" />
+          {/* 3D Extruded Depth Slab */}
+          <rect x="6" y="15.5" width="38" height="24" rx="5.8" fill={`url(#${gBevel})`} />
+          {/* Main Metallic Glossy TV Chassis */}
+          <rect x="4.5" y="14" width="38" height="24" rx="5.8" fill={`url(#${gMetal})`} stroke={`url(#${gRim})`} strokeWidth="1.35" />
+          {/* Top Specular Glossy Edge */}
+          <path d="M10.5 15.2H36.5" stroke="#FFFFFF" strokeOpacity="0.82" strokeWidth="1.2" strokeLinecap="round" />
+          {/* Recessed Dark Glass Screen */}
+          <rect x="8.2" y="17.8" width="23.2" height="16.4" rx="2.8" fill={`url(#${gScreen})`} stroke={`url(#${gRim})`} strokeWidth="1" />
+          {/* Diagonal Glass Sheen */}
+          <path d="M9.2 18.6H26L14.5 33.4H9.2C8.9 33.4 8.8 33 8.8 32.5V19.4C8.8 18.9 8.9 18.6 9.2 18.6Z" fill={`url(#${gGlass})`} />
+          {/* Luminous 3D Play Emblem */}
+          <polygon points="16.8,22 25.2,26 16.8,30" fill={`url(#${gPlay})`} stroke="#FFFFFF" strokeOpacity="0.9" strokeWidth="0.7" strokeLinejoin="round" />
+          {/* Right Control Dials & Speaker Slits */}
+          <circle cx="36.6" cy="21.2" r="2.1" fill={`url(#${gBevel})`} stroke={`url(#${gRim})`} strokeWidth="0.9" />
+          <circle cx="36.3" cy="20.9" r="0.8" fill="#FFFFFF" fillOpacity="0.8" />
+          <circle cx="36.6" cy="27.2" r="2.1" fill={`url(#${gBevel})`} stroke={`url(#${gRim})`} strokeWidth="0.9" />
+          <circle cx="36.3" cy="26.9" r="0.8" fill="#FFFFFF" fillOpacity="0.8" />
+          <path d="M34.5 31.6H38.7M34.5 33.6H38.7" stroke="rgba(6,8,14,0.8)" strokeWidth="1.3" strokeLinecap="round" />
         </g>
       );
     }
+
     if (kind === 'movies') {
+      const holeAngles = [-90, -18, 54, 126, 198];
       return (
         <g>
-          <rect x="6" y="17" width="26" height="20" rx="4" fill={fillBody} stroke={strokeMain} strokeWidth={sw} />
-          <circle cx="13" cy="11" r="5.5" fill={fillSub} stroke={strokeAccent} strokeWidth={sw * 0.9} />
-          <circle cx="25.5" cy="11" r="5.5" fill={fillSub} stroke={strokeAccent} strokeWidth={sw * 0.9} />
-          <circle cx="13" cy="11" r="1.9" fill={fillDark} />
-          <circle cx="25.5" cy="11" r="1.9" fill={fillDark} />
-          <path d="M32 22L42 17V34L32 29V22Z" fill={fillSub} stroke={strokeMain} strokeWidth={sw} strokeLinejoin="round" />
-          <polygon points="16,22.5 23.5,27 16,31.5" fill={fillDark} stroke={strokeAccent} strokeWidth={1.3} />
+          {/* Unwinding 3D Perforated Film Strip Tail */}
+          <path
+            d="M27.5 36.2C32.8 39.2 38.6 38.2 42.8 33L44.5 37.8C39.6 43 32.2 43.8 24.5 40.5L27.5 36.2Z"
+            fill={`url(#${gMetal})`}
+            stroke={`url(#${gRim})`}
+            strokeWidth="1.05"
+            strokeLinejoin="round"
+          />
+          <circle cx="32.2" cy="39.5" r="0.9" fill="#090B12" />
+          <circle cx="36.6" cy="39.1" r="0.9" fill="#090B12" />
+          <circle cx="40.6" cy="37.1" r="0.9" fill="#090B12" />
+
+          {/* 3D Extruded Reel Depth */}
+          <circle cx="23.4" cy="24.2" r="17.2" fill={`url(#${gBevel})`} />
+          {/* Main Metallic Glossy Reel Disc */}
+          <circle cx="22" cy="22.8" r="17.2" fill={`url(#${gMetal})`} stroke={`url(#${gRim})`} strokeWidth="1.45" />
+          {/* Glossy Top Crescent Highlight */}
+          <path d="M9.5 13.5A15.2 15.2 0 0 1 34.5 13.5" fill="none" stroke="#FFFFFF" strokeOpacity="0.72" strokeWidth="1.3" strokeLinecap="round" />
+          {/* Inner Beveled Track Ring */}
+          <circle cx="22" cy="22.8" r="14.2" fill="none" stroke={`url(#${gBevel})`} strokeWidth="1.2" opacity="0.75" />
+
+          {/* 5 Precision Film Reel Holes */}
+          {holeAngles.map((deg) => {
+            const rad = (deg * Math.PI) / 180;
+            const hx = 22 + Math.cos(rad) * 9.1;
+            const hy = 22.8 + Math.sin(rad) * 9.1;
+            return (
+              <g key={deg}>
+                <circle cx={hx} cy={hy} r="3.65" fill={`url(#${gScreen})`} stroke={`url(#${gRim})`} strokeWidth="1.05" />
+                <circle cx={hx - 0.3} cy={hy - 0.3} r="2.2" fill="rgba(255,255,255,0.06)" />
+              </g>
+            );
+          })}
+
+          {/* Raised 3D Center Hub */}
+          <circle cx="22" cy="22.8" r="4.2" fill={`url(#${gBevel})`} stroke={`url(#${gRim})`} strokeWidth="1.15" />
+          <circle cx="22" cy="22.8" r="1.9" fill={`url(#${gPlay})`} />
         </g>
       );
     }
+
     if (kind === 'series') {
       return (
         <g>
-          <rect x="7" y="10.5" width="34" height="24" rx="4.2" fill={fillBody} stroke={strokeMain} strokeWidth={sw} />
-          <rect x="10.5" y="14" width="27" height="17" rx="2.4" fill={fillDark} />
-          <polygon points="20.5,18 29,22.5 20.5,27" fill={fillAccent} stroke={strokeAccent} strokeWidth={1.3} />
-          <path d="M18 39.5H30L32 34.5H16L18 39.5Z" fill={fillBody} />
+          {/* 3D Extruded Frame Depth */}
+          <rect x="6" y="12.2" width="38" height="26.5" rx="5.5" fill={`url(#${gBevel})`} />
+          {/* Main Sculpted Widescreen Bezel */}
+          <rect x="4.5" y="10.5" width="38" height="26.5" rx="5.5" fill={`url(#${gMetal})`} stroke={`url(#${gRim})`} strokeWidth="1.4" />
+          {/* Top Metallic Specular Rim */}
+          <path d="M10.5 11.7H36.5" stroke="#FFFFFF" strokeOpacity="0.82" strokeWidth="1.2" strokeLinecap="round" />
+          {/* 4 Corner Specular Rivets */}
+          <circle cx="8" cy="14" r="1.05" fill="#FFFFFF" fillOpacity="0.85" />
+          <circle cx="39" cy="14" r="1.05" fill="#FFFFFF" fillOpacity="0.85" />
+          <circle cx="8" cy="33.5" r="1.05" fill="var(--theme-soft-white, #FFFFFF)" fillOpacity="0.7" />
+          <circle cx="39" cy="33.5" r="1.05" fill="var(--theme-soft-white, #FFFFFF)" fillOpacity="0.7" />
+          {/* Recessed Glossy Dark Display */}
+          <rect x="9.6" y="15" width="27.8" height="17.5" rx="3" fill={`url(#${gScreen})`} stroke={`url(#${gRim})`} strokeWidth="1.05" />
+          {/* Diagonal Glass Reflection */}
+          <path d="M10.5 15.8H30L16.5 31.8H10.5C10.2 31.8 10.1 31.4 10.1 30.8V16.6C10.1 16.1 10.2 15.8 10.5 15.8Z" fill={`url(#${gGlass})`} />
+          {/* Glowing Centered Play Emblem */}
+          <polygon points="20.2,19 29.4,23.8 20.2,28.6" fill={`url(#${gPlay})`} stroke="#FFFFFF" strokeOpacity="0.9" strokeWidth="0.75" strokeLinejoin="round" />
         </g>
       );
     }
+
     if (kind === 'add') {
       return (
         <g>
-          <rect x="6" y="10" width="28" height="6" rx="2.5" fill={fillBody} stroke={strokeMain} strokeWidth={1} />
-          <rect x="6" y="19.5" width="23" height="6" rx="2.5" fill={fillBody} stroke={strokeMain} strokeWidth={1} />
-          <rect x="6" y="29" width="19" height="6" rx="2.5" fill={fillSub} stroke={strokeAccent} strokeWidth={1} />
-          <circle cx="34.5" cy="31" r="8.2" fill={fillBody} stroke={strokeMain} strokeWidth={sw * 0.9} />
-          <path d="M34.5 27V35M30.5 31H38.5" stroke="#0A0D14" strokeWidth="2.6" strokeLinecap="round" />
+          {/* Bar 1 Depth & Front */}
+          <rect x="6" y="10.5" width="26.5" height="6.4" rx="3.2" fill={`url(#${gBevel})`} />
+          <rect x="5" y="9.2" width="26.5" height="6.4" rx="3.2" fill={`url(#${gMetal})`} stroke={`url(#${gRim})`} strokeWidth="1.05" />
+          <path d="M8.5 10.4H28" stroke="#FFFFFF" strokeOpacity="0.78" strokeWidth="0.9" strokeLinecap="round" />
+          <circle cx="8.8" cy="12.4" r="1.2" fill="#090B12" />
+
+          {/* Bar 2 Depth & Front */}
+          <rect x="6" y="20.2" width="21.5" height="6.4" rx="3.2" fill={`url(#${gBevel})`} />
+          <rect x="5" y="18.9" width="21.5" height="6.4" rx="3.2" fill={`url(#${gMetal})`} stroke={`url(#${gRim})`} strokeWidth="1.05" />
+          <path d="M8.5 20.1H23" stroke="#FFFFFF" strokeOpacity="0.74" strokeWidth="0.9" strokeLinecap="round" />
+          <circle cx="8.8" cy="22.1" r="1.2" fill="#090B12" />
+
+          {/* Bar 3 Depth & Front */}
+          <rect x="6" y="29.9" width="16.5" height="6.4" rx="3.2" fill={`url(#${gBevel})`} />
+          <rect x="5" y="28.6" width="16.5" height="6.4" rx="3.2" fill={`url(#${gMetal})`} stroke={`url(#${gRim})`} strokeWidth="1.05" />
+          <path d="M8.5 29.8H18" stroke="#FFFFFF" strokeOpacity="0.7" strokeWidth="0.9" strokeLinecap="round" />
+          <circle cx="8.8" cy="31.8" r="1.2" fill="#090B12" />
+
+          {/* 3D Overlapping Play Disc */}
+          <circle cx="35.2" cy="32.2" r="9.4" fill={`url(#${gBevel})`} />
+          <circle cx="34" cy="31" r="9.4" fill={`url(#${gMetal})`} stroke={`url(#${gRim})`} strokeWidth="1.35" />
+          <circle cx="34" cy="31" r="7.2" fill={`url(#${gScreen})`} stroke="rgba(255,255,255,0.45)" strokeWidth="0.8" />
+          <polygon points="31.8,27 38.6,31 31.8,35" fill={`url(#${gPlay})`} stroke="#FFFFFF" strokeOpacity="0.9" strokeWidth="0.65" strokeLinejoin="round" />
         </g>
       );
     }
+
+    const gearPath =
+      'M20.8 5.2H27.2L28.6 9.7C29.9 10.1 31.1 10.8 32.1 11.7L36.2 9.5L40.8 14.1L38.6 18.2C39.5 19.2 40.2 20.4 40.6 21.7L44.8 23.1V29.5L40.6 30.9C40.2 32.2 39.5 33.4 38.6 34.4L40.8 38.5L36.2 43.1L32.1 40.9C31.1 41.8 29.9 42.5 28.6 42.9L27.2 47H20.8L19.4 42.9C18.1 42.5 16.9 41.8 15.9 40.9L11.8 43.1L7.2 38.5L9.4 34.4C8.5 33.4 7.8 32.2 7.4 30.9L3.2 29.5V23.1L7.4 21.7C7.8 20.4 8.5 19.2 9.4 18.2L7.2 14.1L11.8 9.5L15.9 11.7C16.9 10.8 18.1 10.1 19.4 9.7L20.8 5.2Z';
+
     return (
       <g>
-        <path
-          d="M21 6H27L28.2 10.2C29.4 10.6 30.5 11.2 31.5 12L35.4 10L39.6 14.2L37.6 18.1C38.4 19.1 39 20.2 39.4 21.4L43.5 22.6V28.6L39.4 29.8C39 31 38.4 32.1 37.6 33.1L39.6 37L35.4 41.2L31.5 39.2C30.5 40 29.4 40.6 28.2 41L27 45H21L19.8 41C18.6 40.6 17.5 40 16.5 39.2L12.6 41.2L8.4 37L10.4 33.1C9.6 32.1 9 31 8.6 29.8L4.5 28.6V22.6L8.6 21.4C9 20.2 9.6 19.1 10.4 18.1L8.4 14.2L12.6 10L16.5 12C17.5 11.2 18.6 10.6 19.8 10.2L21 6Z"
-          fill={fillBody}
-          stroke={strokeMain}
-          strokeWidth={sw}
-          strokeLinejoin="round"
-        />
-        <circle cx="24" cy="25.5" r="7.2" fill={fillDark} stroke={strokeAccent} strokeWidth={1.6} />
-        <circle cx="24" cy="25.5" r="3" fill={fillAccent} />
+        {/* 3D Extruded Gear Depth */}
+        <g transform="translate(1.4, 1.9) scale(0.95)">
+          <path d={gearPath} fill={`url(#${gBevel})`} />
+        </g>
+        {/* Main Sculpted Metallic Gear */}
+        <g transform="translate(0, -0.8) scale(0.95)">
+          <path d={gearPath} fill={`url(#${gMetal})`} stroke={`url(#${gRim})`} strokeWidth="1.25" strokeLinejoin="round" />
+        </g>
+        {/* Raised Inner Collar */}
+        <circle cx="22.8" cy="24" r="10.2" fill={`url(#${gBevel})`} stroke={`url(#${gRim})`} strokeWidth="1.1" />
+        {/* Top Specular Crescent */}
+        <path d="M16 17.5A9.5 9.5 0 0 1 29.6 17.5" fill="none" stroke="#FFFFFF" strokeOpacity="0.72" strokeWidth="1.2" strokeLinecap="round" />
+        {/* Deep Recessed Center Bore */}
+        <circle cx="22.8" cy="24" r="6" fill={`url(#${gScreen})`} stroke={`url(#${gRim})`} strokeWidth="1.35" />
+        <circle cx="22.8" cy="24" r="2.2" fill={`url(#${gPlay})`} fillOpacity="0.85" />
       </g>
     );
   };
@@ -235,14 +325,37 @@ function Style1Classic3DIcon({
       className={`shrink-0 select-none overflow-visible achour-icon-svg ${className}`}
     >
       <defs>
-        <linearGradient id={gMain} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="var(--theme-accent, #F5E6A8)" />
-          <stop offset="48%" stopColor="var(--theme-primary, #D4AF37)" />
+        <linearGradient id={gMetal} x1="10%" y1="0%" x2="90%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="16%" stopColor="var(--theme-soft-white, #FFF6D6)" />
+          <stop offset="42%" stopColor="var(--theme-accent, #F5E6A8)" />
+          <stop offset="72%" stopColor="var(--theme-primary, #D4AF37)" />
           <stop offset="100%" stopColor="var(--theme-secondary, #8C6A1D)" />
         </linearGradient>
-        <linearGradient id={gSub} x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="var(--theme-secondary, #8C6A1D)" />
-          <stop offset="55%" stopColor="var(--theme-primary, #D4AF37)" />
+        <linearGradient id={gBevel} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="var(--theme-primary, #D4AF37)" />
+          <stop offset="55%" stopColor="var(--theme-secondary, #8C6A1D)" />
+          <stop offset="100%" stopColor="#07090F" />
+        </linearGradient>
+        <linearGradient id={gRim} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="38%" stopColor="var(--theme-soft-white, #FFF6D6)" />
+          <stop offset="75%" stopColor="var(--theme-accent, #F5E6A8)" />
+          <stop offset="100%" stopColor="var(--theme-primary, #D4AF37)" />
+        </linearGradient>
+        <linearGradient id={gGlass} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.34" />
+          <stop offset="65%" stopColor="#FFFFFF" stopOpacity="0.06" />
+          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id={gScreen} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#1B1F2E" />
+          <stop offset="55%" stopColor="#0B0E17" />
+          <stop offset="100%" stopColor="#04060B" />
+        </linearGradient>
+        <linearGradient id={gPlay} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="65%" stopColor="var(--theme-soft-white, #FFF6D6)" />
           <stop offset="100%" stopColor="var(--theme-accent, #F5E6A8)" />
         </linearGradient>
       </defs>

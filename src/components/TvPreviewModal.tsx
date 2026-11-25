@@ -203,7 +203,7 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
         <div className="bg-white/[0.04] px-4 py-2.5 border-b border-white/10 flex flex-wrap items-center justify-between gap-2 shrink-0">
           <div className="flex items-center gap-2">
             <Monitor size={16} className="text-[var(--theme-primary,#D4AF37)]" />
-            <span className="text-xs font-black text-white">
+            <span className="text-xs font-semibold achour-glossy-title">
               {isRtl ? 'معاينة شاشة التلفزيون (16:9)' : 'TV Screen Preview (16:9)'}
             </span>
             <span className="text-[10px] text-zinc-400 hidden md:inline">
@@ -226,9 +226,9 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
                   data-tv-preview-focus="true"
                   tabIndex={0}
                   onClick={() => setMode(tab.id as PreviewMode)}
-                  className={`px-2.5 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1.5 transition-all focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary,#D4AF37)] ${
+                  className={`px-2.5 py-1 rounded-xl text-[11px] font-medium flex items-center gap-1.5 transition-all focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary,#D4AF37)] ${
                     mode === tab.id
-                      ? 'bg-[var(--theme-primary,#D4AF37)] text-black'
+                      ? 'achour-glossy-pill'
                       : 'bg-white/10 text-zinc-200 hover:bg-white/15'
                   }`}
                 >
@@ -242,7 +242,7 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
               data-tv-preview-focus="true"
               tabIndex={0}
               onClick={() => setShowBar(prev => !prev)}
-              className="px-2.5 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary,#D4AF37)]"
+              className="px-2.5 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[11px] font-medium flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary,#D4AF37)]"
             >
               {showBar ? <EyeOff size={12} /> : <Eye size={12} />}
               <span>{showBar ? (isRtl ? 'إخفاء الشريط' : 'Hide Bar') : (isRtl ? 'إظهار الشريط' : 'Show Bar')}</span>
@@ -252,7 +252,7 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
               data-tv-preview-focus="true"
               tabIndex={0}
               onClick={onClose}
-              className="px-2.5 py-1 rounded-xl bg-red-500/20 hover:bg-red-500/40 text-red-200 text-[11px] font-bold flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-red-400"
+              className="px-2.5 py-1 rounded-xl bg-red-500/20 hover:bg-red-500/40 text-red-200 text-[11px] font-medium flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-red-400"
             >
               <X size={13} />
               <span>{isRtl ? 'إغلاق' : 'Close'}</span>
@@ -275,7 +275,7 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
 
           {/* Subtle feedback toast inside preview */}
           {actionFeedback && (
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 z-40 px-4 py-1.5 rounded-full achour-glass-modal border-[var(--theme-primary,#D4AF37)]/60 text-xs font-bold text-white">
+            <div className="absolute top-6 left-1/2 -translate-x-1/2 z-40 px-4 py-1.5 rounded-full achour-glass-modal border-[var(--theme-primary,#D4AF37)]/60 text-xs font-medium text-white">
               {actionFeedback}
             </div>
           )}
@@ -299,7 +299,7 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
                   <ChevronLeft className="w-5 h-5" />
                 </button>
 
-                <div className="px-2.5 py-1 bg-[var(--theme-primary,#D4AF37)] text-black font-mono font-black text-xs rounded-xl shrink-0">
+                <div className="px-2.5 py-1 achour-glossy-badge font-sans tabular-nums font-semibold text-xs rounded-xl shrink-0">
                   {String(liveChannelIdx).padStart(3, '0')}
                 </div>
 
@@ -309,14 +309,14 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
 
                 <div className="flex-1 min-w-0 flex flex-col justify-center">
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-sm font-extrabold text-white truncate">
+                    <h3 className="text-sm font-semibold achour-glossy-text truncate">
                       {SAMPLE_STREAMS['live-bar'].name}
                     </h3>
-                    <span className="text-[10px] font-mono text-zinc-200 whitespace-nowrap">
+                    <span className="text-[10px] font-sans font-normal tabular-nums text-zinc-200 whitespace-nowrap">
                       {SAMPLE_STREAMS['live-bar'].startTime} - {SAMPLE_STREAMS['live-bar'].endTime}
                     </span>
                   </div>
-                  <p className="text-[11px] font-bold text-zinc-200/90 truncate">
+                  <p className="text-[11px] font-normal text-zinc-200/90 truncate">
                     {SAMPLE_STREAMS['live-bar'].program}
                   </p>
                   <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden mt-1">
@@ -328,8 +328,8 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
                 </div>
 
                 <div className="flex flex-col items-end shrink-0 text-right px-1">
-                  <span className="text-[11px] font-mono font-black text-white leading-tight">{formattedClock}</span>
-                  <span className="text-[9px] font-mono text-zinc-300 leading-tight">{formattedDate}</span>
+                  <span className="text-[11px] font-sans tabular-nums font-normal achour-glossy-text leading-tight">{formattedClock}</span>
+                  <span className="text-[9px] font-sans tabular-nums font-normal achour-glossy-info leading-tight">{formattedDate}</span>
                 </div>
 
                 <button
@@ -344,7 +344,7 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
                   <Star className={`w-5 h-5 ${isFavorite ? 'text-amber-400 fill-amber-400' : 'text-zinc-300'}`} />
                 </button>
 
-                <div className="px-2 py-1 rounded-lg border border-white/25 bg-black/30 text-[var(--theme-primary,#D4AF37)] font-black text-[11px] font-mono shrink-0">
+                <div className="px-2 py-1 rounded-lg border border-white/25 bg-black/30 text-[var(--theme-primary,#D4AF37)] font-medium text-[11px] font-sans shrink-0">
                   {SAMPLE_STREAMS['live-bar'].quality}
                 </div>
 
@@ -376,28 +376,28 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <h3 className="text-sm font-black text-white truncate">
+                      <h3 className="text-sm font-semibold achour-glossy-text truncate">
                         {mode === 'series-bar'
                           ? `${SAMPLE_STREAMS['series-bar'].seriesTitle} — S${String(SAMPLE_STREAMS['series-bar'].seasonNum).padStart(2, '0')}E${String(SAMPLE_STREAMS['series-bar'].episodeNum).padStart(2, '0')} • ${SAMPLE_STREAMS['series-bar'].episodeTitle}`
                           : SAMPLE_STREAMS['movie-bar'].title}
                       </h3>
                       <div className="text-right shrink-0">
-                        <span className="text-[11px] font-mono font-black text-white block leading-tight">{formattedClock}</span>
-                        <span className="text-[9px] font-mono text-zinc-300 block leading-tight">{formattedDate}</span>
+                        <span className="text-[11px] font-sans tabular-nums font-normal achour-glossy-text block leading-tight">{formattedClock}</span>
+                        <span className="text-[9px] font-sans tabular-nums font-normal achour-glossy-info block leading-tight">{formattedDate}</span>
                       </div>
                     </div>
 
                     {/* Progress bar + Elapsed / Total / Remaining */}
                     <div className="flex items-center gap-2 mt-1.5">
-                      <span className="text-[10px] font-mono font-bold text-white shrink-0">{formatTime(simTime)}</span>
+                      <span className="text-[10px] font-sans tabular-nums font-normal text-white shrink-0">{formatTime(simTime)}</span>
                       <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-[var(--theme-primary,#D4AF37)] rounded-full"
                           style={{ width: `${Math.min(100, (simTime / totalDur) * 100)}%` }}
                         />
                       </div>
-                      <span className="text-[10px] font-mono font-bold text-zinc-300 shrink-0">{formatTime(totalDur)}</span>
-                      <span className="text-[10px] font-mono font-bold text-[var(--theme-primary,#D4AF37)] shrink-0">
+                      <span className="text-[10px] font-sans tabular-nums font-normal text-zinc-300 shrink-0">{formatTime(totalDur)}</span>
+                      <span className="text-[10px] font-sans tabular-nums font-medium text-[var(--theme-primary,#D4AF37)] shrink-0">
                         -{formatTime(remainingSec)}
                       </span>
                     </div>
@@ -416,7 +416,7 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
                         if (videoRef.current) videoRef.current.currentTime = target % (videoRef.current.duration || 60);
                         showToast(`-${seekStep}s`);
                       }}
-                      className="px-2.5 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-[11px] font-bold flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary,#D4AF37)]"
+                      className="px-2.5 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-[11px] font-medium flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary,#D4AF37)]"
                     >
                       <RotateCcw size={13} />
                       <span>-{seekStep}s</span>
@@ -432,7 +432,7 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
                           else videoRef.current.play().catch(() => {});
                         }
                       }}
-                      className="w-9 h-9 rounded-full bg-[var(--theme-primary,#D4AF37)] text-black flex items-center justify-center font-black focus:outline-none focus:ring-2 focus:ring-white"
+                      className="w-9 h-9 rounded-full achour-glossy-pill flex items-center justify-center font-medium focus:outline-none focus:ring-2 focus:ring-white"
                     >
                       {isPlaying ? <Pause size={16} className="fill-current" /> : <Play size={16} className="fill-current ml-0.5" />}
                     </button>
@@ -446,7 +446,7 @@ export const TvPreviewModal: React.FC<TvPreviewModalProps> = ({
                         if (videoRef.current) videoRef.current.currentTime = target % (videoRef.current.duration || 60);
                         showToast(`+${seekStep}s`);
                       }}
-                      className="px-2.5 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-[11px] font-bold flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary,#D4AF37)]"
+                      className="px-2.5 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-[11px] font-medium flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary,#D4AF37)]"
                     >
                       <span>+{seekStep}s</span>
                       <RotateCw size={13} />

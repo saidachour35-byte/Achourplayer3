@@ -1681,7 +1681,14 @@ export function applyRoyalTheme(
   const { primary, secondary, accent, mid, glow, r, g, b } = palette;
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   const onPrimary = luminance > 0.52 ? '#090b10' : '#ffffff';
+  const softWhiteTint = rgbToHex(r + (255 - r) * 0.76, g + (255 - g) * 0.76, b + (255 - b) * 0.76);
+  const luminousPrimary = rgbToHex(r + (255 - r) * 0.24, g + (255 - g) * 0.24, b + (255 - b) * 0.24);
   const metallicGrad = `linear-gradient(135deg, ${secondary} 0%, ${primary} 34%, ${accent} 58%, ${mid} 82%, ${secondary} 100%)`;
+  const glossyHeadingGrad = `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 18%, ${softWhiteTint} 40%, ${primary} 74%, ${secondary} 100%)`;
+  const glossyTextGrad = `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 14%, ${softWhiteTint} 36%, ${accent} 58%, ${primary} 82%, ${secondary} 100%)`;
+  const glossyInfoGrad = `linear-gradient(180deg, #FFFFFF 0%, ${softWhiteTint} 42%, ${accent} 76%, ${primary} 100%)`;
+  const glossyBtnGrad = `linear-gradient(180deg, rgba(255,255,255,0.48) 0%, rgba(255,255,255,0.16) 38%, rgba(${r},${g},${b},0.94) 52%, ${primary} 78%, ${secondary} 100%)`;
+  const glossySurfaceGrad = `linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(${r},${g},${b},0.20) 50%, rgba(${r},${g},${b},0.08) 100%)`;
 
   const root = document.documentElement;
   root.style.setProperty('--color-gold', primary);
@@ -1691,8 +1698,16 @@ export function applyRoyalTheme(
   root.style.setProperty('--theme-accent', accent);
   root.style.setProperty('--theme-mid', mid);
   root.style.setProperty('--theme-glow', glow);
+  root.style.setProperty('--theme-rgb', `${r}, ${g}, ${b}`);
   root.style.setProperty('--theme-on-primary', onPrimary);
+  root.style.setProperty('--theme-soft-white', softWhiteTint);
+  root.style.setProperty('--theme-luminous', luminousPrimary);
   root.style.setProperty('--theme-metallic-grad', metallicGrad);
+  root.style.setProperty('--theme-glossy-heading-grad', glossyHeadingGrad);
+  root.style.setProperty('--theme-glossy-text-grad', glossyTextGrad);
+  root.style.setProperty('--theme-glossy-info-grad', glossyInfoGrad);
+  root.style.setProperty('--theme-glossy-btn-grad', glossyBtnGrad);
+  root.style.setProperty('--theme-glossy-surface-grad', glossySurfaceGrad);
   root.style.setProperty('--achour-glass-alpha', String(alpha));
   root.style.setProperty('--achour-glass-blur', `${blurPx}px`);
 
@@ -1704,9 +1719,13 @@ export function applyRoyalTheme(
   const opacityRules = opacitySteps
     .map((pct) => {
       const a = (pct / 100).toFixed(2);
+      const isHighlightSurface = pct >= 10 && pct <= 35;
+      const bgExtra = isHighlightSurface
+        ? `background-image: linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.03) 45%, rgba(0,0,0,0.16) 100%) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,0.28);`
+        : '';
       return `
         .text-gold\\/${pct}, .text-amber-400\\/${pct}, .text-amber-300\\/${pct}, .text-yellow-400\\/${pct} { color: rgba(${r},${g},${b},${a}) !important; }
-        .bg-gold\\/${pct}, .bg-amber-500\\/${pct}, .bg-yellow-500\\/${pct} { background-color: rgba(${r},${g},${b},${a}) !important; }
+        .bg-gold\\/${pct}, .bg-amber-500\\/${pct}, .bg-yellow-500\\/${pct} { background-color: rgba(${r},${g},${b},${a}) !important; ${bgExtra} }
         .border-gold\\/${pct}, .border-amber-500\\/${pct}, .border-yellow-500\\/${pct} { border-color: rgba(${r},${g},${b},${a}) !important; }
         .hover\\:bg-gold\\/${pct}:hover { background-color: rgba(${r},${g},${b},${a}) !important; }
         .hover\\:border-gold\\/${pct}:hover, .hover\\:border-amber-500\\/${pct}:hover { border-color: rgba(${r},${g},${b},${a}) !important; }
@@ -1734,26 +1753,36 @@ export function applyRoyalTheme(
       --theme-accent: ${accent} !important;
       --theme-mid: ${mid} !important;
       --theme-glow: ${glow} !important;
+      --theme-rgb: ${r}, ${g}, ${b} !important;
       --theme-on-primary: ${onPrimary} !important;
+      --theme-soft-white: ${softWhiteTint} !important;
+      --theme-luminous: ${luminousPrimary} !important;
       --theme-metallic-grad: ${metallicGrad} !important;
+      --theme-glossy-heading-grad: ${glossyHeadingGrad} !important;
+      --theme-glossy-text-grad: ${glossyTextGrad} !important;
+      --theme-glossy-info-grad: ${glossyInfoGrad} !important;
+      --theme-glossy-btn-grad: ${glossyBtnGrad} !important;
+      --theme-glossy-surface-grad: ${glossySurfaceGrad} !important;
       --achour-glass-alpha: ${alpha} !important;
       --achour-glass-blur: ${blurPx}px !important;
     }
     .text-gold, .text-amber-400, .text-amber-300, .text-amber-200, .text-yellow-400, .text-yellow-300 {
-      color: ${primary} !important;
+      color: ${luminousPrimary} !important;
     }
     .bg-gold, .bg-amber-500, .bg-amber-600, .bg-yellow-500 {
       background-color: ${primary} !important;
+      background-image: ${glossyBtnGrad} !important;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.62), inset 0 -2px 4px rgba(0,0,0,0.34), 0 4px 14px ${glow};
       color: ${onPrimary};
     }
     .border-gold, .border-amber-500, .border-amber-400, .border-amber-300, .border-yellow-500 {
       border-color: ${primary} !important;
     }
     .fill-gold, .fill-amber-500, .fill-amber-400, .fill-yellow-500 {
-      fill: ${primary} !important;
+      fill: ${luminousPrimary} !important;
     }
     .stroke-gold {
-      stroke: ${primary} !important;
+      stroke: ${luminousPrimary} !important;
     }
     .accent-gold {
       accent-color: ${primary} !important;
@@ -1791,13 +1820,15 @@ export function applyRoyalTheme(
     }
     .hover\\:bg-gold:hover, .hover\\:bg-amber-500:hover {
       background-color: ${primary} !important;
+      background-image: ${glossyBtnGrad} !important;
     }
     .hover\\:text-gold:hover, .hover\\:text-amber-400:hover,
     .group:hover .group-hover\\:text-gold {
-      color: ${primary} !important;
+      color: ${luminousPrimary} !important;
     }
     .group:hover .group-hover\\:bg-gold {
       background-color: ${primary} !important;
+      background-image: ${glossyBtnGrad} !important;
       color: ${onPrimary} !important;
     }
     .hover\\:border-gold:hover, .hover\\:border-amber-500:hover {

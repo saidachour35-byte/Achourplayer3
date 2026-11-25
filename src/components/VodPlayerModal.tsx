@@ -2574,17 +2574,17 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
 
         {/* 2. Sleep Timer Badge */}
         {sleepTimerTimeLeft !== null && !isPreview && showControls && (
-          <div className="absolute top-4 left-4 z-40 achour-glass-modal px-3 py-1.5 rounded-full border-gold/40 text-gold flex items-center gap-2 text-xs font-mono">
-            <Clock className="w-3.5 h-3.5" />
-            <span>إيقاف تلقائي: {formatTime(sleepTimerTimeLeft)}</span>
+          <div className="absolute top-4 left-4 z-40 achour-glass-modal px-3 py-1.5 rounded-full border-gold/40 text-gold flex items-center gap-2 text-xs font-sans font-normal tabular-nums">
+            <Clock className="w-3.5 h-3.5 shrink-0" />
+            <span className="achour-glossy-info">إيقاف تلقائي: {formatTime(sleepTimerTimeLeft)}</span>
           </div>
         )}
 
         {/* 2b. Direct Seeking Overlay Badge (Movies & Series VOD) */}
         {seekNotice && !isPreview && (
           <div className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none">
-            <div className="achour-glass-modal px-6 py-3.5 rounded-2xl border-2 border-gold text-gold flex items-center gap-3 text-lg font-mono font-black">
-              <span>{seekNotice}</span>
+            <div className="achour-glass-modal px-6 py-3.5 rounded-2xl border-2 border-gold flex items-center gap-3 text-lg font-sans font-semibold tabular-nums">
+              <span className="achour-glossy-title">{seekNotice}</span>
             </div>
           </div>
         )}
@@ -2612,8 +2612,8 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
               <div className="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto border border-gold/30">
                 <Play className="w-6 h-6 fill-current mr-0.5" />
               </div>
-              <h3 className="text-lg font-bold text-white">الحلقة التالية بعد {autoNextCountdown} ثوانٍ</h3>
-              <p className="text-sm text-gray-300">
+              <h3 className="text-lg font-semibold achour-glossy-title">الحلقة التالية بعد {autoNextCountdown} ثوانٍ</h3>
+              <p className="text-sm font-normal text-gray-200">
                 {vodEpisodes[resolvedEpisodeIndex + 1]?.title || `الحلقة ${resolvedEpisodeIndex + 2}`}
               </p>
               <div className="flex items-center justify-center gap-3 pt-1">
@@ -2622,7 +2622,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                   data-tv-prompt-btn="true"
                   data-tv-focus-inset="true"
                   tabIndex={0}
-                  className="px-6 py-2.5 rounded-xl bg-gold hover:bg-gold-light text-black font-bold text-sm transition-transform active:scale-95"
+                  className="px-6 py-2.5 rounded-xl achour-glossy-pill font-medium text-sm transition-transform active:scale-95"
                 >
                   تشغيل الآن
                 </button>
@@ -2631,7 +2631,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                   data-tv-prompt-btn="true"
                   data-tv-focus-inset="true"
                   tabIndex={0}
-                  className="px-5 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/15 text-gray-200 text-sm font-semibold border border-white/15"
+                  className="px-5 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/15 text-gray-200 text-sm font-medium border border-white/15"
                 >
                   إلغاء
                 </button>
@@ -2659,10 +2659,10 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
               <div className="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto border border-gold/30">
                 <RotateCcw className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white">{t('resume_watching')}</h3>
-              <p className="text-sm text-gray-300">
+              <h3 className="text-lg font-semibold achour-glossy-title">{t('resume_watching')}</h3>
+              <p className="text-sm font-normal text-gray-200">
                 {isRtl ? 'هل ترغب في مواصلة العرض من الدقيقة' : 'Would you like to resume playback from'}{' '}
-                <span className="text-gold font-mono font-bold">{formatTime(savedResumeTime)}</span>{isRtl ? '؟' : '?'}
+                <span className="achour-glossy-text font-sans font-medium tabular-nums">{formatTime(savedResumeTime)}</span>{isRtl ? '؟' : '?'}
               </p>
               <div className="flex items-center justify-center gap-3 pt-1">
                 <button
@@ -2670,7 +2670,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                   data-tv-prompt-btn="true"
                   data-tv-focus-inset="true"
                   tabIndex={0}
-                  className="px-6 py-2.5 rounded-xl bg-gold hover:bg-gold-light text-black font-bold text-sm transition-transform active:scale-95"
+                  className="px-6 py-2.5 rounded-xl achour-glossy-pill font-medium text-sm transition-transform active:scale-95"
                 >
                   {t('resume')}
                 </button>
@@ -2679,7 +2679,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                   data-tv-prompt-btn="true"
                   data-tv-focus-inset="true"
                   tabIndex={0}
-                  className="px-5 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/15 text-gray-200 text-sm font-semibold border border-white/15"
+                  className="px-5 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/15 text-gray-200 text-sm font-medium border border-white/15"
                 >
                   {t('start_over')}
                 </button>
@@ -2730,7 +2730,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                 >
                   {/* Single Centered Lightly-Dimmed Translucent Live Bar */}
                   <div
-                    className={`w-full bg-black/45 border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.35)] flex items-center justify-between min-w-0 ${
+                    className={`w-full achour-glass-bar flex items-center justify-between min-w-0 ${
                       isLiveCompact
                         ? 'rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 gap-2 sm:gap-2.5'
                         : 'rounded-3xl px-4 py-3 sm:px-6 sm:py-4.5 gap-3 sm:gap-4'
@@ -2738,7 +2738,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                   >
                     {/* 2. Channel Number */}
                     <div
-                      className={`bg-[var(--theme-primary,#e5a00d)] text-black font-mono font-black shrink-0 shadow-inner ${
+                      className={`achour-glossy-badge font-sans font-semibold tabular-nums shrink-0 ${
                         isLiveCompact
                           ? 'px-2 py-1 sm:px-2.5 sm:py-1 text-xs sm:text-sm rounded-xl'
                           : 'px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-lg rounded-2xl'
@@ -2772,28 +2772,28 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                     {/* 4. Channel Name + EPG Program Name + Start/End + Progress + Next Program */}
                     <div className="flex flex-col flex-1 min-w-0 justify-center">
                       <div className="flex items-center justify-between gap-2.5 min-w-0">
-                        <h2 className={`font-black text-white truncate leading-tight ${isLiveCompact ? 'text-xs sm:text-base' : 'text-base sm:text-2xl'}`}>
+                        <h2 className={`font-semibold achour-glossy-title truncate leading-tight ${isLiveCompact ? 'text-xs sm:text-base' : 'text-base sm:text-2xl'}`}>
                           {activeVod.name || activeVod.title || (isRtl ? 'قناة مباشرة' : 'Live Channel')}
                         </h2>
                         {currentProg?.start && currentProg?.stop && (
-                          <span className={`font-mono font-bold text-zinc-200 whitespace-nowrap shrink-0 ${isLiveCompact ? 'text-[10px] sm:text-xs' : 'text-xs sm:text-base'}`}>
+                          <span className={`font-sans font-normal tabular-nums achour-glossy-info whitespace-nowrap shrink-0 ${isLiveCompact ? 'text-[10px] sm:text-xs' : 'text-xs sm:text-base'}`}>
                             {formatTimeHHMM(currentProg.start)} - {formatTimeHHMM(currentProg.stop)}
                           </span>
                         )}
                       </div>
                       <div className={`flex items-center justify-between gap-2.5 min-w-0 ${isLiveCompact ? 'mt-0.5' : 'mt-1'}`}>
-                        <span className={`font-bold text-zinc-200/95 truncate ${isLiveCompact ? 'text-[11px] sm:text-xs' : 'text-xs sm:text-lg'}`}>
+                        <span className={`font-medium achour-glossy-text truncate ${isLiveCompact ? 'text-[11px] sm:text-xs' : 'text-xs sm:text-lg'}`}>
                           {currentProg?.title || (isRtl ? 'لا تتوفر بيانات برنامج حالية' : 'No program information available')}
                         </span>
                         {nextProg?.title && (
-                          <span className={`hidden sm:inline font-semibold text-zinc-400 truncate max-w-[55%] shrink-0 ${isLiveCompact ? 'text-[11px] sm:text-xs' : 'text-xs sm:text-base'}`}>
+                          <span className={`hidden sm:inline font-normal achour-glossy-info opacity-85 truncate max-w-[55%] shrink-0 ${isLiveCompact ? 'text-[11px] sm:text-xs' : 'text-xs sm:text-base'}`}>
                             {isRtl ? `التالي: ${nextProg.title}` : `Next: ${nextProg.title}`}
                           </span>
                         )}
                       </div>
                       <div className={`w-full bg-white/20 rounded-full overflow-hidden ${isLiveCompact ? 'h-1.5 mt-1' : 'h-2 sm:h-2.5 mt-2'}`}>
                         <div
-                          className="h-full bg-[var(--theme-primary,#e5a00d)] rounded-full transition-all duration-300"
+                          className="h-full bg-gold rounded-full transition-all duration-300"
                           style={{ width: `${currentProg ? (currentProgPercent || 5) : 0}%` }}
                         />
                       </div>
@@ -2801,10 +2801,10 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
 
                     {/* 5. Clock Time & Date inside the bar */}
                     <div className={`flex flex-col items-end shrink-0 text-right ${isLiveCompact ? 'px-1' : 'px-2'}`}>
-                      <span className={`font-mono font-black text-gold leading-tight whitespace-nowrap ${isLiveCompact ? 'text-xs sm:text-sm' : 'text-base sm:text-xl'}`} style={{ color: 'var(--theme-primary)' }}>
+                      <span className={`font-sans font-normal tabular-nums achour-glossy-title leading-tight whitespace-nowrap ${isLiveCompact ? 'text-xs sm:text-sm' : 'text-base sm:text-xl'}`}>
                         {formattedClockTime}
                       </span>
-                      <span className={`font-bold text-gold opacity-85 leading-tight whitespace-nowrap ${isLiveCompact ? 'text-[9px] sm:text-[11px]' : 'text-[11px] sm:text-sm'}`} style={{ color: 'var(--theme-primary)' }}>
+                      <span className={`font-sans font-normal tabular-nums achour-glossy-info leading-tight whitespace-nowrap ${isLiveCompact ? 'text-[9px] sm:text-[11px]' : 'text-[11px] sm:text-sm'}`}>
                         {formattedClockDate}
                       </span>
                     </div>
@@ -2835,9 +2835,9 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                           aria-label={qualityLabel || undefined}
                           className={`${
                             isLiveCompact ? 'w-[68px] sm:w-[86px] text-[10px] sm:text-xs' : 'w-[82px] sm:w-[104px] text-xs sm:text-base'
-                          } font-black shrink-0 font-mono inline-flex items-center justify-center text-center whitespace-nowrap select-none ${
+                          } font-semibold shrink-0 font-sans tabular-nums inline-flex items-center justify-center text-center whitespace-nowrap select-none ${
                             qualityLabel
-                              ? 'text-[var(--theme-primary,#e5a00d)]'
+                              ? 'achour-glossy-text'
                               : 'text-transparent pointer-events-none'
                           }`}
                         >
@@ -2866,7 +2866,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
               }`}
             >
               <div
-                className="w-full bg-black/45 border border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.35)] rounded-3xl px-3.5 py-2.5 flex flex-col gap-2"
+                className="w-full achour-glass-bar rounded-3xl px-3.5 py-2.5 flex flex-col gap-2"
               >
                 {/* Top Info Strip: Poster + Title/Episode + Clock/Date */}
                 <div className="flex items-center gap-3 min-w-0">
@@ -2889,25 +2889,36 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                   {/* 2. Title + Season/Episode/Title + Subtitle Status */}
                   <div className="flex-1 min-w-0 flex flex-col justify-center">
                     <div className="flex items-center justify-between gap-2 min-w-0">
-                      <h2 className="text-xs sm:text-sm font-black text-white truncate leading-tight">
-                        {displayTitle}
-                      </h2>
+                      <div className="flex items-center gap-2 min-w-0">
+                        <h2 className="text-xs sm:text-sm font-semibold achour-glossy-title truncate leading-tight">
+                          {displayTitle}
+                        </h2>
+                        {(() => {
+                          const qBadge = formatVideoResolution(realResolution) || inferQualityFromMedia(activeVodRef.current);
+                          if (!qBadge) return null;
+                          return (
+                            <span className="px-1.5 py-0.5 rounded achour-glossy-surface border border-gold/45 text-[10px] font-sans font-semibold tabular-nums tracking-wide shrink-0">
+                              <span className="achour-glossy-text">{qBadge}</span>
+                            </span>
+                          );
+                        })()}
+                      </div>
                       <div className="flex flex-col items-end shrink-0 text-right">
-                        <span className="text-[11px] font-mono font-black text-gold leading-tight whitespace-nowrap" style={{ color: 'var(--theme-primary)' }}>
+                        <span className="text-[11px] font-sans font-normal tabular-nums achour-glossy-title leading-tight whitespace-nowrap">
                           {formattedClockTime}
                         </span>
-                        <span className="text-[9px] font-bold text-gold opacity-85 leading-tight whitespace-nowrap" style={{ color: 'var(--theme-primary)' }}>
+                        <span className="text-[9px] font-sans font-normal tabular-nums achour-glossy-info leading-tight whitespace-nowrap">
                           {formattedClockDate}
                         </span>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between gap-2 mt-0.5 min-w-0">
-                      <span className="text-[11px] font-bold text-zinc-200/90 truncate">
+                      <span className="text-[11px] font-medium achour-glossy-text truncate">
                         {displaySeriesSubline}
                       </span>
                       {subtitles.length === 0 && (
-                        <span className="text-[10px] font-bold text-zinc-300/80 whitespace-nowrap shrink-0">
+                        <span className="text-[10px] font-normal achour-glossy-info opacity-85 whitespace-nowrap shrink-0">
                           {isRtl ? 'الترجمة غير متوفرة' : 'Subtitles unavailable'}
                         </span>
                       )}
@@ -2915,7 +2926,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
 
                     {/* 3. Progress Bar + Elapsed / Total / Remaining Time */}
                     <div className="flex items-center gap-2 mt-1.5 w-full">
-                      <span className="text-[10px] sm:text-xs font-mono font-bold text-white shrink-0">
+                      <span className="text-[10px] sm:text-xs font-sans font-normal tabular-nums achour-glossy-info shrink-0">
                         {formatTime(currentTime)}
                       </span>
                       <div className="relative flex-1 flex items-center">
@@ -2933,10 +2944,10 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                           }}
                         />
                       </div>
-                      <span className="text-[10px] sm:text-xs font-mono font-bold text-zinc-300 shrink-0">
+                      <span className="text-[10px] sm:text-xs font-sans font-normal tabular-nums text-zinc-200 shrink-0">
                         {formatTime(duration)}
                       </span>
-                      <span className="text-[10px] sm:text-xs font-mono font-bold text-[var(--theme-primary,#e5a00d)] shrink-0">
+                      <span className="text-[10px] sm:text-xs font-sans font-normal tabular-nums achour-glossy-text shrink-0">
                         -{formatTime(Math.max(0, duration - currentTime))}
                       </span>
                     </div>
@@ -2987,11 +2998,11 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                       data-tv-vod-item="rewind"
                       data-tv-focus-inset="true"
                       tabIndex={0}
-                      className="h-9 px-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-bold flex items-center gap-1.5 transition-transform active:scale-90 focus:outline-none whitespace-nowrap"
+                      className="h-9 px-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-medium flex items-center gap-1.5 transition-transform active:scale-90 focus:outline-none whitespace-nowrap"
                       title={`-${seekStepSeconds}s`}
                     >
                       <RotateCcw className="w-4 h-4" />
-                      <span>-{seekStepSeconds}s</span>
+                      <span className="font-sans tabular-nums">-{seekStepSeconds}s</span>
                     </button>
 
                     {/* Play / Pause Button */}
@@ -3001,7 +3012,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                       data-tv-vod-item="play"
                       data-tv-focus-inset="true"
                       tabIndex={0}
-                      className="vod-bottom-play-btn w-11 h-11 rounded-full bg-[var(--theme-primary,#e5a00d)] hover:brightness-110 text-black flex items-center justify-center font-bold shadow-lg transition-transform active:scale-90 focus:outline-none shrink-0"
+                      className="vod-bottom-play-btn w-11 h-11 rounded-full achour-glossy-pill hover:brightness-110 flex items-center justify-center font-medium transition-transform active:scale-90 focus:outline-none shrink-0"
                       title={isPlaying ? (isRtl ? 'إيقاف مؤقت' : 'Pause') : (isRtl ? 'تشغيل' : 'Play')}
                     >
                       {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current ml-0.5" />}
@@ -3014,10 +3025,10 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                       data-tv-vod-item="forward"
                       data-tv-focus-inset="true"
                       tabIndex={0}
-                      className="h-9 px-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-bold flex items-center gap-1.5 transition-transform active:scale-90 focus:outline-none whitespace-nowrap"
+                      className="h-9 px-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-medium flex items-center gap-1.5 transition-transform active:scale-90 focus:outline-none whitespace-nowrap"
                       title={`+${seekStepSeconds}s`}
                     >
-                      <span>+{seekStepSeconds}s</span>
+                      <span className="font-sans tabular-nums">+{seekStepSeconds}s</span>
                       <RotateCw className="w-4 h-4" />
                     </button>
                   </div>
@@ -3058,7 +3069,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                       data-tv-vod-item="speed"
                       data-tv-focus-inset="true"
                       tabIndex={0}
-                      className="h-8 px-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-[11px] font-mono font-bold flex items-center justify-center transition-colors focus:outline-none shrink-0 whitespace-nowrap"
+                      className="h-8 px-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-[11px] font-sans font-medium tabular-nums flex items-center justify-center transition-colors focus:outline-none shrink-0 whitespace-nowrap"
                       title={t('speed')}
                     >
                       {playbackSpeed}x
@@ -3106,9 +3117,9 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                 className="vod-popup-container achour-glass-modal border-gold/40 rounded-2xl p-5 w-[min(92vw,600px)] max-h-[82vh] flex flex-col gap-3 animate-in fade-in zoom-in-95 duration-75"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-2.5 shrink-0">
-                  <h4 className="text-sm font-bold text-gold flex items-center gap-2">
-                    <Languages className="w-4 h-4" />
-                    {t('select_audio')}
+                  <h4 className="text-sm font-semibold text-gold flex items-center gap-2">
+                    <Languages className="w-4 h-4 shrink-0" />
+                    <span className="achour-glossy-title">{t('select_audio')}</span>
                   </h4>
                   <button
                     onClick={() => setActivePopup('none')}
@@ -3129,16 +3140,16 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                         tabIndex={0}
                         className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors border ${
                           selectedAudioTrack === tr.id
-                            ? 'bg-gold/20 text-gold border-gold/40'
+                            ? 'achour-glossy-surface border-gold/45 text-gold'
                             : 'text-gray-200 border-white/10 bg-white/[0.04] hover:bg-white/[0.08]'
                         }`}
                       >
-                        <span className="truncate">{tr.name}</span>
+                        <span className={`truncate ${selectedAudioTrack === tr.id ? 'achour-glossy-text' : ''}`}>{tr.name}</span>
                         {selectedAudioTrack === tr.id && <Check className="w-4 h-4 shrink-0" />}
                       </button>
                     ))
                   ) : (
-                    <div className="sm:col-span-2 p-4 text-center text-xs text-gray-400">
+                    <div className="sm:col-span-2 p-4 text-center text-xs font-normal text-gray-400">
                       {isRtl ? 'لا تتوفر مسارات صوت متعددة' : 'No multiple audio tracks available'}
                     </div>
                   )}
@@ -3153,9 +3164,9 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                 className="vod-popup-container achour-glass-modal border-gold/40 rounded-2xl p-5 w-[min(92vw,600px)] max-h-[82vh] flex flex-col gap-3 animate-in fade-in zoom-in-95 duration-75"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-2.5 shrink-0">
-                  <h4 className="text-sm font-bold text-gold flex items-center gap-2">
-                    <SubtitleIcon className="w-4 h-4" />
-                    {t('sub_settings')}
+                  <h4 className="text-sm font-semibold text-gold flex items-center gap-2">
+                    <SubtitleIcon className="w-4 h-4 shrink-0" />
+                    <span className="achour-glossy-title">{t('sub_settings')}</span>
                   </h4>
                   <button
                     onClick={() => setActivePopup('none')}
@@ -3168,7 +3179,7 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                 </div>
 
                 {subtitles.length === 0 ? (
-                  <div className="p-4 text-center text-xs font-bold text-gray-300 bg-white/5 rounded-xl border border-white/10">
+                  <div className="p-4 text-center text-xs font-medium text-gray-300 bg-white/5 rounded-xl border border-white/10">
                     {isRtl ? 'الترجمة غير متوفرة' : 'Subtitles unavailable'}
                   </div>
                 ) : (
@@ -3180,11 +3191,11 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                         tabIndex={0}
                         className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors border ${
                           selectedSubtitle === -1
-                            ? 'bg-gold/20 text-gold border-gold/40'
+                            ? 'achour-glossy-surface border-gold/45 text-gold'
                             : 'text-gray-200 border-white/10 bg-white/[0.04] hover:bg-white/[0.08]'
                         }`}
                       >
-                        <span>{t('off')}</span>
+                        <span className={selectedSubtitle === -1 ? 'achour-glossy-text' : ''}>{t('off')}</span>
                         {selectedSubtitle === -1 && <Check className="w-4 h-4 shrink-0" />}
                       </button>
 
@@ -3196,11 +3207,11 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                           tabIndex={0}
                           className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors border ${
                             selectedSubtitle === sub.id
-                              ? 'bg-gold/20 text-gold border-gold/40'
+                              ? 'achour-glossy-surface border-gold/45 text-gold'
                               : 'text-gray-200 border-white/10 bg-white/[0.04] hover:bg-white/[0.08]'
                           }`}
                         >
-                          <span className="truncate">{sub.name}</span>
+                          <span className={`truncate ${selectedSubtitle === sub.id ? 'achour-glossy-text' : ''}`}>{sub.name}</span>
                           {selectedSubtitle === sub.id && <Check className="w-4 h-4 shrink-0" />}
                         </button>
                       ))}
@@ -3210,10 +3221,10 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                       onClick={() => setActivePopup('subtitle-settings')}
                       data-tv-focus-inset="true"
                       tabIndex={0}
-                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/15 text-xs font-semibold text-gold border border-white/15 shrink-0"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/15 text-xs font-medium text-gold border border-white/15 shrink-0"
                     >
-                      <Settings className="w-3.5 h-3.5" />
-                      {isRtl ? 'تخصيص الحجم / اللون / المزامنة' : 'Customize Size / Color / Sync'}
+                      <Settings className="w-3.5 h-3.5 shrink-0" />
+                      <span className="achour-glossy-text">{isRtl ? 'تخصيص الحجم / اللون / المزامنة' : 'Customize Size / Color / Sync'}</span>
                     </button>
                   </>
                 )}
@@ -3227,9 +3238,9 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                 className="vod-popup-container achour-glass-modal border-gold/40 rounded-2xl p-5 w-[min(92vw,640px)] max-h-[82vh] overflow-y-auto no-scrollbar flex flex-col gap-3.5 animate-in fade-in zoom-in-95 duration-75"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-2.5 shrink-0">
-                  <h4 className="text-sm font-bold text-gold flex items-center gap-2">
-                    <Settings className="w-4 h-4" />
-                    {isRtl ? 'تخصيص مظهر الترجمة' : 'Customize Subtitle Style'}
+                  <h4 className="text-sm font-semibold text-gold flex items-center gap-2">
+                    <Settings className="w-4 h-4 shrink-0" />
+                    <span className="achour-glossy-title">{isRtl ? 'تخصيص مظهر الترجمة' : 'Customize Subtitle Style'}</span>
                   </h4>
                   <button
                     onClick={() => setActivePopup('subtitles')}
@@ -3249,18 +3260,18 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                         onClick={() => handleSubSyncChange(-0.5)}
                         data-tv-focus-inset="true"
                         tabIndex={0}
-                        className="px-3 py-1 bg-white/[0.08] hover:bg-white/15 rounded-lg text-xs font-bold text-gold"
+                        className="px-3 py-1 bg-white/[0.08] hover:bg-white/15 rounded-lg text-xs font-medium"
                       >
-                        -0.5s
+                        <span className="achour-glossy-text font-sans tabular-nums">-0.5s</span>
                       </button>
-                      <span className="text-xs font-mono font-bold text-white">{subSyncOffset > 0 ? `+${subSyncOffset}` : subSyncOffset}s</span>
+                      <span className="text-xs font-sans font-normal tabular-nums achour-glossy-info">{subSyncOffset > 0 ? `+${subSyncOffset}` : subSyncOffset}s</span>
                       <button
                         onClick={() => handleSubSyncChange(0.5)}
                         data-tv-focus-inset="true"
                         tabIndex={0}
-                        className="px-3 py-1 bg-white/[0.08] hover:bg-white/15 rounded-lg text-xs font-bold text-gold"
+                        className="px-3 py-1 bg-white/[0.08] hover:bg-white/15 rounded-lg text-xs font-medium"
                       >
-                        +0.5s
+                        <span className="achour-glossy-text font-sans tabular-nums">+0.5s</span>
                       </button>
                     </div>
                   </div>
@@ -3274,9 +3285,9 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                           onClick={() => setSubFontSize(sz)}
                           data-tv-focus-inset="true"
                           tabIndex={0}
-                          className={`py-2 rounded-lg text-xs font-bold uppercase border ${
+                          className={`py-2 rounded-lg text-xs font-medium uppercase border ${
                             subFontSize === sz
-                              ? 'bg-gold text-black border-gold'
+                              ? 'achour-glossy-pill border-gold'
                               : 'bg-white/[0.08] text-gray-300 border-white/15'
                           }`}
                         >
@@ -3322,9 +3333,9 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                           onClick={() => setSubBg(bg.id as any)}
                           data-tv-focus-inset="true"
                           tabIndex={0}
-                          className={`py-2 rounded-lg text-xs font-bold border ${
+                          className={`py-2 rounded-lg text-xs font-medium border ${
                             subBg === bg.id
-                              ? 'bg-gold text-black border-gold'
+                              ? 'achour-glossy-pill border-gold'
                               : 'bg-white/[0.08] text-gray-300 border-white/15'
                           }`}
                         >
@@ -3344,9 +3355,9 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                 className="vod-popup-container achour-glass-modal border-gold/40 rounded-2xl p-5 w-[min(92vw,580px)] max-h-[82vh] flex flex-col gap-3 animate-in fade-in zoom-in-95 duration-75"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-2.5 shrink-0">
-                  <h4 className="text-sm font-bold text-gold flex items-center gap-2">
-                    <Zap className="w-4 h-4" />
-                    {t('quality')}
+                  <h4 className="text-sm font-semibold text-gold flex items-center gap-2">
+                    <Zap className="w-4 h-4 shrink-0" />
+                    <span className="achour-glossy-title">{t('quality')}</span>
                   </h4>
                   <button
                     onClick={() => setActivePopup('none')}
@@ -3365,11 +3376,11 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                     tabIndex={0}
                     className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors border ${
                       selectedQuality === -1
-                        ? 'bg-gold/20 text-gold border-gold/40'
+                        ? 'achour-glossy-surface border-gold/45 text-gold'
                         : 'text-gray-200 border-white/10 bg-white/[0.04] hover:bg-white/[0.08]'
                     }`}
                   >
-                    <span>{isRtl ? 'تلقائي' : 'Auto'}</span>
+                    <span className={selectedQuality === -1 ? 'achour-glossy-text' : ''}>{isRtl ? 'تلقائي' : 'Auto'}</span>
                     {selectedQuality === -1 && <Check className="w-4 h-4 shrink-0" />}
                   </button>
 
@@ -3381,11 +3392,11 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                       tabIndex={0}
                       className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors border ${
                         selectedQuality === q.id
-                          ? 'bg-gold/20 text-gold border-gold/40'
+                          ? 'achour-glossy-surface border-gold/45 text-gold'
                           : 'text-gray-200 border-white/10 bg-white/[0.04] hover:bg-white/[0.08]'
                       }`}
                     >
-                      <span>{q.name}</span>
+                      <span className={selectedQuality === q.id ? 'achour-glossy-text' : ''}>{q.name}</span>
                       {selectedQuality === q.id && <Check className="w-4 h-4 shrink-0" />}
                     </button>
                   ))}
@@ -3400,9 +3411,9 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                 className="vod-popup-container achour-glass-modal border-gold/40 rounded-2xl p-5 w-[min(92vw,580px)] max-h-[82vh] flex flex-col gap-3 animate-in fade-in zoom-in-95 duration-75"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-2.5 shrink-0">
-                  <h4 className="text-sm font-bold text-gold flex items-center gap-2">
-                    <Maximize2 className="w-4 h-4" />
-                    {t('aspect_ratio')}
+                  <h4 className="text-sm font-semibold text-gold flex items-center gap-2">
+                    <Maximize2 className="w-4 h-4 shrink-0" />
+                    <span className="achour-glossy-title">{t('aspect_ratio')}</span>
                   </h4>
                   <button
                     onClick={() => setActivePopup('none')}
@@ -3436,11 +3447,11 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                       tabIndex={0}
                       className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors border ${
                         aspectRatio === mode.id
-                          ? 'bg-gold/20 text-gold border-gold/40'
+                          ? 'achour-glossy-surface border-gold/45 text-gold'
                           : 'text-gray-200 border-white/10 bg-white/[0.04] hover:bg-white/[0.08]'
                       }`}
                     >
-                      <span>{mode.label}</span>
+                      <span className={aspectRatio === mode.id ? 'achour-glossy-text' : ''}>{mode.label}</span>
                       {aspectRatio === mode.id && <Check className="w-4 h-4 shrink-0" />}
                     </button>
                   ))}
@@ -3455,9 +3466,9 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                 className="vod-popup-container achour-glass-modal border-gold/40 rounded-2xl p-5 w-[min(92vw,580px)] max-h-[82vh] flex flex-col gap-3 animate-in fade-in zoom-in-95 duration-75"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-2.5 shrink-0">
-                  <h4 className="text-sm font-bold text-gold flex items-center gap-2">
-                    <Sliders className="w-4 h-4" />
-                    {t('speed')}
+                  <h4 className="text-sm font-semibold text-gold flex items-center gap-2">
+                    <Sliders className="w-4 h-4 shrink-0" />
+                    <span className="achour-glossy-title">{t('speed')}</span>
                   </h4>
                   <button
                     onClick={() => setActivePopup('none')}
@@ -3486,11 +3497,11 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                       tabIndex={0}
                       className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors border ${
                         playbackSpeed === speed
-                          ? 'bg-gold/20 text-gold border-gold/40'
+                          ? 'achour-glossy-surface border-gold/45 text-gold'
                           : 'text-gray-200 border-white/10 bg-white/[0.04] hover:bg-white/[0.08]'
                       }`}
                     >
-                      <span>{speed === 1 ? (isRtl ? 'سرعة طبيعية (1.0x)' : 'Normal (1.0x)') : `${speed}x`}</span>
+                      <span className={`font-sans tabular-nums ${playbackSpeed === speed ? 'achour-glossy-text' : ''}`}>{speed === 1 ? (isRtl ? 'سرعة طبيعية (1.0x)' : 'Normal (1.0x)') : `${speed}x`}</span>
                       {playbackSpeed === speed && <Check className="w-4 h-4 shrink-0" />}
                     </button>
                   ))}
@@ -3505,9 +3516,9 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                 className="vod-popup-container achour-glass-modal border-gold/40 rounded-2xl p-5 w-[min(92vw,580px)] max-h-[82vh] flex flex-col gap-3 animate-in fade-in zoom-in-95 duration-75"
               >
                 <div className="flex items-center justify-between border-b border-white/10 pb-2.5 shrink-0">
-                  <h4 className="text-sm font-bold text-gold flex items-center gap-2">
-                    <Clock className="w-4 h-4" />
-                    {t('sleep_timer')}
+                  <h4 className="text-sm font-semibold text-gold flex items-center gap-2">
+                    <Clock className="w-4 h-4 shrink-0" />
+                    <span className="achour-glossy-title">{t('sleep_timer')}</span>
                   </h4>
                   <button
                     onClick={() => setActivePopup('none')}
@@ -3537,11 +3548,11 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                       tabIndex={0}
                       className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors border ${
                         sleepTimerMinutes === opt.min
-                          ? 'bg-gold/20 text-gold border-gold/40'
+                          ? 'achour-glossy-surface border-gold/45 text-gold'
                           : 'text-gray-200 border-white/10 bg-white/[0.04] hover:bg-white/[0.08]'
                       }`}
                     >
-                      <span>{opt.label}</span>
+                      <span className={sleepTimerMinutes === opt.min ? 'achour-glossy-text' : ''}>{opt.label}</span>
                       {sleepTimerMinutes === opt.min && <Check className="w-4 h-4 shrink-0" />}
                     </button>
                   ))}
@@ -3556,9 +3567,9 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                 className="vod-popup-container achour-glass-modal border-gold/40 rounded-2xl p-5 w-[min(92vw,680px)] max-h-[82vh] flex flex-col gap-3 animate-in fade-in zoom-in-95 duration-75"
               >
                 <div className="flex items-center justify-between pb-3 border-b border-white/10 shrink-0">
-                  <h3 className="text-base font-bold text-white flex items-center gap-2">
-                    <ListVideo className="w-5 h-5 text-gold" />
-                    {t('episodes')}
+                  <h3 className="text-base font-semibold text-gold flex items-center gap-2">
+                    <ListVideo className="w-5 h-5 shrink-0" />
+                    <span className="achour-glossy-title">{t('episodes')}</span>
                   </h3>
                   <button
                     onClick={() => setActivePopup('none')}
@@ -3589,20 +3600,20 @@ export const VodPlayerModal: React.FC<VodPlayerModalProps> = ({
                         tabIndex={0}
                         className={`w-full p-3 rounded-xl border text-start transition-all flex items-center justify-between gap-3 ${
                           isCurrent
-                            ? 'bg-gold/20 border-gold text-gold'
+                            ? 'achour-glossy-surface border-gold'
                             : 'bg-white/[0.05] border-white/10 text-gray-200 hover:bg-white/10'
                         }`}
                       >
                         <div className="min-w-0">
-                          <div className="text-xs font-bold truncate">
+                          <div className={`text-xs font-medium truncate ${isCurrent ? 'achour-glossy-text' : ''}`}>
                             S{ep.season_num || 1} E{ep.episode_num || idx + 1}: {ep.title || ep.name || `الحلقة ${idx + 1}`}
                           </div>
                           {ep.duration && (
-                            <div className="text-[10px] text-gray-400 mt-0.5">{ep.duration}</div>
+                            <div className="text-[10px] font-sans font-normal tabular-nums achour-glossy-info mt-0.5">{ep.duration}</div>
                           )}
                         </div>
                         {isCurrent ? (
-                          <div className="w-7 h-7 rounded-full bg-gold text-black flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-full achour-glossy-pill flex items-center justify-center shrink-0">
                             <Play className="w-4 h-4 fill-current" />
                           </div>
                         ) : (

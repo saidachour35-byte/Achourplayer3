@@ -346,12 +346,12 @@ const LiveChannelRow: React.FC<{
         }}
         className={`w-full h-full flex items-center gap-3 px-3 py-2 rounded-2xl transition-colors relative group cursor-pointer outline-none bg-transparent ${
           isSelected
-            ? 'text-gold font-bold'
-            : 'text-zinc-300 hover:text-white'
+            ? 'achour-glossy-surface font-semibold'
+            : 'text-zinc-300 hover:text-white font-medium'
         } ${isRtl ? 'text-right' : 'text-left'}`}
         title={mediaType === 'live' ? (isRtl ? 'اضغط مطولاً أو انقر بالزر الأيمن لنقل القناة أو تغيير رقمها' : 'Long press or right click to reorder channel position') : undefined}
       >
-        <span className="w-9 text-xs sm:text-sm text-gold font-mono font-black shrink-0 text-center select-none" tabIndex={-1}>
+        <span className={`w-9 text-xs sm:text-sm font-sans tabular-nums shrink-0 text-center select-none ${isSelected ? 'font-semibold achour-glossy-text' : 'font-normal achour-glossy-info'}`} tabIndex={-1}>
           {idx + 1}
         </span>
 
@@ -368,8 +368,8 @@ const LiveChannelRow: React.FC<{
         <div className="flex flex-col flex-1 min-w-0 justify-center py-0.5">
           <div className="flex items-center gap-1.5 min-w-0">
             <span
-              className={`text-sm sm:text-base font-bold truncate leading-tight ${
-                isSelected ? 'text-gold' : 'text-white group-hover:text-gold'
+              className={`text-sm sm:text-base truncate leading-tight ${
+                isSelected ? 'font-semibold achour-glossy-text' : 'font-medium text-white group-hover:text-gold'
               }`}
               title={ch.name}
             >
@@ -382,7 +382,7 @@ const LiveChannelRow: React.FC<{
             const lowerCat = rawCat.toLowerCase();
             const isSynthetic = !rawCat || lowerCat === 'general' || lowerCat === 'uncategorized' || rawCat === 'عام' || lowerCat === 'عام (general)';
             return !isSynthetic ? (
-              <span className="text-[11px] font-semibold text-gold/80 truncate leading-none mt-1">
+              <span className="text-[11px] font-normal achour-glossy-info truncate leading-none mt-1">
                 {rawCat}
               </span>
             ) : null;
@@ -450,8 +450,8 @@ const VodListRow: React.FC<{
         }}
         className={`w-full h-full flex items-center gap-3 px-3 py-1.5 rounded-2xl transition-colors relative group cursor-pointer outline-none bg-transparent ${
           isSelected
-            ? 'text-gold font-bold'
-            : 'text-zinc-200 hover:text-white'
+            ? 'achour-glossy-surface font-semibold'
+            : 'text-zinc-200 hover:text-white font-medium'
         } ${isRtl ? 'text-right' : 'text-left'}`}
       >
         <div className="w-11 h-16 rounded-xl bg-transparent flex items-center justify-center overflow-hidden shrink-0">
@@ -465,31 +465,31 @@ const VodListRow: React.FC<{
         </div>
 
         <div className="flex flex-col flex-1 min-w-0 justify-center gap-1">
-          <span className={`text-sm sm:text-base font-bold truncate leading-tight ${isSelected ? 'text-gold' : 'text-white group-hover:text-gold'}`}>
+          <span className={`text-sm sm:text-base truncate leading-tight ${isSelected ? 'font-semibold achour-glossy-text' : 'font-medium text-white group-hover:text-gold'}`}>
             {ch.name}
           </span>
-          <div className="flex items-center flex-wrap gap-2 text-[11px] font-medium text-zinc-400">
+          <div className="flex items-center flex-wrap gap-2 text-[11px] font-normal text-zinc-400">
             {ch.category_name &&
   !['general', 'uncategorized', 'عام', 'عام (general)'].includes(
     String(ch.category_name).trim().toLowerCase()
   ) && (
-    <span className="text-gold/90 truncate max-w-[180px]">
+    <span className="achour-glossy-info truncate max-w-[180px]">
       {ch.category_name}
     </span>
 )}
             {ratingVal && (
-              <span className="text-gold flex items-center gap-1 font-mono">
+              <span className="text-gold flex items-center gap-1 font-sans tabular-nums">
                 <Star size={10} className="fill-gold" />
-                {ratingVal}
+                <span className="achour-glossy-info">{ratingVal}</span>
               </span>
             )}
             {yearVal && (
-              <span className="text-zinc-300 font-mono">
+              <span className="font-sans tabular-nums achour-glossy-info">
                 {yearVal}
               </span>
             )}
             {durationVal && (
-              <span className="text-zinc-300 font-mono">
+              <span className="font-sans tabular-nums achour-glossy-info">
                 {durationVal}
               </span>
             )}
@@ -608,7 +608,7 @@ const VodPosterCard: React.FC<{
 
       {showTitle && (
         <div className="h-[40px] w-full shrink-0 px-2 flex items-center justify-center bg-transparent text-center">
-          <span className="text-[11px] sm:text-xs font-semibold text-zinc-100 line-clamp-2 leading-tight w-full">
+          <span className={`text-[11px] sm:text-xs line-clamp-2 leading-tight w-full ${isSelected ? 'font-semibold achour-glossy-text' : 'font-medium text-zinc-100'}`}>
             {ch.name}
           </span>
         </div>

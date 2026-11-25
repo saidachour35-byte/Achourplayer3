@@ -69,11 +69,18 @@ const ClockDisplay = React.memo(({ settings, isRtl }: { settings: AppSettings, i
   }, [currentTime, settings.language]);
 
   return (
-    <div className="flex flex-col items-end text-right min-w-0">
-      <span className="text-lg sm:text-3xl md:text-4xl font-black text-gold font-mono tracking-wider leading-none [text-shadow:0_2px_6px_rgba(0,0,0,0.75)]">
-        {formattedClock}
-      </span>
-      <span className="text-[10px] sm:text-sm font-bold text-gold opacity-85 capitalize mt-1 tracking-tight max-w-full truncate">
+    <div className="achour-header-glass-card rounded-2xl px-3 sm:px-4 py-2 flex flex-col items-end text-right min-w-0">
+      <div className="flex items-center gap-2 min-w-0">
+        <Clock
+          size={18}
+          className="shrink-0 hidden sm:block drop-shadow-[0_0_8px_var(--theme-glow)]"
+          style={{ color: 'var(--theme-primary, #d4af37)' }}
+        />
+        <span className="text-lg sm:text-2xl md:text-3xl font-semibold font-sans tabular-nums achour-glossy-title tracking-wider leading-none">
+          {formattedClock}
+        </span>
+      </div>
+      <span className="text-[10px] sm:text-xs font-normal font-sans achour-glossy-info capitalize mt-1 tracking-tight max-w-full truncate">
         {formattedDate}
       </span>
     </div>
@@ -903,73 +910,67 @@ if (currentView === 'settings') return (
       <div className={`relative h-full w-full bg-transparent flex flex-col select-none overflow-hidden ${isRtl ? 'text-right font-cairo' : 'text-left font-sans'}`}>
 
 
-      {/* Top Header Bar - Single Top-Aligned Row: Left (Subscription Expiry), Center (App Name & Slightly Enlarged Logo), Right (Clock & Date) */}
-      <div 
+      {/* Top Header Bar: Left (Subscription Glass Card), Center (Glowing Brand Title & Beam), Right (Clock & Date Glass Card) */}
+      <div
         dir="ltr"
-        className="relative z-20 grid grid-cols-3 items-start justify-between gap-2 sm:gap-3 px-3 sm:px-5 pt-3 mb-2 shrink-0 w-full max-w-7xl mx-auto"
+        className="relative z-20 grid grid-cols-3 items-start justify-between gap-2 sm:gap-4 px-3 sm:px-6 pt-3 sm:pt-4 mb-2 shrink-0 w-full max-w-7xl mx-auto"
       >
-        {/* 1. Left Side: Subscription Expiry (No Border/Frame, Theme-colored Active label) */}
+        {/* 1. Left Side: Subscription Expiry Glass Capsule */}
         <div className="flex items-start justify-start min-w-0">
           {activePlaylistData ? (
-            <div 
+            <div
               dir={isRtl ? 'rtl' : 'ltr'}
-              className={`py-1 flex items-center gap-2 sm:gap-2.5 max-w-full transition-colors ${
-                parsedSubscription?.isExpired ? 'text-red-200' : 'text-gold'
-              }`}
+              className="achour-header-glass-card rounded-2xl px-3 sm:px-4 py-2 flex flex-col gap-1 max-w-full transition-colors"
             >
-              <div className={`hidden sm:flex shrink-0 ${
-                parsedSubscription?.isExpired ? 'text-red-400' : 'text-gold'
-              }`}
-              style={!parsedSubscription?.isExpired ? { color: 'var(--theme-primary)' } : undefined}>
-                <Calendar size={18} />
-              </div>
-              <div className="flex flex-col min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span
-                    className={`text-[11px] sm:text-sm font-medium truncate max-w-[90px] sm:max-w-[180px] ${
-                      parsedSubscription?.isExpired ? 'text-red-200' : 'text-gold'
-                    }`}
-                    style={!parsedSubscription?.isExpired ? { color: 'var(--theme-primary)' } : undefined}
-                  >
-                    {activePlaylistData?.name || t('active_subscription')}
-                  </span>
-                  {parsedSubscription && (
-                    <span
-                      className={`text-[9px] sm:text-[10px] font-bold font-mono shrink-0 ${
-                        parsedSubscription.isExpired ? 'text-red-300' : 'text-gold'
-                      }`}
-                      style={!parsedSubscription.isExpired ? { color: 'var(--theme-primary)' } : undefined}
-                    >
-                      {parsedSubscription.isExpired ? t('expired') : t('active')}
-                    </span>
-                  )}
-                </div>
-                <div
-                  className={`flex items-center gap-1 text-[10px] sm:text-xs font-mono truncate ${
-                    parsedSubscription?.isExpired ? 'text-red-300' : 'text-gold/90'
+              <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                <CheckCircle2
+                  size={16}
+                  className={`shrink-0 ${
+                    parsedSubscription?.isExpired
+                      ? 'text-red-400'
+                      : 'text-emerald-400 drop-shadow-[0_0_6px_rgba(52,211,153,0.75)]'
+                  }`}
+                />
+                <span
+                  className={`text-[11px] sm:text-sm font-semibold font-sans truncate max-w-[105px] sm:max-w-[190px] ${
+                    parsedSubscription?.isExpired ? 'text-red-200' : 'achour-glossy-text'
                   }`}
                 >
+                  {activePlaylistData?.name || t('active_subscription')}
+                </span>
+                {parsedSubscription && (
                   <span
-                    className={parsedSubscription?.isExpired ? 'text-red-300' : 'text-gold'}
-                    style={!parsedSubscription?.isExpired ? { color: 'var(--theme-primary)' } : undefined}
+                    className={`text-[9px] sm:text-[10px] font-medium font-sans shrink-0 ${
+                      parsedSubscription.isExpired ? 'text-red-300' : 'achour-glossy-info opacity-90'
+                    }`}
                   >
-                    {t('expire_short')}:
+                    {parsedSubscription.isExpired ? t('expired') : t('active')}
                   </span>
-                  <strong
-                    className={`${parsedSubscription?.isExpired ? 'text-red-200' : 'text-gold'} font-medium truncate`}
-                    style={!parsedSubscription?.isExpired ? { color: 'var(--theme-primary)' } : undefined}
-                  >
-                    {parsedSubscription ? parsedSubscription.formattedDate : t('per_link_lifetime')}
-                  </strong>
-                  {parsedSubscription && !parsedSubscription.isExpired && parsedSubscription.daysRemaining !== null && parsedSubscription.daysRemaining < 999 && (
-                    <span
-                      className="text-gold/90 font-medium text-[10px] sm:text-[11px] shrink-0"
-                      style={{ color: 'var(--theme-primary)' }}
-                    >
-                      {parsedSubscription.daysRemaining} {t('day_short')}
-                    </span>
-                  )}
-                </div>
+                )}
+              </div>
+              <div
+                className={`flex items-center gap-1.5 text-[10px] sm:text-xs font-normal font-sans tabular-nums truncate ${
+                  parsedSubscription?.isExpired ? 'text-red-300' : ''
+                }`}
+              >
+                <Calendar
+                  size={13}
+                  className="hidden sm:block shrink-0"
+                  style={{ color: parsedSubscription?.isExpired ? '#f87171' : 'var(--theme-primary, #d4af37)' }}
+                />
+                <span className={parsedSubscription?.isExpired ? 'text-red-300' : 'achour-glossy-info'}>
+                  {t('expire_short')}:
+                </span>
+                <span
+                  className={`${parsedSubscription?.isExpired ? 'text-red-200' : 'achour-glossy-info'} font-normal truncate`}
+                >
+                  {parsedSubscription ? parsedSubscription.formattedDate : t('per_link_lifetime')}
+                </span>
+                {parsedSubscription && !parsedSubscription.isExpired && parsedSubscription.daysRemaining !== null && parsedSubscription.daysRemaining < 999 && (
+                  <span className="achour-glossy-text font-medium text-[10px] sm:text-[11px] shrink-0">
+                    ({parsedSubscription.daysRemaining} {t('day_short')})
+                  </span>
+                )}
               </div>
             </div>
           ) : (
@@ -977,14 +978,15 @@ if (currentView === 'settings') return (
           )}
         </div>
 
-        {/* App name only: the brand artwork is reserved for the splash screen */}
-        <div dir="ltr" className="flex items-center justify-center min-w-0 pt-0.5">
-          <h1 className="text-sm sm:text-xl md:text-2xl font-bold text-gold tracking-wider uppercase leading-none [text-shadow:0_2px_6px_rgba(0,0,0,0.75)] whitespace-nowrap">
+        {/* 2. Center Brand: 3D Glossy Neon Title + Horizontal Glowing Beam */}
+        <div dir="ltr" className="flex flex-col items-center justify-center min-w-0 pt-1">
+          <h1 className="text-sm sm:text-xl md:text-2xl font-semibold font-sans achour-brand-neon-title uppercase leading-none whitespace-nowrap">
             ACHOUR PLAYER
           </h1>
+          <div className="achour-brand-light-flare" aria-hidden="true" />
         </div>
 
-        {/* 3. Right Side: Clock & Date */}
+        {/* 3. Right Side: Clock & Date Glass Capsule */}
         <div className="flex items-start justify-end gap-2 sm:gap-3 min-w-0">
           <ClockDisplay settings={settings} isRtl={isRtl} />
           {/* Hidden focus buffer */}
@@ -1004,11 +1006,11 @@ if (currentView === 'settings') return (
             <div className="flex items-center gap-3 min-w-0">
               <RefreshCcw className="w-4 h-4 text-gold animate-spin shrink-0" />
               <div className="min-w-0">
-                <p className="text-xs sm:text-sm font-bold text-white truncate">
+                <p className="text-xs sm:text-sm font-semibold achour-glossy-text truncate">
                   {formatExtractionProgressMessage(extractionProgress.message, settings.language, extractionProgress.stage)} ({Math.round(extractionProgress.percent)}%)
                 </p>
                 {extractionProgress.counts && (
-                  <p className="text-[11px] text-zinc-400 font-mono truncate">
+                  <p className="text-[11px] font-normal font-sans tabular-nums achour-glossy-info truncate">
                     {t('live')}: {extractionProgress.counts.live.toLocaleString()} · {t('movies')}: {extractionProgress.counts.movie.toLocaleString()} · {t('series')}: {extractionProgress.counts.series.toLocaleString()}
                   </p>
                 )}
@@ -1020,7 +1022,7 @@ if (currentView === 'settings') return (
                   data-tv-focusable="true"
                   tabIndex={0}
                   onClick={() => setCurrentView('live')}
-                  className="px-3 py-1.5 rounded-xl bg-emerald-500 text-black font-bold text-xs hover:bg-emerald-400 transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl bg-emerald-500 text-black font-medium text-xs hover:bg-emerald-400 transition-colors cursor-pointer"
                 >
                   {t('watch_live')}
                 </button>
@@ -1032,7 +1034,7 @@ if (currentView === 'settings') return (
                   dismissedExtractionRef.current.delete(activePlaylistData.id);
                   setShowExtractionModal(true);
                 }}
-                className="px-3 py-1.5 rounded-xl bg-transparent text-gold font-bold text-xs hover:text-white transition-colors cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-transparent achour-glossy-text font-medium text-xs hover:brightness-125 transition-all cursor-pointer"
               >
                 {t('details')}
               </button>
@@ -1046,12 +1048,12 @@ if (currentView === 'settings') return (
         <div className="relative z-20 w-full max-w-3xl mx-auto px-4 mb-2 shrink-0">
           <div className="flex items-center justify-between gap-3 px-4 py-2.5 rounded-2xl bg-transparent">
             <div className="flex items-center gap-3 min-w-0">
-              <Clock className="w-5 h-5 text-amber-300 shrink-0" />
+              <Clock className="w-5 h-5 text-gold shrink-0" />
               <div className="min-w-0">
-                <p className="text-sm font-medium text-white truncate">
+                <p className="text-sm font-semibold achour-glossy-text truncate">
                   {t('extraction_paused_at')} {pausedExtraction.percent || 0}%
                 </p>
-                <p className="text-xs text-zinc-400 truncate">
+                <p className="text-xs font-normal text-zinc-300 truncate">
                   {formatExtractionProgressMessage(pausedExtraction.message, settings.language, pausedExtraction.stage)}
                 </p>
               </div>
@@ -1068,7 +1070,7 @@ if (currentView === 'settings') return (
                     setExtractionProgress(p);
                   }, false);
                 }}
-                className="px-4 py-2 rounded-xl bg-gold text-black font-medium text-sm hover:brightness-110 transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-xl achour-glossy-pill font-medium text-sm hover:brightness-110 transition-all cursor-pointer"
               >
                 {t('resume_extraction')}
               </button>
@@ -1087,9 +1089,9 @@ if (currentView === 'settings') return (
               initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
-              className="relative z-30 mx-auto mb-1 px-4 py-1.5 rounded-xl bg-black/80 border border-[var(--theme-primary)] text-gold text-xs font-bold flex items-center gap-3 shadow-lg shrink-0"
+              className="relative z-30 mx-auto mb-1 px-4 py-1.5 rounded-xl bg-black/80 border border-[var(--theme-primary)] achour-glossy-surface text-xs font-medium flex items-center gap-3 shadow-lg shrink-0"
             >
-              <span>
+              <span className="achour-glossy-text">
                 {isRtl
                   ? 'وضع الترتيب: استخدم الأسهم لتحريك العنصر • OK للتثبيت والحفظ • Back للإلغاء'
                   : 'Reorder Mode: Use Arrows to move • OK to lock & save • Back to cancel'}
@@ -1157,7 +1159,7 @@ if (currentView === 'settings') return (
               settings.dashboardAlignment === 'top'
                 ? 'justify-start pt-2 sm:pt-4'
                 : settings.dashboardAlignment === 'bottom'
-                ? 'justify-end pb-3 sm:pb-6'
+                ? 'justify-end pb-4 sm:pb-8'
                 : 'justify-center'
             } w-full overflow-y-auto no-scrollbar px-3 sm:px-6`}
           >
@@ -1175,6 +1177,7 @@ if (currentView === 'settings') return (
               dashboardAlignment={settings.dashboardAlignment}
               dashboardHorizontalAlignment={settings.dashboardHorizontalAlignment}
               dashboardFocusMode={settings.dashboardFocusMode}
+              focusVisualStyle={settings.focusVisualStyle}
               dashboardLabelColorMode={settings.dashboardLabelColorMode}
               dashboardLabelCustomColor={settings.dashboardLabelCustomColor}
               reorderingKind={reorderingKind}
@@ -1303,7 +1306,7 @@ if (currentView === 'settings') return (
                 <div className="flex items-center justify-between border-b border-white/10 pb-2.5 shrink-0">
                   <div className="flex items-center gap-2 min-w-0">
                     <ArrowUpDown className="w-4 h-4 text-gold shrink-0" />
-                    <h3 className="text-sm sm:text-base font-bold text-gold truncate">
+                    <h3 className="text-sm sm:text-base font-semibold achour-glossy-title truncate">
                       {isRtl ? 'موضع وترتيب أيقونات الرئيسية' : 'Dashboard Icons Position & Order'}
                     </h3>
                   </div>
@@ -1352,10 +1355,10 @@ if (currentView === 'settings') return (
                             if (el) setTVFocus(el, { scroll: false });
                           }, 35);
                         }}
-                        className="w-full py-2 px-3 rounded-xl bg-gold/15 hover:bg-gold/25 border border-gold/50 text-gold text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shrink-0"
+                        className="w-full py-2 px-3 rounded-xl bg-gold/15 hover:bg-gold/25 border border-gold/50 text-xs font-medium flex items-center justify-center gap-2 transition-colors cursor-pointer shrink-0"
                       >
-                        <Move size={14} />
-                        <span className="truncate">
+                        <Move size={14} className="text-gold shrink-0" />
+                        <span className="truncate achour-glossy-text">
                           {isRtl
                             ? 'تحريك الأيقونات بالأسهم على الشاشة'
                             : 'Move Icons with Arrows'}
@@ -1363,9 +1366,9 @@ if (currentView === 'settings') return (
                       </button>
 
                       <div className="space-y-1.5">
-                        <div className="flex items-center gap-1.5 text-xs font-bold text-gold">
-                          <Move size={13} />
-                          <span>{isRtl ? 'موضع شريط أيقونات الرئيسية' : 'Dashboard Icons Position'}</span>
+                        <div className="flex items-center gap-1.5 text-xs font-semibold">
+                          <Move size={13} className="text-gold shrink-0" />
+                          <span className="achour-glossy-text">{isRtl ? 'موضع شريط أيقونات الرئيسية' : 'Dashboard Icons Position'}</span>
                         </div>
                         <div dir="ltr" className="grid grid-cols-3 gap-1.5">
                           {[
@@ -1398,7 +1401,7 @@ if (currentView === 'settings') return (
                                 }}
                                 className={`py-1.5 px-1.5 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1 ${
                                   active
-                                    ? 'bg-gold/25 border-gold text-gold shadow-[0_0_12px_var(--theme-glow)]'
+                                    ? 'bg-gold/25 border-gold shadow-[0_0_12px_var(--theme-glow)]'
                                     : 'bg-white/[0.04] border-white/10 text-zinc-200 hover:border-gold/50'
                                 }`}
                               >
@@ -1411,7 +1414,7 @@ if (currentView === 'settings') return (
                                 >
                                   <span className={`w-3 h-1 rounded-sm ${active ? 'bg-gold' : 'bg-gold/70'}`} />
                                 </div>
-                                <span className="text-[10px] font-bold leading-tight">{isRtl ? cell.ar : cell.en}</span>
+                                <span className={`text-[10px] font-medium leading-tight ${active ? 'achour-glossy-text' : ''}`}>{isRtl ? cell.ar : cell.en}</span>
                               </button>
                             );
                           })}
@@ -1421,7 +1424,7 @@ if (currentView === 'settings') return (
 
                     {/* Right Column: Reorder Dashboard Tiles */}
                     <div className="space-y-1.5 sm:border-s sm:border-white/10 sm:ps-3.5">
-                      <div className="text-xs font-bold text-gold pb-0.5">
+                      <div className="text-xs font-semibold achour-glossy-text pb-0.5">
                         {isRtl ? 'ترتيب إطارات لوحة التحكم' : 'Reorder Dashboard Tiles'}
                       </div>
                       {(() => {
@@ -1430,13 +1433,13 @@ if (currentView === 'settings') return (
                         const names: Record<string, string> = { live: isRtl ? 'المباشر' : 'Live', movies: isRtl ? 'الأفلام' : 'Movies', series: isRtl ? 'المسلسلات' : 'Series', add: isRtl ? 'إضافة قائمة' : 'Add Playlist', settings: isRtl ? 'الإعدادات' : 'Settings' };
                         return order.map((kind, index) => (
                           <div key={kind} className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl bg-white/[0.04] border border-white/10">
-                            <span className="text-[11px] font-semibold text-white truncate">{index + 1}. {names[kind]}</span>
+                            <span className="text-[11px] font-medium text-white truncate">{index + 1}. {names[kind]}</span>
                             <div className="flex items-center gap-1 shrink-0">
                               {(['left', 'up', 'down', 'right'] as const).map(direction => (
                                 <button key={direction} data-tv-focusable="true" data-rep-row={1 + index} tabIndex={0}
                                   onClick={() => moveDashboardTile(kind, direction)}
                                   title={direction}
-                                  className="w-6 h-6 rounded-lg bg-white/10 hover:bg-gold hover:text-black text-zinc-200 text-xs font-black transition-colors cursor-pointer">
+                                  className="w-6 h-6 rounded-lg bg-white/10 hover:bg-gold hover:text-black text-zinc-200 text-xs font-medium transition-colors cursor-pointer">
                                   {direction === 'left' ? '←' : direction === 'right' ? '→' : direction === 'up' ? '↑' : '↓'}
                                 </button>
                               ))}
@@ -1451,7 +1454,7 @@ if (currentView === 'settings') return (
                 {/* Fixed Footer */}
                 <div className={`flex items-center gap-2 pt-2 border-t border-white/10 shrink-0 ${isFireOrTvDevice ? 'justify-between' : 'justify-end'}`}>
                   {isFireOrTvDevice && (
-                    <span className="text-[10px] text-zinc-400 truncate">
+                    <span className="text-[10px] font-normal text-zinc-400 truncate">
                       {isRtl ? 'التنقل عبر أسهم الريموت فقط' : 'Navigate with Remote Arrows'}
                     </span>
                   )}
@@ -1460,7 +1463,7 @@ if (currentView === 'settings') return (
                     data-rep-row={6}
                     tabIndex={0}
                     onClick={() => setShowRepositionModal(false)}
-                    className="px-5 py-2 rounded-xl bg-gold text-black hover:brightness-110 text-xs sm:text-sm font-bold transition-colors cursor-pointer shrink-0"
+                    className="px-5 py-2 rounded-xl achour-glossy-pill hover:brightness-110 text-xs sm:text-sm font-medium transition-all cursor-pointer shrink-0"
                   >
                     {isRtl ? 'تم' : 'Done'}
                   </button>
@@ -1477,10 +1480,10 @@ if (currentView === 'settings') return (
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 achour-glass-modal border-gold/40 text-gold rounded-2xl text-[11px] font-bold"
+              className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 achour-glass-modal border-gold/40 rounded-2xl text-[11px] font-medium"
             >
-              <CheckCircle2 size={14} className="text-emerald-400" />
-              <span>{t('data_refreshed')}</span>
+              <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+              <span className="achour-glossy-text">{t('data_refreshed')}</span>
             </motion.div>
           )}
         </AnimatePresence>

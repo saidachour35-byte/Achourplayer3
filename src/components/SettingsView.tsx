@@ -155,19 +155,19 @@ const SettingsTimePreview = React.memo(({
             onClick={() => onSelect(item.format)}
             className={`sm:col-span-1 lg:col-span-2 flex flex-col justify-between p-4 rounded-2xl border transition-colors cursor-pointer min-h-[92px] ${
               active
-                ? 'border-gold bg-gold/15'
+                ? 'border-gold achour-glossy-surface'
                 : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
             } ${isRtl ? 'text-right' : 'text-left'}`}
           >
             <div className="flex items-center justify-between gap-2 w-full">
-              <span className="text-base font-medium text-white">{item.label}</span>
+              <span className={`text-base font-medium ${active ? 'achour-glossy-text' : 'text-white'}`}>{item.label}</span>
               {active && (
-                <span className="p-1.5 rounded-lg bg-gold text-black shrink-0">
+                <span className="p-1.5 rounded-lg achour-glossy-pill shrink-0">
                   <Check size={16} />
                 </span>
               )}
             </div>
-            <span className="text-lg font-mono text-gold mt-3 block">
+            <span className="text-lg font-sans font-normal tabular-nums achour-glossy-title mt-3 block">
               {t('time_preview_label')} {item.preview}
             </span>
           </button>
@@ -1025,8 +1025,8 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
           <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/10 text-xs sm:text-sm text-zinc-300 flex items-center justify-between gap-2">
             <span>{t('auto_open_last_channel_desc')}</span>
             {savedChannelName && (
-              <span className="px-2.5 py-1 rounded-xl bg-gold/15 border border-gold/35 text-gold text-xs font-medium shrink-0">
-                {savedChannelName}
+              <span className="px-2.5 py-1 rounded-xl achour-glossy-surface border border-gold/35 text-xs font-medium shrink-0">
+                <span className="achour-glossy-text">{savedChannelName}</span>
               </span>
             )}
           </div>
@@ -1181,8 +1181,8 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
             {scaleValues.map(value => (
               <button key={value} data-tv-focusable="true" tabIndex={0}
                 onClick={() => updateSetting(scaleConfig.key, value)}
-                className={`min-h-[72px] rounded-2xl border flex flex-col items-center justify-center gap-1 transition-colors ${scaleConfig.current === value ? 'border-gold bg-gold/15' : 'border-white/10 bg-white/[0.04] hover:border-gold/40'}`}>
-                <span className="text-lg font-mono font-bold text-gold">{value}%</span>
+                className={`min-h-[72px] rounded-2xl border flex flex-col items-center justify-center gap-1 transition-colors ${scaleConfig.current === value ? 'border-gold achour-glossy-surface' : 'border-white/10 bg-white/[0.04] hover:border-gold/40'}`}>
+                <span className="text-lg font-sans font-normal tabular-nums achour-glossy-title">{value}%</span>
                 {scaleConfig.current === value && <Check size={14} className="text-gold" />}
               </button>
             ))}
@@ -1256,10 +1256,10 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                   tabIndex={0}
                   onClick={() => updateSetting('zoomScale', val)}
                   className={`p-3 rounded-2xl border transition-colors flex flex-col items-center justify-center gap-1 min-h-[76px] cursor-pointer ${
-                    isActive ? 'border-gold bg-gold/15' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
+                    isActive ? 'border-gold achour-glossy-surface' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
                   }`}
                 >
-                  <span className="text-lg font-mono font-medium text-gold">{val}%</span>
+                  <span className="text-lg font-sans font-normal tabular-nums achour-glossy-title">{val}%</span>
                   <span className="text-xs sm:text-sm font-normal text-zinc-200">
                     {val === 100 ? t('zoom_default_95') : val === 98 ? t('zoom_tv_fit') : `${val}%`}
                   </span>
@@ -1278,16 +1278,16 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateSetting('zoomScale', Math.max(70, currentZoom - 1))}
-                className="px-4 py-2 bg-white/10 hover:bg-gold hover:text-black text-white rounded-xl text-sm font-medium transition-colors cursor-pointer"
+                className="px-4 py-2 bg-white/10 hover:bg-gold hover:text-black text-white rounded-xl text-sm font-medium transition-colors cursor-pointer font-sans tabular-nums"
               >
                 - 1%
               </button>
-              <span className="text-base font-mono font-medium text-gold px-2">{currentZoom}%</span>
+              <span className="text-base font-sans font-normal tabular-nums achour-glossy-title px-2">{currentZoom}%</span>
               <button
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => updateSetting('zoomScale', Math.min(150, currentZoom + 1))}
-                className="px-4 py-2 bg-white/10 hover:bg-gold hover:text-black text-white rounded-xl text-sm font-medium transition-colors cursor-pointer"
+                className="px-4 py-2 bg-white/10 hover:bg-gold hover:text-black text-white rounded-xl text-sm font-medium transition-colors cursor-pointer font-sans tabular-nums"
               >
                 + 1%
               </button>
@@ -1295,7 +1295,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => setSubView('main')}
-                className="px-5 py-2 bg-gold text-black rounded-xl text-sm font-medium cursor-pointer"
+                className="px-5 py-2 achour-glossy-pill rounded-xl text-sm font-medium cursor-pointer"
               >
                 {t('done')}
               </button>
@@ -1334,7 +1334,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                 tabIndex={0}
                 onClick={() => setPlayersTab(tab.id as any)}
                 className={`flex-1 py-2 px-3 rounded-xl text-sm font-medium transition-colors cursor-pointer ${
-                  playersTab === tab.id ? 'bg-gold text-black' : 'text-zinc-300 hover:bg-white/5'
+                  playersTab === tab.id ? 'achour-glossy-pill' : 'text-zinc-300 hover:bg-white/5'
                 }`}
               >
                 {tab.label}
@@ -1356,11 +1356,11 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                       setSubView('main');
                     }}
                     className={`p-3.5 rounded-2xl border transition-colors flex flex-col justify-between min-h-[96px] cursor-pointer ${
-                      isActive ? 'border-gold bg-gold/15' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
+                      isActive ? 'border-gold achour-glossy-surface' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
                     } ${isRtl ? 'text-right' : 'text-left'}`}
                   >
                     <div className="flex items-start justify-between gap-2 w-full">
-                      <span className="text-sm sm:text-base font-medium text-white leading-snug">{p.name}</span>
+                      <span className={`text-sm sm:text-base font-medium leading-snug ${isActive ? 'achour-glossy-text' : 'text-white'}`}>{p.name}</span>
                       {isActive && <Check className="text-gold shrink-0" size={16} />}
                     </div>
                     <p className="text-xs text-zinc-400 font-normal mt-1.5 line-clamp-2">{p.desc}</p>
@@ -1397,15 +1397,15 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                             setSubView('main');
                           }}
                           className={`p-3.5 rounded-2xl border transition-colors flex flex-col justify-between min-h-[112px] cursor-pointer ${
-                            isActive ? 'border-gold bg-gold/15' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
+                            isActive ? 'border-gold achour-glossy-surface' : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
                           } ${isRtl ? 'text-right' : 'text-left'}`}
                         >
                           <div className="flex items-start justify-between gap-2 w-full">
-                            <span className="text-sm sm:text-base font-medium text-white leading-snug">{displayName}</span>
+                            <span className={`text-sm sm:text-base font-medium leading-snug ${isActive ? 'achour-glossy-text' : 'text-white'}`}>{displayName}</span>
                             {isActive && <Check className="text-gold shrink-0" size={16} />}
                           </div>
                           <div className="mt-1.5 space-y-1">
-                            <span className="text-[11px] font-mono text-zinc-400 truncate block">
+                            <span className="text-[11px] font-sans font-normal text-zinc-400 truncate block">
                               {p.packageName === '__achour_native_system__'
                                 ? (isRtl ? 'مدمج في النظام (بدون تحميل)' : 'Built-in OS / Fire TV Activity')
                                 : p.packageName || (isRtl ? 'اختيار من تطبيقات الجهاز' : 'Android / Fire TV Picker')}
@@ -1415,17 +1415,17 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                                 {t('standalone_app_badge')}
                               </span>
                               {installStatus === true && (
-                                <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold">
+                                <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-medium">
                                   {t('installed_badge')}
                                 </span>
                               )}
                               {installStatus === false && (
-                                <span className="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[10px] font-bold">
+                                <span className="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[10px] font-medium">
                                   {t('not_installed_badge')}
                                 </span>
                               )}
                               {showFireTvWarn && (
-                                <span className={`px-1.5 py-0.5 rounded border text-[10px] font-bold flex items-center gap-1 ${
+                                <span className={`px-1.5 py-0.5 rounded border text-[10px] font-medium flex items-center gap-1 ${
                                   onFireTv
                                     ? 'bg-amber-500/25 border-amber-400/60 text-amber-200'
                                     : 'bg-amber-500/15 border-amber-500/35 text-amber-300'
@@ -1488,13 +1488,13 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                   value={newPlayerPackage}
                   onChange={(e) => setNewPlayerPackage(e.target.value)}
                   placeholder={t('package_id_placeholder')}
-                  className="bg-white/[0.05] border border-white/15 rounded-xl px-3.5 py-2 text-sm font-mono text-white"
+                  className="bg-white/[0.05] border border-white/15 rounded-xl px-3.5 py-2 text-sm font-sans text-white"
                 />
                 <button
                   data-tv-focusable="true"
                   tabIndex={0}
                   onClick={handleAddPlayer}
-                  className="px-4 py-2 bg-gold text-black rounded-xl text-sm font-medium cursor-pointer"
+                  className="px-4 py-2 achour-glossy-pill rounded-xl text-sm font-medium cursor-pointer"
                 >
                   {t('add_player')}
                 </button>
@@ -1514,10 +1514,10 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                             setSubView('main');
                           }}
                           className={`p-3 rounded-2xl border flex items-center justify-between cursor-pointer ${
-                            isActive ? 'border-gold bg-gold/15' : 'border-white/10 bg-white/[0.04] hover:bg-white/[0.09]'
+                            isActive ? 'border-gold achour-glossy-surface' : 'border-white/10 bg-white/[0.04] hover:bg-white/[0.09]'
                           }`}
                         >
-                          <span className="text-sm font-medium text-white truncate">{name}</span>
+                          <span className={`text-sm font-medium truncate ${isActive ? 'achour-glossy-text' : 'text-white'}`}>{name}</span>
                           {isActive && <Check className="text-gold shrink-0" size={16} />}
                         </button>
                         <button
@@ -1655,13 +1655,13 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
         <div className="flex flex-col gap-3 pb-4">
           <div className={`flex flex-wrap items-center justify-between gap-2 bg-white/[0.04] p-2 rounded-2xl border border-white/10 shrink-0 ${isRtl ? 'flex-row-reverse' : ''}`}>
             <div className="relative flex-1 min-w-[160px]">
-              <Search className={`absolute top-1/2 -translate-y-1/2 text-zinc-400 ${isRtl ? 'right-3' : 'left-3'}`} size={15} />
+              <Search className={`absolute top-1/2 -translate-y-1/2 text-gold/80 ${isRtl ? 'right-3' : 'left-3'}`} size={15} />
               <input
                 type="text"
                 value={catSearch}
                 onChange={(e) => setCatSearch(e.target.value)}
                 placeholder={t('search_categories')}
-                className={`w-full bg-white/[0.05] border border-white/15 rounded-xl py-1.5 text-sm text-white ${isRtl ? 'pr-9 pl-3 text-right' : 'pl-9 pr-3 text-left'}`}
+                className={`w-full bg-white/[0.05] border border-white/15 rounded-xl py-1.5 text-sm text-gold placeholder:text-gold/75 ${isRtl ? 'pr-9 pl-3 text-right' : 'pl-9 pr-3 text-left'}`}
               />
             </div>
 
@@ -1670,7 +1670,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                 data-tv-focusable="true"
                 tabIndex={0}
                 onClick={() => setCatFilterTab('all')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-medium cursor-pointer ${catFilterTab === 'all' ? 'bg-gold text-black' : 'bg-white/5 text-zinc-300'}`}
+                className={`px-3 py-1.5 rounded-xl text-xs font-medium cursor-pointer ${catFilterTab === 'all' ? 'achour-glossy-pill' : 'bg-white/5 text-zinc-300'}`}
               >
                 {t('cat_all_count', { count: categories.length })}
               </button>
@@ -1827,8 +1827,8 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
           <ChevronLeft size={20} className={isRtl ? 'rotate-180' : ''} />
         </button>
         <div className="flex flex-col items-center">
-          <h1 className="text-base sm:text-lg font-medium text-gold leading-tight">{t('settings')}</h1>
-          <span className="text-xs text-zinc-400 font-normal">{t('settings_subtitle')}</span>
+          <h1 className="text-base sm:text-lg font-semibold achour-glossy-title leading-tight">{t('settings')}</h1>
+          <span className="text-xs font-normal achour-glossy-info">{t('settings_subtitle')}</span>
         </div>
         <div className="w-10" />
       </header>
@@ -1843,9 +1843,9 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
           )}
 
           {syncNotification && (
-            <div className="px-4 py-1.5 bg-white/[0.05] border border-gold/40 text-gold rounded-xl text-sm font-medium flex items-center gap-2">
-              <RefreshCw size={16} className={syncInProgress ? 'animate-spin' : ''} />
-              <span>{syncNotification}</span>
+            <div className="px-4 py-1.5 achour-glossy-surface border border-gold/40 text-gold rounded-xl text-sm font-medium flex items-center gap-2">
+              <RefreshCw size={16} className={syncInProgress ? 'animate-spin shrink-0' : 'shrink-0'} />
+              <span className="achour-glossy-text">{syncNotification}</span>
             </div>
           )}
 
@@ -1871,7 +1871,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                     <div className="p-1.5 rounded-xl bg-gold/15 text-gold shrink-0">
                       <Icon size={17} />
                     </div>
-                    <span className="text-xs sm:text-sm font-medium text-white truncate">{catCard.title}</span>
+                    <span className="text-xs sm:text-sm font-medium achour-glossy-text truncate">{catCard.title}</span>
                   </div>
                   <ChevronLeft size={16} className={`${isRtl ? '' : 'rotate-180'} text-gold shrink-0`} />
                 </button>
@@ -1883,7 +1883,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
           <div className="space-y-4 pb-3">
             {settingsGroups.map((group, gIdx) => (
               <div key={gIdx} className="space-y-2">
-                <h3 className="text-xs sm:text-sm font-black text-gold uppercase tracking-wider px-1">
+                <h3 className="text-xs sm:text-sm font-semibold achour-glossy-title uppercase tracking-wider px-1">
                   {group.title}
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-2">
@@ -1906,11 +1906,11 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                           <Icon size={17} />
                         </div>
                         <div className="w-full min-w-0">
-                          <span className="text-xs sm:text-sm font-medium text-white group-hover:text-gold truncate w-full leading-snug block">
+                          <span className="text-xs sm:text-sm font-medium achour-glossy-text truncate w-full leading-snug block">
                             {item.label}
                           </span>
                           {item.subLabel && (
-                            <span className="text-[10px] text-zinc-400 truncate w-full leading-none block mt-0.5">
+                            <span className="text-[10px] font-normal achour-glossy-info opacity-85 truncate w-full leading-none block mt-0.5">
                               {item.subLabel}
                             </span>
                           )}
@@ -1925,9 +1925,9 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
         </div>
 
         {/* Minimal Device Footer */}
-        <footer className="pt-1.5 pb-1 flex items-center justify-center gap-6 text-xs font-mono text-zinc-400 shrink-0">
-          <span>MAC: <strong className="text-zinc-200 font-normal">6A:CD:C2:93:2F:D5</strong></span>
-          <span>{t('device_key')}: <strong className="text-gold font-normal">411480</strong></span>
+        <footer className="pt-1.5 pb-1 flex items-center justify-center gap-6 text-xs font-sans font-normal tabular-nums text-zinc-400 shrink-0">
+          <span>MAC: <strong className="achour-glossy-info font-normal">6A:CD:C2:93:2F:D5</strong></span>
+          <span>{t('device_key')}: <strong className="achour-glossy-info font-normal">411480</strong></span>
         </footer>
       </div>
 
@@ -1954,7 +1954,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                 <div className="p-2 rounded-xl bg-red-500/20 text-red-400">
                   <Trash2 size={18} />
                 </div>
-                <h3 className="text-base font-semibold text-white">
+                <h3 className="text-base font-semibold achour-glossy-title">
                   {t('clear_history_confirm_title')}
                 </h3>
               </div>
@@ -1969,7 +1969,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
               </button>
             </div>
 
-            <p className="text-sm text-zinc-200 leading-relaxed">
+            <p className="text-sm font-normal text-zinc-200 leading-relaxed">
               {confirmClearType === 'movie'
                 ? t('clear_movie_history_confirm')
                 : confirmClearType === 'series'
@@ -1992,7 +1992,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                 data-tv-modal="confirm-clear"
                 tabIndex={0}
                 onClick={handleConfirmClearWatchHistory}
-                className="px-5 py-2 bg-red-600 hover:bg-red-500 text-white rounded-xl text-sm font-semibold cursor-pointer"
+                className="px-5 py-2 bg-red-600 hover:bg-red-500 text-white rounded-xl text-sm font-medium cursor-pointer"
               >
                 {t('confirm_clear')}
               </button>
@@ -2019,7 +2019,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
             className={`w-[min(92vw,640px)] max-h-[84vh] achour-glass-modal border border-gold/45 rounded-3xl p-4 sm:p-5 flex flex-col gap-3 ${isRtl ? 'font-cairo text-right' : 'text-left'}`}
           >
             <div className={`flex items-center justify-between pb-2.5 border-b border-white/10 ${isRtl ? 'flex-row-reverse' : ''}`}>
-              <h3 className="text-base font-medium text-white">
+              <h3 className="text-base font-semibold achour-glossy-title">
                 {t('upload_paste_m3u')}
               </h3>
               <button data-tv-focusable="true" tabIndex={0} onClick={() => setShowUploadPasteModal(false)} className="p-2 text-zinc-300 hover:text-white rounded-full cursor-pointer">
@@ -2038,7 +2038,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                 value={pastedM3uText}
                 onChange={(e) => setPastedM3uText(e.target.value)}
                 rows={4}
-                className="sm:col-span-2 w-full bg-white/[0.05] border border-white/15 rounded-2xl p-3 text-sm font-mono text-gold"
+                className="sm:col-span-2 w-full bg-white/[0.05] border border-white/15 rounded-2xl p-3 text-sm font-sans text-gold"
               />
             </div>
             <div className="flex items-center justify-end gap-2">
@@ -2050,7 +2050,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                 tabIndex={0}
                 onClick={() => saveAndActivateM3uContent(pastedM3uName.trim() || 'ملف_قنوات_مباشر.m3u', pastedM3uText)}
                 disabled={!pastedM3uText.trim()}
-                className="px-5 py-2 bg-gold text-black rounded-xl text-sm font-medium disabled:opacity-40 cursor-pointer"
+                className="px-5 py-2 achour-glossy-pill rounded-xl text-sm font-medium disabled:opacity-40 cursor-pointer"
               >
                 {t('save_and_activate')}
               </button>
@@ -2062,7 +2062,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
   );
 }
 
-function SubViewContainer({ title: _title, onBack, children, isRtl, backLabel }: { title: string; onBack: () => void; children: React.ReactNode; isRtl: boolean; backLabel?: string }) {
+function SubViewContainer({ title, onBack, children, isRtl, backLabel }: { title: string; onBack: () => void; children: React.ReactNode; isRtl: boolean; backLabel?: string }) {
   return (
     <div className={`h-full w-full bg-transparent px-3 py-2 flex flex-col items-center select-none overflow-hidden relative z-10 ${isRtl ? 'font-cairo' : 'font-sans'}`}>
       <header className="w-full max-w-6xl flex items-center justify-between mb-2 shrink-0 bg-transparent px-3 py-1.5 border-b border-white/10">
@@ -2075,6 +2075,11 @@ function SubViewContainer({ title: _title, onBack, children, isRtl, backLabel }:
         >
           <ChevronLeft size={18} className={isRtl ? 'rotate-180' : ''} />
         </button>
+        {title ? (
+          <h2 className="text-sm sm:text-base font-semibold achour-glossy-title truncate px-2">
+            {title}
+          </h2>
+        ) : null}
         <div className="w-8" />
       </header>
       <div data-tv-scroll-container="true" className="w-full max-w-6xl flex-1 min-h-0 overflow-y-auto no-scrollbar pb-1">
@@ -2104,20 +2109,20 @@ function TileOptionButton({
       onClick={onClick}
       className={`w-full flex flex-col justify-between p-3 rounded-2xl transition-colors border min-h-[82px] cursor-pointer ${
         active
-          ? 'border-gold bg-gold/15'
+          ? 'border-gold achour-glossy-surface'
           : 'border-white/10 bg-white/[0.04] hover:border-gold/40 hover:bg-white/[0.09]'
       } ${isRtl ? 'text-right' : 'text-left'}`}
     >
       <div className="flex items-start justify-between gap-2 w-full">
-        <span className="text-xs sm:text-sm font-medium text-white leading-snug">{title}</span>
+        <span className={`text-xs sm:text-sm font-medium leading-snug ${active ? 'achour-glossy-text' : 'text-white'}`}>{title}</span>
         {active && (
-          <span className="p-1 rounded-lg bg-gold text-black shrink-0">
+          <span className="p-1 rounded-lg achour-glossy-pill shrink-0">
             <Check size={14} />
           </span>
         )}
       </div>
       {subtitle && (
-        <span className="text-xs font-normal text-zinc-400 mt-1.5 block truncate w-full">
+        <span className="text-xs font-normal achour-glossy-info opacity-85 mt-1.5 block truncate w-full">
           {subtitle}
         </span>
       )}

@@ -90,8 +90,8 @@ export default function AIOcrModal({ onClose, onSelectChannel, language = 'en' }
               <Sparkles size={20} />
             </div>
             <div className={isRtl ? 'text-right' : 'text-left'}>
-              <h2 className="text-base sm:text-lg font-black text-white uppercase tracking-wider">{t('ai_discovery')}</h2>
-              <p className="text-xs text-gold font-bold">{isRtl ? 'التعرف على القنوات من الصور' : 'Visual Channel Recognition'}</p>
+              <h2 className="text-base sm:text-lg font-semibold achour-glossy-title uppercase tracking-wider">{t('ai_discovery')}</h2>
+              <p className="text-xs achour-glossy-text font-medium">{isRtl ? 'التعرف على القنوات من الصور' : 'Visual Channel Recognition'}</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-xl transition-all text-zinc-400 hover:text-white">
@@ -104,7 +104,7 @@ export default function AIOcrModal({ onClose, onSelectChannel, language = 'en' }
             <label className="flex flex-col items-center justify-center aspect-video border-2 border-dashed border-white/10 rounded-[2rem] cursor-pointer hover:border-gold/50 hover:bg-gold/5 transition-all group relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20 pointer-events-none" />
               <Upload size={56} className="text-zinc-600 group-hover:text-gold mb-4 transition-colors duration-300" />
-              <span className="text-zinc-400 font-black uppercase tracking-widest text-xs group-hover:text-white transition-colors">
+              <span className="text-zinc-400 font-semibold uppercase tracking-wider text-xs group-hover:text-white transition-colors">
                 {isRtl ? 'انقر لرفع لقطة شاشة' : 'Upload Screenshot'}
               </span>
               <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
@@ -125,8 +125,8 @@ export default function AIOcrModal({ onClose, onSelectChannel, language = 'en' }
               {results.length > 0 ? (
                 <div className="space-y-4">
                   <div className={`flex items-center justify-between ${isRtl ? 'flex-row-reverse' : ''}`}>
-                    <h3 className="text-xs font-black text-gold uppercase tracking-widest">{isRtl ? 'القنوات التي تم اكتشافها' : 'Detected Channels'}</h3>
-                    <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded-lg border border-emerald-500/30">
+                    <h3 className="text-xs font-semibold achour-glossy-text uppercase tracking-wider">{isRtl ? 'القنوات التي تم اكتشافها' : 'Detected Channels'}</h3>
+                    <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-medium font-sans tabular-nums rounded-lg border border-emerald-500/30">
                       {results.length} {isRtl ? 'نتائج' : 'Results'}
                     </span>
                   </div>
@@ -136,7 +136,7 @@ export default function AIOcrModal({ onClose, onSelectChannel, language = 'en' }
                         key={i}
                         data-tv-focusable="true"
                         onClick={() => onSelectChannel(res)}
-                        className="px-5 py-2.5 bg-white/5 hover:bg-gold hover:text-black border border-white/10 hover:border-gold rounded-2xl text-sm font-bold transition-all active:scale-95 shadow-md"
+                        className="px-5 py-2.5 bg-white/5 hover:bg-gold hover:text-black border border-white/10 hover:border-gold rounded-2xl text-sm font-medium transition-all active:scale-95 shadow-md"
                       >
                         {res}
                       </button>
@@ -144,7 +144,7 @@ export default function AIOcrModal({ onClose, onSelectChannel, language = 'en' }
                   </div>
                   <button 
                     onClick={() => { setResults([]); setPreview(null); }}
-                    className="w-full py-3 text-zinc-500 hover:text-white text-xs font-bold uppercase transition-colors"
+                    className="w-full py-3 text-zinc-500 hover:text-white text-xs font-medium uppercase transition-colors"
                   >
                     {isRtl ? 'إعادة المحاولة' : 'Try Another Image'}
                   </button>
@@ -154,7 +154,7 @@ export default function AIOcrModal({ onClose, onSelectChannel, language = 'en' }
                   disabled={loading}
                   data-tv-focusable="true"
                   onClick={handleAnalyze}
-                  className="w-full py-5 bg-gold text-black font-black uppercase tracking-[0.2em] rounded-2xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-98 disabled:opacity-50 transition-all group overflow-hidden relative"
+                  className="w-full py-5 bg-gold text-black font-semibold uppercase tracking-wider rounded-2xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-98 disabled:opacity-50 transition-all group overflow-hidden relative"
                 >
                   <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-12" />
                   {loading ? <Loader2 className="animate-spin" /> : <Zap size={20} className="fill-current" />}
