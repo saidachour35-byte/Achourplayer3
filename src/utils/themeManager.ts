@@ -1681,12 +1681,12 @@ export function applyRoyalTheme(
   const { primary, secondary, accent, mid, glow, r, g, b } = palette;
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   const onPrimary = luminance > 0.52 ? '#090b10' : '#ffffff';
-  const softWhiteTint = rgbToHex(r + (255 - r) * 0.76, g + (255 - g) * 0.76, b + (255 - b) * 0.76);
-  const luminousPrimary = rgbToHex(r + (255 - r) * 0.24, g + (255 - g) * 0.24, b + (255 - b) * 0.24);
+  const softWhiteTint = rgbToHex(Math.round(r + (255 - r) * 0.76), Math.round(g + (255 - g) * 0.76), Math.round(b + (255 - b) * 0.76));
+  const luminousPrimary = rgbToHex(Math.round(r + (255 - r) * 0.36), Math.round(g + (255 - g) * 0.36), Math.round(b + (255 - b) * 0.36));
   const metallicGrad = `linear-gradient(135deg, ${secondary} 0%, ${primary} 34%, ${accent} 58%, ${mid} 82%, ${secondary} 100%)`;
-  const glossyHeadingGrad = `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 18%, ${softWhiteTint} 40%, ${primary} 74%, ${secondary} 100%)`;
-  const glossyTextGrad = `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 14%, ${softWhiteTint} 36%, ${accent} 58%, ${primary} 82%, ${secondary} 100%)`;
-  const glossyInfoGrad = `linear-gradient(180deg, #FFFFFF 0%, ${softWhiteTint} 42%, ${accent} 76%, ${primary} 100%)`;
+  const glossyHeadingGrad = `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 22%, ${accent} 52%, ${primary} 84%, ${secondary} 100%)`;
+  const glossyTextGrad = `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 18%, ${accent} 48%, ${primary} 82%, ${secondary} 100%)`;
+  const glossyInfoGrad = `linear-gradient(180deg, #FFFFFF 0%, ${softWhiteTint} 44%, ${accent} 78%, ${primary} 100%)`;
   const glossyBtnGrad = `linear-gradient(180deg, rgba(255,255,255,0.48) 0%, rgba(255,255,255,0.16) 38%, rgba(${r},${g},${b},0.94) 52%, ${primary} 78%, ${secondary} 100%)`;
   const glossySurfaceGrad = `linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(${r},${g},${b},0.20) 50%, rgba(${r},${g},${b},0.08) 100%)`;
 

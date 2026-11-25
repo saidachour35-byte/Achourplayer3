@@ -70,7 +70,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   multiViewFullSplit: false,
   liveBarSize: 'default',
   seekStep: 10,
-  dashboardFocusMode: 'both',
+  dashboardFocusMode: 'label',
   focusVisualStyle: 'frameless-glow',
   dashboardLabelColorMode: 'theme',
   dashboardLabelCustomColor: null,
@@ -161,6 +161,10 @@ export default function App() {
         if (!parsed.focusVisualStyle || parsed.focusVisualStyle === 'lamp-halo') {
           migratedFocusVisualStyle = 'frameless-glow';
         }
+      }
+      if (!localStorage.getItem('achour_focus_label_mode_v2')) {
+        localStorage.setItem('achour_focus_label_mode_v2', 'true');
+        migratedFocusMode = 'label';
       }
       const rawSelectedPlayer = String(parsed.selectedPlayer || DEFAULT_SETTINGS.selectedPlayer);
       const isLegacyLibVlcSelected = /libvlc/i.test(rawSelectedPlayer);

@@ -80,7 +80,7 @@ const ClockDisplay = React.memo(({ settings, isRtl }: { settings: AppSettings, i
           {formattedClock}
         </span>
       </div>
-      <span className="text-[10px] sm:text-xs font-normal font-sans achour-glossy-info capitalize mt-1 tracking-tight max-w-full truncate">
+      <span className="text-[10px] sm:text-xs font-semibold font-sans achour-glossy-title capitalize mt-1 tracking-tight max-w-full truncate inline-block">
         {formattedDate}
       </span>
     </div>
@@ -932,16 +932,16 @@ if (currentView === 'settings') return (
                   }`}
                 />
                 <span
-                  className={`text-[11px] sm:text-sm font-semibold font-sans truncate max-w-[105px] sm:max-w-[190px] ${
-                    parsedSubscription?.isExpired ? 'text-red-200' : 'achour-glossy-text'
+                  className={`text-[11px] sm:text-sm font-semibold font-sans truncate max-w-[105px] sm:max-w-[190px] inline-block ${
+                    parsedSubscription?.isExpired ? 'text-red-200' : 'achour-glossy-title'
                   }`}
                 >
                   {activePlaylistData?.name || t('active_subscription')}
                 </span>
                 {parsedSubscription && (
                   <span
-                    className={`text-[9px] sm:text-[10px] font-medium font-sans shrink-0 ${
-                      parsedSubscription.isExpired ? 'text-red-300' : 'achour-glossy-info opacity-90'
+                    className={`text-[9px] sm:text-[10px] font-semibold font-sans shrink-0 inline-block ${
+                      parsedSubscription.isExpired ? 'text-red-300' : 'achour-glossy-title opacity-95'
                     }`}
                   >
                     {parsedSubscription.isExpired ? t('expired') : t('active')}
@@ -949,7 +949,7 @@ if (currentView === 'settings') return (
                 )}
               </div>
               <div
-                className={`flex items-center gap-1.5 text-[10px] sm:text-xs font-normal font-sans tabular-nums truncate ${
+                className={`flex items-center gap-1.5 text-[10px] sm:text-xs font-semibold font-sans tabular-nums truncate ${
                   parsedSubscription?.isExpired ? 'text-red-300' : ''
                 }`}
               >
@@ -958,16 +958,16 @@ if (currentView === 'settings') return (
                   className="hidden sm:block shrink-0"
                   style={{ color: parsedSubscription?.isExpired ? '#f87171' : 'var(--theme-primary, #d4af37)' }}
                 />
-                <span className={parsedSubscription?.isExpired ? 'text-red-300' : 'achour-glossy-info'}>
+                <span className={parsedSubscription?.isExpired ? 'text-red-300' : 'achour-glossy-title inline-block'}>
                   {t('expire_short')}:
                 </span>
                 <span
-                  className={`${parsedSubscription?.isExpired ? 'text-red-200' : 'achour-glossy-info'} font-normal truncate`}
+                  className={`${parsedSubscription?.isExpired ? 'text-red-200' : 'achour-glossy-title'} font-semibold truncate inline-block`}
                 >
                   {parsedSubscription ? parsedSubscription.formattedDate : t('per_link_lifetime')}
                 </span>
                 {parsedSubscription && !parsedSubscription.isExpired && parsedSubscription.daysRemaining !== null && parsedSubscription.daysRemaining < 999 && (
-                  <span className="achour-glossy-text font-medium text-[10px] sm:text-[11px] shrink-0">
+                  <span className="achour-glossy-title font-semibold text-[10px] sm:text-[11px] shrink-0 inline-block">
                     ({parsedSubscription.daysRemaining} {t('day_short')})
                   </span>
                 )}

@@ -125,7 +125,7 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
   tileSpacing = 'md',
   glassOpacity = 16,
   glassBlur = 10,
-  dashboardFocusMode = 'both',
+  dashboardFocusMode = 'label',
   focusVisualStyle = 'frameless-glow',
   dashboardLabelColorMode = 'theme',
   dashboardLabelCustomColor = null,
@@ -244,7 +244,7 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
   ) => {
     const isReorderingThis = !previewMode && reorderingKind === item.kind;
     const isIconsOnly = resolved.iconDisplayMode === 'icons-only';
-    const effectiveFocusMode = dashboardFocusMode || 'both';
+    const effectiveFocusMode = dashboardFocusMode || 'label';
     const iconMultiplier = isHero
       ? 1.15
       : mode === 'row' || mode === 'pill'
@@ -405,10 +405,10 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
               }`
         } ${reorderRing} ${extraClass}`}
       >
-        {mode === 'open' && effectiveFocusStyle !== 'frameless-glow' && (
+        {mode === 'open' && effectiveFocusMode !== 'label' && effectiveFocusStyle !== 'frameless-glow' && (
           <span className="dashboard-focus-halo" aria-hidden="true" />
         )}
-        {mode === 'open' && <span className="dashboard-lamp-orb" aria-hidden="true" />}
+        {mode === 'open' && effectiveFocusMode !== 'label' && <span className="dashboard-lamp-orb" aria-hidden="true" />}
 
         {isReorderingThis && (
           <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 z-30 px-2 py-0.5 rounded-full bg-emerald-400 text-black text-[9px] font-semibold flex items-center gap-1 shadow whitespace-nowrap">

@@ -325,10 +325,10 @@ function Style1Classic3DIcon({
       className={`shrink-0 select-none overflow-visible achour-icon-svg ${className}`}
     >
       <defs>
-        <linearGradient id={gMetal} x1="10%" y1="0%" x2="90%" y2="100%">
+        <linearGradient id={gMetal} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="16%" stopColor="var(--theme-soft-white, #FFF6D6)" />
-          <stop offset="42%" stopColor="var(--theme-accent, #F5E6A8)" />
+          <stop offset="38%" stopColor="#FFFFFF" />
+          <stop offset="48%" stopColor="var(--theme-accent, #F5E6A8)" />
           <stop offset="72%" stopColor="var(--theme-primary, #D4AF37)" />
           <stop offset="100%" stopColor="var(--theme-secondary, #8C6A1D)" />
         </linearGradient>
@@ -337,10 +337,10 @@ function Style1Classic3DIcon({
           <stop offset="55%" stopColor="var(--theme-secondary, #8C6A1D)" />
           <stop offset="100%" stopColor="#07090F" />
         </linearGradient>
-        <linearGradient id={gRim} x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id={gRim} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="38%" stopColor="var(--theme-soft-white, #FFF6D6)" />
-          <stop offset="75%" stopColor="var(--theme-accent, #F5E6A8)" />
+          <stop offset="42%" stopColor="#FFFFFF" />
+          <stop offset="55%" stopColor="var(--theme-accent, #F5E6A8)" />
           <stop offset="100%" stopColor="var(--theme-primary, #D4AF37)" />
         </linearGradient>
         <linearGradient id={gGlass} x1="0%" y1="0%" x2="100%" y2="100%">
