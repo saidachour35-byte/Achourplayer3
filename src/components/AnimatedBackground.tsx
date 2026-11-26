@@ -21,18 +21,11 @@ export default function AnimatedBackground({ settings }: { settings?: AppSetting
 
   const activeImageUrl = customUrl && !isCustomVideo ? customUrl : bgConfig?.imageUrl || null;
 
-  // Existing black dimming control (0% = natural photo, 100% = fully dimmed)
+  // backgroundOpacity controls the dark dimming scrim overlay (0% = natural photo, 62% = balanced default, 100% = full dim)
   const dimmingOpacity =
     typeof settings?.backgroundOpacity === 'number' && !Number.isNaN(settings.backgroundOpacity)
       ? Math.max(0, Math.min(100, settings.backgroundOpacity)) / 100
       : 0.62;
-
-  // Theme color overlay intensity (0% = disabled, 100% = maximum tint)
-  const tintOpacity =
-    typeof settings?.backgroundTintOpacity === 'number' &&
-    !Number.isNaN(settings.backgroundTintOpacity)
-      ? Math.max(0, Math.min(100, settings.backgroundTintOpacity)) / 100
-      : 0.18;
 
   return (
     <div
@@ -60,20 +53,9 @@ export default function AnimatedBackground({ settings }: { settings?: AppSetting
           />
         )
       )}
-
-      {/* Existing black dimming overlay */}
       <div
         className="absolute inset-0 bg-black pointer-events-none transition-opacity duration-300"
         style={{ opacity: dimmingOpacity }}
-      />
-
-      {/* Dynamic transparent overlay using the currently selected app theme */}
-      <div
-        className="absolute inset-0 pointer-events-none transition-opacity duration-300"
-        style={{
-          backgroundColor: 'rgba(var(--theme-rgb, 212, 175, 55), 1)',
-          opacity: tintOpacity,
-        }}
       />
     </div>
   );
