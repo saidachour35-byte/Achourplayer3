@@ -382,7 +382,7 @@ const LiveChannelRow: React.FC<{
             const lowerCat = rawCat.toLowerCase();
             const isSynthetic = !rawCat || lowerCat === 'general' || lowerCat === 'uncategorized' || rawCat === 'عام' || lowerCat === 'عام (general)';
             return !isSynthetic ? (
-              <span className="text-[11px] font-normal achour-glossy-info truncate leading-none mt-1">
+              <span className="text-[11px] font-normal text-white truncate leading-none mt-1">
                 {rawCat}
               </span>
             ) : null;
@@ -473,7 +473,7 @@ const VodListRow: React.FC<{
   !['general', 'uncategorized', 'عام', 'عام (general)'].includes(
     String(ch.category_name).trim().toLowerCase()
   ) && (
-    <span className="achour-glossy-info truncate max-w-[180px]">
+    <span className="text-white truncate max-w-[180px]">
       {ch.category_name}
     </span>
 )}
