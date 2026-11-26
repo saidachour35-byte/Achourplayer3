@@ -213,7 +213,7 @@ const CategoryButton = React.memo(({ cat, catIdx, isSelected, onSelect, onFocusI
             {catIdx + 1}
           </span>
         )}
-        <span className={`truncate text-xs sm:text-sm md:text-base leading-snug achour-glossy-text ${isSelected ? 'font-semibold' : 'font-medium'}`}>
+        <span className={`truncate text-xs sm:text-sm md:text-base leading-snug text-white ${isSelected ? 'font-semibold' : 'font-medium'}`}>
           {cat.category_name}
         </span>
       </div>
