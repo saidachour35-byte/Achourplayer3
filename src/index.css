@@ -65,43 +65,62 @@
   }
 
   /* Global Glossy 3D White-Blended Text & Surface System */
+  .achour-app-shell :is(h1, h2, h3, h4):not([class*="text-red"]):not([class*="text-rose"]):not(.text-black):not(.achour-glossy-pill):not(.achour-glossy-badge) {
+    color: var(--theme-soft-white, #ffffff);
+    background-image: var(
+      --theme-two-tone-grad,
+      linear-gradient(180deg, #ffffff 0%, #ffffff 45%, var(--theme-split-mid, #f5e6a8) 52%, var(--theme-split-color, #d4af37) 61%, var(--theme-split-deep, #8c6a1d) 100%)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
   .achour-glossy-title {
     color: var(--theme-soft-white, #ffffff);
     background-image: var(
       --theme-glossy-heading-grad,
-      linear-gradient(180deg, #ffffff 0%, #ffffff 22%, var(--theme-accent, #f5e6a8) 52%, var(--theme-primary, #d4af37) 84%, var(--theme-secondary, #8c6a1d) 100%)
+      linear-gradient(180deg, #ffffff 0%, #ffffff 46%, var(--theme-split-mid, #f5e6a8) 52%, var(--theme-split-color, #d4af37) 61%, var(--theme-split-deep, #8c6a1d) 100%)
     ) !important;
     -webkit-background-clip: text !important;
     background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
     text-shadow: none !important;
-    padding-block: 0.04em;
+    padding-block: 0;
   }
 
   .achour-glossy-text {
     color: var(--theme-luminous, #f5e6a8);
     background-image: var(
       --theme-glossy-text-grad,
-      linear-gradient(180deg, #ffffff 0%, #ffffff 18%, var(--theme-accent, #f5e6a8) 48%, var(--theme-primary, #d4af37) 82%, var(--theme-secondary, #8c6a1d) 100%)
+      linear-gradient(180deg, #ffffff 0%, #ffffff 45%, var(--theme-split-mid, #f5e6a8) 52%, var(--theme-split-color, #d4af37) 61%, var(--theme-split-deep, #8c6a1d) 100%)
     ) !important;
     -webkit-background-clip: text !important;
     background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
     text-shadow: none !important;
-    padding-block: 0.03em;
+    padding-block: 0;
   }
 
   .achour-glossy-info {
     color: var(--theme-soft-white, #ffffff);
     background-image: var(
       --theme-glossy-info-grad,
-      linear-gradient(180deg, #ffffff 0%, var(--theme-soft-white, #fff6d6) 44%, var(--theme-accent, #f5e6a8) 78%, var(--theme-primary, #d4af37) 100%)
+      linear-gradient(180deg, #ffffff 0%, #ffffff 45%, var(--theme-split-mid, #f5e6a8) 52%, var(--theme-split-color, #d4af37) 61%, var(--theme-split-deep, #8c6a1d) 100%)
     ) !important;
     -webkit-background-clip: text !important;
     background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
     text-shadow: none !important;
-    padding-block: 0.03em;
+    padding-block: 0;
   }
 
   .achour-glossy-surface {
@@ -149,14 +168,14 @@
     color: var(--theme-soft-white, #ffffff);
     background-image: var(
       --theme-glossy-heading-grad,
-      linear-gradient(180deg, #ffffff 0%, #ffffff 22%, var(--theme-accent, #f5e6a8) 52%, var(--theme-primary, #d4af37) 84%, var(--theme-secondary, #8c6a1d) 100%)
+      linear-gradient(180deg, #ffffff 0%, #ffffff 46%, var(--theme-split-mid, #f5e6a8) 52%, var(--theme-split-color, #d4af37) 61%, var(--theme-split-deep, #8c6a1d) 100%)
     ) !important;
     -webkit-background-clip: text !important;
     background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     letter-spacing: 0.12em;
     filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 14px rgba(var(--theme-rgb, 212, 175, 55), 0.62));
-    padding-block: 0.05em;
+    padding-block: 0;
   }
 
   .achour-brand-light-flare {
@@ -269,52 +288,63 @@ button[data-dashboard-kind][data-preview-focused="true"] div[class*="shrink-0"] 
   outline: none !important;
 }
 
-/* Radiant Lamp Backlight Orb Behind Icon */
+/* Radiant Lamp Backlight Orb Behind Icon (Icons-Only Mode) */
 .dashboard-lamp-orb {
   position: absolute;
   left: 50%;
   top: 40%;
   width: 132%;
-  max-width: 196px;
+  max-width: 210px;
   height: 126px;
   transform: translate(-50%, -50%) scale(0.76);
   border-radius: 9999px;
   background: radial-gradient(
     ellipse at center,
-    rgba(255, 255, 255, 0.92) 0%,
-    rgba(255, 255, 255, 0.56) 20%,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.78) 44%,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.3) 68%,
+    var(--focus-glow-white-strong, rgba(255, 255, 255, 0.72)) 0%,
+    var(--focus-glow-white-soft, rgba(255, 255, 255, 0.3)) 22%,
+    var(--focus-glow-color-strong, rgba(212, 175, 55, 0.75)) 46%,
+    var(--focus-glow-color-soft, rgba(212, 175, 55, 0.28)) 68%,
     transparent 84%
   );
   opacity: 0;
-  transition: opacity 0.1s ease-out, transform 0.12s ease-out;
+  transition: opacity 0.12s ease-out, transform 0.14s ease-out;
   pointer-events: none;
   z-index: 1;
 }
 
-/* Open Dock Halo Frame (Clean Outer Glow Enclosure — No Inner Oval Clutter) */
+/* Open Dock Halo Frame (Icons-Only Halo Styles — Never Rendered Over the 40 Custom Frames) */
 .dashboard-focus-halo {
   position: absolute;
   inset: -4px 4px 4px 4px;
   border-radius: 22px;
-  border: 1.5px solid rgba(255, 255, 255, 0.86);
-  background:
-    radial-gradient(
-      ellipse at 50% 42%,
-      rgba(255, 255, 255, 0.28) 0%,
-      rgba(var(--theme-rgb, 212, 175, 55), 0.36) 38%,
-      rgba(var(--theme-rgb, 212, 175, 55), 0.1) 70%,
-      transparent 92%
-    );
+  border: 1.5px solid transparent;
+  background: radial-gradient(
+    ellipse at 50% 42%,
+    var(--focus-glow-white-soft, rgba(255, 255, 255, 0.26)) 0%,
+    var(--focus-glow-color-soft, rgba(212, 175, 55, 0.34)) 42%,
+    transparent 90%
+  );
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.86),
-    0 0 16px rgba(var(--theme-rgb, 212, 175, 55), 0.78);
+    0 0 var(--focus-glow-outer-px, 18px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.78));
   opacity: 0;
   transform: scale(0.94);
-  transition: opacity 0.1s ease-out, transform 0.12s ease-out;
+  transition: opacity 0.12s ease-out, transform 0.14s ease-out;
   pointer-events: none;
   z-index: 0;
+}
+
+.dashboard-focus-halo::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  padding: 2px;
+  background: var(--theme-two-tone-grad, linear-gradient(180deg, #ffffff 0%, #ffffff 45%, #f5e6a8 52%, #d4af37 61%, #8c6a1d 100%));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 /* Icon Stage Smooth Scale */
@@ -324,10 +354,54 @@ button[data-dashboard-kind][data-preview-focused="true"] div[class*="shrink-0"] 
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.1s ease-out;
+  transition: transform 0.12s ease-out;
 }
 
-/* Section Label Capsule (Clean Floating Pill — Transparent Resting State) */
+/* SVG Inner Glow Overlay (Clipped Strictly to Each SVG Shape Geometry) */
+.dashboard-svg-inner-glow {
+  opacity: 0;
+  transition: opacity 0.14s ease-out;
+  pointer-events: none;
+}
+
+/* CSS Box Frame Inner Glow & Two-Tone Split Contour Layer (Inherits Exact border-radius & Skew of Any Box Frame) */
+.dashboard-frame-focus-surface {
+  position: relative;
+}
+
+.dashboard-frame-focus-surface::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2.6px;
+  background: var(--theme-two-tone-grad, linear-gradient(180deg, #ffffff 0%, #ffffff 45%, #f5e6a8 52%, #d4af37 61%, #8c6a1d 100%));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 6;
+  opacity: 0;
+  transition: opacity 0.14s ease-out;
+}
+
+.dashboard-frame-focus-surface[data-frame-shape="frame-20"]::before {
+  display: none !important;
+}
+
+.dashboard-frame-focus-surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.14s ease-out;
+}
+
+/* Section Label Capsule (Clean Floating Pill — Tightly Fitted & Transparent) */
 .dashboard-pill-btn {
   position: relative;
   z-index: 3;
@@ -336,7 +410,7 @@ button[data-dashboard-kind][data-preview-focused="true"] div[class*="shrink-0"] 
   justify-content: center;
   min-width: 0;
   max-width: 100%;
-  padding: 3px 14px;
+  padding: 2px 10px;
   border-radius: 9999px;
   border: 1.5px solid transparent !important;
   background: transparent !important;
@@ -347,7 +421,23 @@ button[data-dashboard-kind][data-preview-focused="true"] div[class*="shrink-0"] 
   transition: transform 0.12s ease-out, border-color 0.12s ease-out, box-shadow 0.12s ease-out;
 }
 
-/* Focused Dock States — Respecting dashboardFocusMode (frame / icon / label / both) */
+.dashboard-pill-btn::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 9999px;
+  padding: 1.8px;
+  background: var(--theme-two-tone-grad, linear-gradient(180deg, #ffffff 0%, #ffffff 45%, #f5e6a8 52%, #d4af37 61%, #8c6a1d 100%));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s ease-out;
+}
+
+/* Focused Dock States — Icons-Only Halo & Orb */
 button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"], [data-dashboard-focus-mode="icon"]) .dashboard-focus-halo {
   opacity: 1;
   transform: scale(1);
@@ -355,87 +445,135 @@ button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focu
 
 button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"], [data-dashboard-focus-mode="icon"]) .dashboard-lamp-orb {
   opacity: 0.96;
-  transform: translate(-50%, -50%) scale(1.04);
+  transform: translate(-50%, -50%) scale(var(--focus-lamp-scale, 1.04));
 }
 
 button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="icon"], [data-dashboard-focus-mode="both"], [data-dashboard-focus-mode="frame"]) .dashboard-icon-stage {
-  transform: scale(1.14) translateY(-3px);
+  transform: scale(1.12) translateY(-2px);
 }
 
-/* Moving Illuminated Small Glowing Thin Capsule Frame on Section Names (Transparent Background) */
+/* Icons-Only Mode Direct Glyph Drop-Shadow Glow */
+button[data-dashboard-kind][data-dashboard-icons-only="true"][data-focus-glow-enabled="true"]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="icon"], [data-dashboard-focus-mode="both"], [data-dashboard-focus-mode="frame"]) .dashboard-icon-wrap {
+  filter: drop-shadow(0 0 var(--focus-glow-drop-px, 14px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.85))) !important;
+}
+
+/* Moving Illuminated Small Glowing Thin Two-Tone Capsule Frame on Section Names (Transparent Background) */
 button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
-  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  border: 1.5px solid transparent !important;
   border-radius: 9999px !important;
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
   box-shadow:
-    0 0 16px 2px var(--theme-glow, rgba(212, 175, 55, 0.85)),
-    inset 0 0 8px rgba(var(--theme-rgb, 212, 175, 55), 0.22) !important;
-  transform: scale(1.08) !important;
+    0 0 var(--focus-glow-outer-px, 16px) 1.5px var(--focus-glow-color-strong, rgba(212, 175, 55, 0.85)),
+    inset 0 0 var(--focus-glow-inner-px, 10px) var(--focus-glow-color-inner, rgba(212, 175, 55, 0.38)) !important;
+  transform: scale(1.06) !important;
+}
+
+button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn::before {
+  opacity: 1 !important;
+}
+
+[data-focus-shape="inner-glow"] button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
+  box-shadow: inset 0 0 var(--focus-glow-inner-px, 12px) var(--focus-glow-color-inner-strong, rgba(212, 175, 55, 0.82)) !important;
+}
+
+[data-focus-shape="outer-glow"] button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
+  box-shadow: 0 0 var(--focus-glow-outer-px, 18px) 2px var(--focus-glow-color-strong, rgba(212, 175, 55, 0.88)) !important;
+}
+
+[data-focus-shape="double-neon"] button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
+  box-shadow:
+    0 0 0 2px var(--theme-split-color, #d4af37),
+    0 0 var(--focus-glow-outer-px, 18px) 1.5px var(--focus-glow-color-strong, rgba(212, 175, 55, 0.88)),
+    inset 0 0 var(--focus-glow-inner-px, 10px) var(--focus-glow-color-inner, rgba(212, 175, 55, 0.45)) !important;
+}
+
+[data-focus-shape="pulse-edge"] button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
+  box-shadow:
+    0 0 0 2px var(--theme-split-color, #d4af37),
+    0 0 var(--focus-glow-outer-px, 16px) 1px var(--focus-glow-color-strong, rgba(212, 175, 55, 0.9)) !important;
+}
+
+[data-focus-shape="classic-ring"] button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
+  box-shadow: 0 0 var(--focus-glow-drop-px, 10px) var(--focus-glow-color-mid, rgba(212, 175, 55, 0.6)) !important;
+}
+
+/* Label Focus Light Turned OFF (either via Label Light toggle OR Master Lighting OFF) */
+button[data-dashboard-kind][data-label-focus-glow="false"]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn,
+button[data-dashboard-kind][data-focus-glow-enabled="false"]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
+  border: 1.5px solid transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn .dashboard-tile-label {
-  background-image: none !important;
-  -webkit-background-clip: border-box !important;
-  background-clip: border-box !important;
-  -webkit-text-fill-color: #ffffff !important;
-  color: #ffffff !important;
   font-weight: 700 !important;
-  filter: none !important;
-  text-shadow: 0 0 12px var(--theme-glow, rgba(212, 175, 55, 0.95)), 0 2px 4px rgba(0, 0, 0, 0.85) !important;
+  text-shadow: none !important;
+  filter: drop-shadow(0 0 var(--focus-glow-drop-sm-px, 7px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.88))) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.85)) !important;
 }
 
-/* In Label Focus Mode: completely suppress the large outer box/halo over the icons */
+button[data-dashboard-kind]:is([data-label-focus-glow="false"], [data-focus-glow-enabled="false"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn .dashboard-tile-label {
+  text-shadow: none !important;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.85)) !important;
+}
+
+/* In Label Focus Mode: completely suppress outer halos/orbs and frame glows */
 button[data-dashboard-kind][data-dashboard-focus-mode="label"] .dashboard-focus-halo,
 button[data-dashboard-kind][data-dashboard-focus-mode="label"] .dashboard-lamp-orb {
   display: none !important;
   opacity: 0 !important;
 }
 
+/* Master Glow OFF disables halo/orb glow shadows cleanly */
+[data-focus-glow-enabled="false"] .dashboard-focus-halo {
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+[data-focus-glow-enabled="false"] .dashboard-lamp-orb {
+  opacity: 0 !important;
+}
+
 /* ===================================================================== */
-/* FOCUS GLOW & SHAPE PRESETS (Frameless + Clean Outer Frame Options)    */
+/* FOCUS GLOW & SHAPE PRESETS (Icons-Only Halos)                         */
 /* ===================================================================== */
 
-/* 1. Frameless Illuminated Glow (Zero Outer Box/Border — Pure Lamp Light) */
-[data-focus-shape="frameless-glow"] .dashboard-focus-halo {
+[data-focus-shape="frameless-glow"] .dashboard-focus-halo,
+[data-focus-shape="inner-glow"] .dashboard-focus-halo,
+[data-focus-shape="outer-glow"] .dashboard-focus-halo,
+[data-focus-shape="combined-glow"] .dashboard-focus-halo,
+[data-focus-shape="soft-glow"] .dashboard-focus-halo,
+[data-focus-shape="pulse-edge"] .dashboard-focus-halo {
   display: none !important;
 }
 
-[data-focus-shape="frameless-glow"] .dashboard-lamp-orb {
+[data-focus-shape="frameless-glow"] .dashboard-lamp-orb,
+[data-focus-shape="outer-glow"] .dashboard-lamp-orb,
+[data-focus-shape="combined-glow"] .dashboard-lamp-orb,
+[data-focus-shape="soft-glow"] .dashboard-lamp-orb {
   width: 142%;
-  max-width: 210px;
-  height: 136px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.58) 20%,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.85) 42%,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.34) 68%,
-    transparent 86%
-  );
+  max-width: 220px;
+  height: 138px;
 }
 
-/* 2. Double Neon Tube */
 [data-focus-shape="double-neon"] .dashboard-focus-halo {
-  border: 2px solid #ffffff;
-  outline: 2px solid var(--theme-primary, #d4af37);
+  border: 2px solid transparent;
+  outline: 2px solid var(--theme-split-color, #d4af37);
   outline-offset: 4px;
   border-radius: 24px;
-  box-shadow: 0 0 18px rgba(var(--theme-rgb, 212, 175, 55), 0.82);
+  box-shadow: 0 0 var(--focus-glow-outer-px, 18px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.85));
 }
 
-/* 3. Stage Spotlight Beam */
 [data-focus-shape="spotlight-pillar"] .dashboard-focus-halo {
   inset: -12px 4px 4px 4px;
   border-radius: 28px 28px 14px 14px;
-  border: 1.5px solid rgba(255, 255, 255, 0.82);
+  border: 1.5px solid transparent;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.48) 0%,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.46) 36%,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.16) 76%,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.32) 100%
+    var(--focus-glow-white-soft, rgba(255, 255, 255, 0.35)) 0%,
+    var(--focus-glow-color-mid, rgba(212, 175, 55, 0.5)) 40%,
+    var(--focus-glow-color-soft, rgba(212, 175, 55, 0.24)) 100%
   );
 }
 
@@ -445,88 +583,284 @@ button[data-dashboard-kind][data-dashboard-focus-mode="label"] .dashboard-lamp-o
   border-radius: 42% 42% 50% 50%;
 }
 
-/* 4. Diamond Glass Prism */
 [data-focus-shape="diamond-prism"] .dashboard-focus-halo {
   border-radius: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.92);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.38) 0%,
-      rgba(var(--theme-rgb, 212, 175, 55), 0.2) 38%,
-      transparent 58%,
-      rgba(var(--theme-rgb, 212, 175, 55), 0.38) 100%
-    );
-  box-shadow: 0 0 18px rgba(var(--theme-rgb, 212, 175, 55), 0.82);
+  border: 2px solid transparent;
+  background: linear-gradient(
+    135deg,
+    var(--focus-glow-white-soft, rgba(255, 255, 255, 0.34)) 0%,
+    var(--focus-glow-color-soft, rgba(212, 175, 55, 0.22)) 42%,
+    transparent 58%,
+    var(--focus-glow-color-mid, rgba(212, 175, 55, 0.44)) 100%
+  );
+  box-shadow: 0 0 var(--focus-glow-outer-px, 18px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.82));
 }
 
-/* 5. Luminous Corner Brackets */
 [data-focus-shape="cyber-brackets"] .dashboard-focus-halo {
   border-radius: 14px;
-  border: 1px solid rgba(var(--theme-rgb, 212, 175, 55), 0.45);
+  border: 1px solid var(--focus-glow-color-soft, rgba(212, 175, 55, 0.45));
   background:
     linear-gradient(90deg, #ffffff 0 18px, transparent 18px) top left / 100% 3px no-repeat,
     linear-gradient(180deg, #ffffff 0 18px, transparent 18px) top left / 3px 100% no-repeat,
     linear-gradient(-90deg, #ffffff 0 18px, transparent 18px) top right / 100% 3px no-repeat,
     linear-gradient(180deg, #ffffff 0 18px, transparent 18px) top right / 3px 100% no-repeat,
-    linear-gradient(90deg, var(--theme-primary, #d4af37) 0 18px, transparent 18px) bottom left / 100% 3px no-repeat,
-    linear-gradient(0deg, var(--theme-primary, #d4af37) 0 18px, transparent 18px) bottom left / 3px 100% no-repeat,
-    linear-gradient(-90deg, var(--theme-primary, #d4af37) 0 18px, transparent 18px) bottom right / 100% 3px no-repeat,
-    linear-gradient(0deg, var(--theme-primary, #d4af37) 0 18px, transparent 18px) bottom right / 3px 100% no-repeat,
-    radial-gradient(ellipse at 50% 45%, rgba(var(--theme-rgb, 212, 175, 55), 0.36) 0%, transparent 78%);
+    linear-gradient(90deg, var(--theme-split-color, #d4af37) 0 18px, transparent 18px) bottom left / 100% 3px no-repeat,
+    linear-gradient(0deg, var(--theme-split-color, #d4af37) 0 18px, transparent 18px) bottom left / 3px 100% no-repeat,
+    linear-gradient(-90deg, var(--theme-split-color, #d4af37) 0 18px, transparent 18px) bottom right / 100% 3px no-repeat,
+    linear-gradient(0deg, var(--theme-split-color, #d4af37) 0 18px, transparent 18px) bottom right / 3px 100% no-repeat,
+    radial-gradient(ellipse at 50% 45%, var(--focus-glow-color-soft, rgba(212, 175, 55, 0.36)) 0%, transparent 78%);
 }
 
-/* 6. Full Aurora Capsule */
+[data-focus-shape="cyber-brackets"] .dashboard-focus-halo::before {
+  display: none !important;
+}
+
 [data-focus-shape="aurora-capsule"] .dashboard-focus-halo {
   inset: -6px 0px 2px 0px;
   border-radius: 28px;
-  border: 2px solid rgba(255, 255, 255, 0.9);
+  border: 2px solid transparent;
   background: radial-gradient(
     ellipse at 50% 44%,
-    rgba(255, 255, 255, 0.28) 0%,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.42) 46%,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.16) 80%,
+    var(--focus-glow-white-soft, rgba(255, 255, 255, 0.28)) 0%,
+    var(--focus-glow-color-mid, rgba(212, 175, 55, 0.44)) 48%,
+    var(--focus-glow-color-soft, rgba(212, 175, 55, 0.18)) 80%,
     transparent 98%
   );
 }
 
-/* 7. Classic Clean Outline */
 [data-focus-shape="classic-ring"] .dashboard-focus-halo {
   border-radius: 18px;
-  border: 2px solid var(--theme-primary, #d4af37);
+  border: 2px solid transparent;
   background: rgba(var(--theme-rgb, 212, 175, 55), 0.14);
-  box-shadow: 0 0 10px rgba(var(--theme-rgb, 212, 175, 55), 0.45);
+  box-shadow: 0 0 var(--focus-glow-drop-px, 12px) var(--focus-glow-color-mid, rgba(212, 175, 55, 0.6));
 }
 
 [data-focus-shape="classic-ring"] button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-lamp-orb {
   opacity: 0.28;
 }
 
-/* Custom Frame Shape Focus Overrides (when iconDisplayMode === 'with-frames') */
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] svg.dashboard-frame-svg,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] svg.dashboard-frame-svg,
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-preview-focused="true"] svg.dashboard-frame-svg,
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-preview-focused="true"] svg.dashboard-frame-svg {
-  filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 16px var(--theme-glow, rgba(212, 175, 55, 0.92))) drop-shadow(0 0 26px var(--theme-primary, #d4af37)) !important;
-  transition: transform 0.15s, filter 0.15s !important;
+/* ===================================================================== */
+/* EXACT 40-FRAME CONTOUR FOCUS & LIGHTING (Zero Extra Square Boxes!)    */
+/* ===================================================================== */
+
+/* Base focused transform & primary two-tone edge highlight for all 22 SVG shapes */
+button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"], [data-dashboard-focus-mode="icon"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg {
+  transition: transform 0.14s ease-out, filter 0.14s ease-out !important;
   transform: scale(1.06) !important;
 }
 
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] svg.dashboard-frame-svg :is(polygon, path, circle, rect),
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] svg.dashboard-frame-svg :is(polygon, path, circle, rect),
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-preview-focused="true"] svg.dashboard-frame-svg :is(polygon, path, circle, rect),
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-preview-focused="true"] svg.dashboard-frame-svg :is(polygon, path, circle, rect) {
-  stroke: var(--theme-accent, #f5e6a8) !important;
+button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg .dashboard-frame-primary-stroke {
   stroke-width: 3.6px !important;
 }
 
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] .dashboard-frame-wrap[data-frame-kind="box"],
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] .dashboard-frame-wrap[data-frame-kind="box"],
-button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-preview-focused="true"] .dashboard-frame-wrap[data-frame-kind="box"],
-button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-preview-focused="true"] .dashboard-frame-wrap[data-frame-kind="box"] {
-  filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 16px var(--theme-glow, rgba(212, 175, 55, 0.92))) drop-shadow(0 0 26px var(--theme-primary, #d4af37)) !important;
-  transition: transform 0.15s, filter 0.15s !important;
+/* Base focused transform for all 18 CSS box frame surfaces (inheriting exact shape radii/skew) */
+button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"], [data-dashboard-focus-mode="icon"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-wrap[data-frame-kind="box"] {
+  transition: transform 0.14s ease-out !important;
   transform: scale(1.06) !important;
+}
+
+/* Always render the exact two-tone White-top / Theme-Color-bottom border contour on focused box frames */
+button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface:not([data-frame-shape="frame-20"]) {
+  border-color: transparent !important;
+}
+
+button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface:not([data-frame-shape="frame-20"])::before {
+  opacity: 1 !important;
+}
+
+/* Lighting Enabled — Default / Outer / Frameless / Lamp / Spotlight / Aurora / Prism / Brackets */
+[data-focus-glow-enabled="true"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg {
+  filter:
+    drop-shadow(0 0 var(--focus-glow-drop-sm-px, 6px) var(--focus-glow-white-strong, rgba(255, 255, 255, 0.72)))
+    drop-shadow(0 0 var(--focus-glow-drop-px, 14px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.88))) !important;
+}
+
+[data-focus-glow-enabled="true"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface:not([data-frame-shape="frame-20"]) {
+  box-shadow:
+    0 0 var(--focus-glow-outer-px, 18px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.88)),
+    0 0 var(--focus-glow-wide-px, 28px) var(--focus-glow-color-mid, rgba(212, 175, 55, 0.55)) !important;
+}
+
+[data-focus-glow-enabled="true"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface[data-frame-shape="frame-20"] {
+  border-top-color: #ffffff !important;
+  border-bottom-color: var(--theme-split-color, #d4af37) !important;
+  filter:
+    drop-shadow(0 0 var(--focus-glow-drop-sm-px, 6px) var(--focus-glow-white-strong, rgba(255, 255, 255, 0.72)))
+    drop-shadow(0 0 var(--focus-glow-drop-px, 14px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.88))) !important;
+}
+
+/* Subtle interior aura for lamp-halo, spotlight-pillar, aurora-capsule, diamond-prism, cyber-brackets */
+[data-focus-glow-enabled="true"]:is([data-focus-shape="lamp-halo"], [data-focus-shape="spotlight-pillar"], [data-focus-shape="aurora-capsule"], [data-focus-shape="diamond-prism"], [data-focus-shape="cyber-brackets"]) button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-svg-inner-glow {
+  opacity: 0.45 !important;
+}
+
+[data-focus-glow-enabled="true"]:is([data-focus-shape="lamp-halo"], [data-focus-shape="spotlight-pillar"], [data-focus-shape="aurora-capsule"], [data-focus-shape="diamond-prism"], [data-focus-shape="cyber-brackets"]) button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface::after {
+  opacity: 0.52 !important;
+  box-shadow: inset 0 0 var(--focus-glow-inner-px, 12px) var(--focus-glow-color-inner-strong, rgba(212, 175, 55, 0.72));
+}
+
+/* Focus Mode = ICON only (with framed icons): subtle contour glow without heavy ring */
+[data-focus-glow-enabled="true"] button[data-dashboard-kind][data-dashboard-icons-only="false"][data-dashboard-focus-mode="icon"]:is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-icon-stage svg:not(.dashboard-frame-svg) {
+  filter: drop-shadow(0 0 var(--focus-glow-drop-px, 12px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.8))) !important;
+}
+
+/* 1. INNER GLOW (Pure internal contour illumination, zero outer halo) */
+[data-focus-glow-enabled="true"][data-focus-shape="inner-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg {
+  filter: none !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="inner-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-svg-inner-glow {
+  opacity: var(--focus-glow-inner-alpha, 0.92) !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="inner-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface:not([data-frame-shape="frame-20"]) {
+  box-shadow: none !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="inner-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface:not([data-frame-shape="frame-20"])::after {
+  opacity: var(--focus-glow-inner-alpha, 0.92) !important;
+  box-shadow:
+    inset 0 0 var(--focus-glow-inner-px, 14px) var(--focus-glow-color-inner-strong, rgba(212, 175, 55, 0.92)),
+    inset 0 0 var(--focus-glow-outer-px, 22px) var(--focus-glow-white-soft, rgba(255, 255, 255, 0.35)) !important;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.14) 0%,
+    var(--focus-glow-color-soft, rgba(212, 175, 55, 0.24)) 64%,
+    var(--focus-glow-color-mid, rgba(212, 175, 55, 0.56)) 100%
+  ) !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="inner-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface[data-frame-shape="frame-20"] {
+  filter: none !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="inner-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface[data-frame-shape="frame-20"]::after {
+  opacity: var(--focus-glow-inner-alpha, 0.92) !important;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    var(--focus-glow-color-mid, rgba(212, 175, 55, 0.55)) 16%,
+    transparent 40%,
+    transparent 60%,
+    var(--focus-glow-color-mid, rgba(212, 175, 55, 0.55)) 84%,
+    rgba(255, 255, 255, 0.45) 100%
+  ) !important;
+}
+
+/* 2. OUTER GLOW (Pure exterior aura hugging the exact silhouette, zero interior fill) */
+[data-focus-glow-enabled="true"][data-focus-shape="outer-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-svg-inner-glow,
+[data-focus-glow-enabled="true"][data-focus-shape="outer-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface::after {
+  opacity: 0 !important;
+}
+
+/* 3. COMBINED GLOW (Synchronized Inner + Outer Contour Glow) */
+[data-focus-glow-enabled="true"][data-focus-shape="combined-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-svg-inner-glow {
+  opacity: var(--focus-glow-inner-alpha, 0.9) !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="combined-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface:not([data-frame-shape="frame-20"])::after {
+  opacity: var(--focus-glow-inner-alpha, 0.9) !important;
+  box-shadow:
+    inset 0 0 var(--focus-glow-inner-px, 14px) var(--focus-glow-color-inner-strong, rgba(212, 175, 55, 0.88)),
+    inset 0 0 var(--focus-glow-outer-px, 20px) var(--focus-glow-white-soft, rgba(255, 255, 255, 0.3)) !important;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.1) 0%,
+    var(--focus-glow-color-soft, rgba(212, 175, 55, 0.22)) 66%,
+    var(--focus-glow-color-mid, rgba(212, 175, 55, 0.48)) 100%
+  ) !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="combined-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface[data-frame-shape="frame-20"]::after {
+  opacity: var(--focus-glow-inner-alpha, 0.9) !important;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    var(--focus-glow-color-mid, rgba(212, 175, 55, 0.48)) 16%,
+    transparent 40%,
+    transparent 60%,
+    var(--focus-glow-color-mid, rgba(212, 175, 55, 0.48)) 84%,
+    rgba(255, 255, 255, 0.4) 100%
+  ) !important;
+}
+
+/* 4. SOFT GLOW (Diffused Silky Ambient Glow Hugging Frame Contour) */
+[data-focus-glow-enabled="true"][data-focus-shape="soft-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg {
+  filter: drop-shadow(0 0 var(--focus-glow-wide-px, 26px) var(--focus-glow-color-mid, rgba(212, 175, 55, 0.72))) !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="soft-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-svg-inner-glow {
+  opacity: 0.45 !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="soft-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface:not([data-frame-shape="frame-20"]) {
+  box-shadow:
+    0 0 var(--focus-glow-wide-px, 28px) 2px var(--focus-glow-color-mid, rgba(212, 175, 55, 0.72)),
+    inset 0 0 var(--focus-glow-inner-px, 14px) var(--focus-glow-color-inner, rgba(212, 175, 55, 0.35)) !important;
+}
+
+/* 5. DOUBLE NEON (Twin Neon Rings Following Exact Frame Shape, Preserving Two-Tone Split Contour) */
+[data-focus-glow-enabled="true"][data-focus-shape="double-neon"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg .dashboard-frame-primary-stroke {
+  stroke-width: 3.8px !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="double-neon"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-svg-inner-glow {
+  opacity: 0.62 !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="double-neon"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface:not([data-frame-shape="frame-20"]) {
+  box-shadow:
+    0 0 0 3.5px var(--theme-split-color, #d4af37),
+    0 0 var(--focus-glow-outer-px, 20px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.9)) !important;
+}
+
+/* 6. TV LUMINOUS EDGE CONTOUR (pulse-edge — Crisp High-Contrast Two-Tone Edge for Android TV) */
+[data-focus-glow-enabled="true"][data-focus-shape="pulse-edge"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg {
+  filter: drop-shadow(0 0 var(--focus-glow-drop-px, 14px) var(--theme-split-color, #d4af37)) !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="pulse-edge"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg .dashboard-frame-primary-stroke {
+  stroke-width: 4.2px !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="pulse-edge"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-svg-inner-glow {
+  opacity: 0.5 !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="pulse-edge"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface:not([data-frame-shape="frame-20"]) {
+  box-shadow:
+    0 0 0 2px var(--theme-split-color, #d4af37),
+    0 0 var(--focus-glow-outer-px, 16px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.92)) !important;
+}
+
+/* 7. CLASSIC RING on Framed Shapes */
+[data-focus-glow-enabled="true"][data-focus-shape="classic-ring"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg {
+  filter: drop-shadow(0 0 var(--focus-glow-drop-px, 10px) var(--focus-glow-color-mid, rgba(212, 175, 55, 0.65))) !important;
+}
+
+[data-focus-glow-enabled="true"][data-focus-shape="classic-ring"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface:not([data-frame-shape="frame-20"]) {
+  box-shadow:
+    0 0 var(--focus-glow-drop-px, 10px) var(--focus-glow-color-mid, rgba(212, 175, 55, 0.55)) !important;
+}
+
+/* MASTER LIGHTING OFF on Framed Shapes (Clean Crisp Two-Tone Shape Contour Outline, Zero Glow) */
+[data-focus-glow-enabled="false"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg {
+  filter: none !important;
+}
+
+[data-focus-glow-enabled="false"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-svg-inner-glow,
+[data-focus-glow-enabled="false"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface::after {
+  opacity: 0 !important;
+}
+
+[data-focus-glow-enabled="false"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface:not([data-frame-shape="frame-20"]) {
+  box-shadow: none !important;
+}
+
+[data-focus-glow-enabled="false"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-focus-surface[data-frame-shape="frame-20"] {
+  border-top-color: #ffffff !important;
+  border-bottom-color: var(--theme-split-color, #d4af37) !important;
+  filter: none !important;
 }
 
 /* Non-open mode fallback label highlight (row/pill/wide layouts) */
@@ -549,7 +883,7 @@ button[data-dashboard-kind][data-dashboard-mode-pill="false"]:is([data-dashboard
   filter: drop-shadow(0 0 7px var(--theme-glow, rgba(212, 175, 55, 0.68)));
 }
 
-/* Lightweight Fire TV & Android TV Performance Rules (Zero Paint Lag) */
+/* Lightweight Fire TV & Android TV Performance Rules (Fast Single-Pass Theme Lighting) */
 html.achour-tv-perf .achour-icon-svg,
 html.achour-tv-perf .achour-icon-svg-glow,
 html.achour-tv-perf .achour-glossy-title,
@@ -568,8 +902,12 @@ html.achour-tv-perf .achour-header-glass-card {
 }
 
 html.achour-tv-perf .dashboard-focus-halo {
-  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 0 var(--focus-glow-outer-px, 14px) var(--focus-glow-color-mid, rgba(212, 175, 55, 0.65)) !important;
   transition: opacity 70ms ease-out, transform 70ms ease-out !important;
+}
+
+html.achour-tv-perf [data-focus-glow-enabled="false"] .dashboard-focus-halo {
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.85) !important;
 }
 
 html.achour-tv-perf .dashboard-lamp-orb {
@@ -595,32 +933,58 @@ html.achour-tv-perf .dashboard-pill-btn {
 }
 
 html.achour-tv-perf button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
-  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  border: 1.5px solid transparent !important;
   border-radius: 9999px !important;
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
-  box-shadow: inset 0 0 12px rgba(var(--theme-rgb, 212, 175, 55), 0.45) !important;
-transform: scale(1.06) !important;
+  box-shadow:
+    0 0 var(--focus-glow-outer-px, 16px) 1.5px var(--focus-glow-color-strong, rgba(212, 175, 55, 0.88)),
+    inset 0 0 var(--focus-glow-inner-px, 10px) var(--focus-glow-color-inner, rgba(212, 175, 55, 0.42)) !important;
+  transform: scale(1.06) !important;
+}
+
+html.achour-tv-perf button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn::before {
+  opacity: 1 !important;
+}
+
+html.achour-tv-perf [data-focus-shape="inner-glow"] button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
+  box-shadow: inset 0 0 var(--focus-glow-inner-px, 12px) var(--focus-glow-color-inner-strong, rgba(212, 175, 55, 0.82)) !important;
+}
+
+html.achour-tv-perf [data-focus-shape="outer-glow"] button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
+  box-shadow: 0 0 var(--focus-glow-outer-px, 18px) 2px var(--focus-glow-color-strong, rgba(212, 175, 55, 0.88)) !important;
+}
+
+html.achour-tv-perf button[data-dashboard-kind]:is([data-label-focus-glow="false"], [data-focus-glow-enabled="false"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn {
+  border: 1.5px solid transparent !important;
+  box-shadow: none !important;
 }
 
 html.achour-tv-perf button[data-dashboard-kind]:is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn .dashboard-tile-label {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.85) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: none !important;
 }
 
-html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] svg.dashboard-frame-svg,
-html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] svg.dashboard-frame-svg {
-  filter: none !important;
+html.achour-tv-perf button[data-dashboard-kind]:is([data-label-focus-glow="false"], [data-focus-glow-enabled="false"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]):is([data-dashboard-focus-mode="label"], [data-dashboard-focus-mode="both"]) .dashboard-pill-btn .dashboard-tile-label {
+  text-shadow: none !important;
+}
+
+/* TV Perf: Single crisp pass on SVG & exact box-shadow contour on CSS box frames */
+html.achour-tv-perf [data-focus-glow-enabled="true"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg {
+  filter: drop-shadow(0 0 var(--focus-glow-drop-px, 12px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.88))) !important;
   transition: transform 70ms ease-out !important;
   transform: scale(1.06) !important;
 }
 
-html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="frame"][data-tv-active-focus="true"] .dashboard-frame-wrap[data-frame-kind="box"],
-html.achour-tv-perf button[data-dashboard-kind][data-dashboard-focus-mode="both"][data-tv-active-focus="true"] .dashboard-frame-wrap[data-frame-kind="box"] {
+html.achour-tv-perf [data-focus-glow-enabled="true"][data-focus-shape="soft-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg {
+  filter: drop-shadow(0 0 var(--focus-glow-wide-px, 24px) var(--focus-glow-color-mid, rgba(212, 175, 55, 0.72))) !important;
+}
+
+html.achour-tv-perf [data-focus-glow-enabled="true"][data-focus-shape="inner-glow"] button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) svg.dashboard-frame-svg {
   filter: none !important;
-  box-shadow: 0 0 0 2.5px var(--theme-accent, #f5e6a8) !important;
+}
+
+html.achour-tv-perf button[data-dashboard-kind][data-dashboard-icons-only="false"]:is([data-dashboard-focus-mode="frame"], [data-dashboard-focus-mode="both"]):is([data-tv-active-focus="true"], [data-preview-focused="true"]) .dashboard-frame-wrap[data-frame-kind="box"] {
   transition: transform 70ms ease-out !important;
   transform: scale(1.06) !important;
 }
@@ -666,12 +1030,12 @@ html.achour-tv-perf .transition-all {
   background-image:
     radial-gradient(
       ellipse at 28% 50%,
-      rgba(255, 255, 255, 0.26) 0%,
-      rgba(var(--theme-rgb, 212, 175, 55), 0.52) 44%,
-      rgba(var(--theme-rgb, 212, 175, 55), 0.16) 100%
+      var(--focus-glow-white-soft, rgba(255, 255, 255, 0.24)) 0%,
+      var(--focus-glow-color-mid, rgba(212, 175, 55, 0.48)) 44%,
+      var(--focus-glow-color-soft, rgba(212, 175, 55, 0.16)) 100%
     ) !important;
   border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
-  box-shadow: inset 0 0 0 1px rgba(var(--theme-rgb, 212, 175, 55), 0.55) !important;
+  box-shadow: inset 0 0 0 1px var(--focus-glow-color-mid, rgba(212, 175, 55, 0.55)) !important;
   border-radius: 14px !important;
   outline: none !important;
   z-index: 4 !important;
@@ -682,46 +1046,173 @@ html[data-focus-shape="frameless-glow"] :is([data-tv-pane="categories"], [data-t
   box-shadow: none !important;
   background-image: linear-gradient(
     90deg,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.42) 0%,
-    rgba(255, 255, 255, 0.16) 46%,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.14) 100%
+    var(--focus-glow-color-mid, rgba(212, 175, 55, 0.45)) 0%,
+    var(--focus-glow-white-soft, rgba(255, 255, 255, 0.16)) 46%,
+    var(--focus-glow-color-soft, rgba(212, 175, 55, 0.14)) 100%
   ) !important;
 }
 
 [data-tv-pane="categories"][data-tv-active-focus="true"] span,
 [data-tv-pane="channels"][data-tv-focus-inset="true"]:not([data-tv-vod-poster="true"])[data-tv-active-focus="true"] span {
-  color: #ffffff !important;
-  background-image: none !important;
-  -webkit-background-clip: border-box !important;
-  background-clip: border-box !important;
-  -webkit-text-fill-color: #ffffff !important;
-  filter: none !important;
+  font-weight: 600 !important;
 }
 
 [data-tv-focus-inset="true"]:not([data-tv-pane="categories"]):not([data-tv-pane="channels"]):not([data-tv-vod-poster="true"])[data-tv-active-focus="true"] {
   background-image: linear-gradient(
     90deg,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.4) 0%,
-    rgba(255, 255, 255, 0.14) 50%,
-    rgba(var(--theme-rgb, 212, 175, 55), 0.24) 100%
+    var(--focus-glow-color-mid, rgba(212, 175, 55, 0.42)) 0%,
+    var(--focus-glow-white-soft, rgba(255, 255, 255, 0.14)) 50%,
+    var(--focus-glow-color-soft, rgba(212, 175, 55, 0.24)) 100%
   ) !important;
   border: 1.5px solid rgba(255, 255, 255, 0.84) !important;
   box-shadow: none !important;
   outline: none !important;
 }
 
+.achour-app-shell [data-tv-vod-poster="true"] {
+  isolation: isolate;
+}
+
+.achour-poster-lamp-bar,
+.achour-poster-lamp-beam {
+  display: none;
+  pointer-events: none;
+}
+
 .achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"] {
   z-index: 50 !important;
   border: 2px solid rgba(255, 255, 255, 0.92) !important;
-  box-shadow: 0 0 0 2.5px var(--theme-primary, #d4af37) !important;
+  box-shadow:
+    0 0 0 2.5px var(--theme-primary, #d4af37),
+    0 0 var(--focus-glow-outer-px, 16px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.8)) !important;
   outline: none !important;
   transform: scale(1.035) !important;
 }
 
 .achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"] span {
-  color: #ffffff !important;
-  background-image: none !important;
-  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* Poster Focus Mode 2: Gallery Spotlight (Top Slim Lamp Bar + Soft Downward Cone) */
+html[data-poster-focus-style="gallery-spotlight"] .achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"],
+.achour-poster-preview-card[data-preview-style="gallery-spotlight"] {
+  z-index: 50 !important;
+  border: 1.5px solid rgba(var(--theme-rgb, 212, 175, 55), calc(0.32 + var(--poster-focus-intensity, 0.35) * 0.45)) !important;
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.62),
+    0 0 calc(8px + var(--poster-focus-intensity, 0.35) * 18px) rgba(var(--theme-rgb, 212, 175, 55), calc(0.16 + var(--poster-focus-intensity, 0.35) * 0.5)) !important;
+  outline: none !important;
+  transform: scale(1.035) !important;
+}
+
+html[data-poster-focus-style="gallery-spotlight"] .achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"] .achour-poster-lamp-bar,
+.achour-poster-preview-card[data-preview-style="gallery-spotlight"] .achour-poster-lamp-bar {
+  display: block;
+  position: absolute;
+  top: -2px;
+  left: 14%;
+  right: 14%;
+  height: 6px;
+  z-index: 25;
+  border-radius: 9999px;
+  background: linear-gradient(
+    180deg,
+    rgba(226, 232, 240, 0.86) 0%,
+    #272a33 38%,
+    #111319 64%,
+    rgba(var(--theme-rgb, 212, 175, 55), calc(0.55 + var(--poster-focus-intensity, 0.35) * 0.56)) 82%,
+    #ffffff 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow:
+    0 2px 8px rgba(var(--theme-rgb, 212, 175, 55), calc(0.35 + var(--poster-focus-intensity, 0.35) * 0.72)),
+    0 4px 18px rgba(var(--theme-rgb, 212, 175, 55), calc(0.22 + var(--poster-focus-intensity, 0.35) * 0.65));
+}
+
+html[data-poster-focus-style="gallery-spotlight"] .achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"] .achour-poster-lamp-bar::before,
+html[data-poster-focus-style="gallery-spotlight"] .achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"] .achour-poster-lamp-bar::after,
+.achour-poster-preview-card[data-preview-style="gallery-spotlight"] .achour-poster-lamp-bar::before,
+.achour-poster-preview-card[data-preview-style="gallery-spotlight"] .achour-poster-lamp-bar::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  width: 6px;
+  height: 7px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #cbd5e1 0%, #334155 55%, #0f172a 100%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+}
+
+html[data-poster-focus-style="gallery-spotlight"] .achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"] .achour-poster-lamp-bar::before,
+.achour-poster-preview-card[data-preview-style="gallery-spotlight"] .achour-poster-lamp-bar::before {
+  left: -3px;
+}
+
+html[data-poster-focus-style="gallery-spotlight"] .achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"] .achour-poster-lamp-bar::after,
+.achour-poster-preview-card[data-preview-style="gallery-spotlight"] .achour-poster-lamp-bar::after {
+  right: -3px;
+}
+
+html[data-poster-focus-style="gallery-spotlight"] .achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"] .achour-poster-lamp-beam,
+.achour-poster-preview-card[data-preview-style="gallery-spotlight"] .achour-poster-lamp-beam {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.achour-poster-lamp-cone {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(14% 0%, 86% 0%, 100% 78%, 0% 78%);
+  mix-blend-mode: soft-light;
+  opacity: calc(0.18 + var(--poster-focus-intensity, 0.35) * 1.02);
+  background: radial-gradient(
+    ellipse 88% 72% at 50% 0%,
+    #ffffff 0%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.92) 28%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.38) 58%,
+    transparent 86%
+  );
+}
+
+.achour-poster-lamp-spill {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(16% 0%, 84% 0%, 96% 52%, 4% 52%);
+  mix-blend-mode: screen;
+  opacity: calc(var(--poster-focus-intensity, 0.35) * 0.45);
+  background: radial-gradient(
+    ellipse 72% 40% at 50% 0%,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(var(--theme-rgb, 212, 175, 55), 0.78) 38%,
+    transparent 82%
+  );
+}
+
+/* Poster Focus Mode 3: Neon Glow (Outer Luminous Theme Frame) */
+html[data-poster-focus-style="neon-glow"] .achour-app-shell [data-tv-vod-poster="true"][data-tv-active-focus="true"],
+.achour-poster-preview-card[data-preview-style="neon-glow"] {
+  z-index: 50 !important;
+  border: 2px solid rgba(255, 255, 255, calc(0.68 + var(--poster-focus-intensity, 0.35) * 0.36)) !important;
+  box-shadow:
+    0 0 0 2px rgba(var(--theme-rgb, 212, 175, 55), calc(0.45 + var(--poster-focus-intensity, 0.35) * 0.65)),
+    0 0 calc(10px + var(--poster-focus-intensity, 0.35) * 28px) rgba(var(--theme-rgb, 212, 175, 55), calc(0.28 + var(--poster-focus-intensity, 0.35) * 0.85)),
+    0 0 calc(20px + var(--poster-focus-intensity, 0.35) * 48px) rgba(var(--theme-rgb, 212, 175, 55), calc(0.14 + var(--poster-focus-intensity, 0.35) * 0.62)),
+    inset 0 0 calc(4px + var(--poster-focus-intensity, 0.35) * 12px) rgba(var(--theme-rgb, 212, 175, 55), calc(0.12 + var(--poster-focus-intensity, 0.35) * 0.28)) !important;
+  outline: none !important;
+  transform: scale(1.035) !important;
+}
+
+.achour-poster-preview-card[data-preview-style="classic"] {
+  z-index: 10;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  box-shadow:
+    0 0 0 2.5px var(--theme-primary, #d4af37),
+    0 0 var(--focus-glow-outer-px, 16px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.8));
+  transform: scale(1.03);
 }
 
 /* Global Focus Shape Variations Applied to Categories & Channels */
@@ -729,18 +1220,50 @@ html[data-focus-shape="double-neon"] :is([data-tv-pane="categories"], [data-tv-p
   border: 2px solid #ffffff !important;
   box-shadow:
     inset 0 0 0 2px var(--theme-primary, #d4af37),
-    inset 0 0 18px rgba(var(--theme-rgb, 212, 175, 55), 0.65),
-    0 0 20px rgba(var(--theme-rgb, 212, 175, 55), 0.92) !important;
+    inset 0 0 var(--focus-glow-inner-px, 16px) var(--focus-glow-color-inner-strong, rgba(212, 175, 55, 0.65)),
+    0 0 var(--focus-glow-outer-px, 20px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.9)) !important;
+}
+
+html[data-focus-shape="inner-glow"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
+  border: 1.5px solid var(--theme-accent, #f5e6a8) !important;
+  box-shadow:
+    inset 0 0 var(--focus-glow-inner-px, 16px) var(--focus-glow-color-inner-strong, rgba(212, 175, 55, 0.85)) !important;
+}
+
+html[data-focus-shape="outer-glow"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
+  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow:
+    0 0 var(--focus-glow-outer-px, 18px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.88)) !important;
+}
+
+html[data-focus-shape="combined-glow"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
+  border: 1.5px solid rgba(255, 255, 255, 0.92) !important;
+  box-shadow:
+    inset 0 0 var(--focus-glow-inner-px, 14px) var(--focus-glow-color-inner-strong, rgba(212, 175, 55, 0.78)),
+    0 0 var(--focus-glow-outer-px, 18px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.88)) !important;
+}
+
+html[data-focus-shape="soft-glow"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
+  border: 1px solid var(--focus-glow-color-mid, rgba(212, 175, 55, 0.7)) !important;
+  box-shadow:
+    0 0 var(--focus-glow-wide-px, 24px) var(--focus-glow-color-mid, rgba(212, 175, 55, 0.65)) !important;
+}
+
+html[data-focus-shape="pulse-edge"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
+  border: 2px solid #ffffff !important;
+  box-shadow:
+    0 0 0 2px var(--theme-primary, #d4af37),
+    0 0 var(--focus-glow-outer-px, 16px) var(--focus-glow-color-strong, rgba(212, 175, 55, 0.9)) !important;
 }
 
 html[data-focus-shape="spotlight-pillar"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"] {
   background-image:
     linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.34) 0%,
-      rgba(var(--theme-rgb, 212, 175, 55), 0.62) 22%,
-      rgba(var(--theme-rgb, 212, 175, 55), 0.24) 72%,
-      rgba(255, 255, 255, 0.14) 100%
+      var(--focus-glow-white-soft, rgba(255, 255, 255, 0.34)) 0%,
+      var(--focus-glow-color-mid, rgba(212, 175, 55, 0.62)) 22%,
+      var(--focus-glow-color-soft, rgba(212, 175, 55, 0.24)) 72%,
+      var(--focus-glow-white-soft, rgba(255, 255, 255, 0.14)) 100%
     ) !important;
 }
 
@@ -748,10 +1271,10 @@ html[data-focus-shape="diamond-prism"] :is([data-tv-pane="categories"], [data-tv
   background-image:
     linear-gradient(
       125deg,
-      rgba(255, 255, 255, 0.36) 0%,
-      rgba(var(--theme-rgb, 212, 175, 55), 0.44) 38%,
-      rgba(255, 255, 255, 0.16) 54%,
-      rgba(var(--theme-rgb, 212, 175, 55), 0.52) 100%
+      var(--focus-glow-white-soft, rgba(255, 255, 255, 0.36)) 0%,
+      var(--focus-glow-color-mid, rgba(212, 175, 55, 0.44)) 38%,
+      var(--focus-glow-white-soft, rgba(255, 255, 255, 0.16)) 54%,
+      var(--focus-glow-color-mid, rgba(212, 175, 55, 0.52)) 100%
     ) !important;
 }
 
@@ -763,7 +1286,7 @@ html[data-focus-shape="cyber-brackets"] :is([data-tv-pane="categories"], [data-t
     linear-gradient(180deg, #ffffff 0 14px, transparent 14px),
     linear-gradient(-90deg, #ffffff 0 14px, transparent 14px),
     linear-gradient(0deg, #ffffff 0 14px, transparent 14px),
-    linear-gradient(90deg, rgba(var(--theme-rgb, 212, 175, 55), 0.48) 0%, rgba(var(--theme-rgb, 212, 175, 55), 0.2) 100%) !important;
+    linear-gradient(90deg, var(--focus-glow-color-mid, rgba(212, 175, 55, 0.48)) 0%, var(--focus-glow-color-soft, rgba(212, 175, 55, 0.2)) 100%) !important;
   background-position: top left, top left, bottom right, bottom right, center !important;
   background-size: 100% 2.5px, 2.5px 100%, 100% 2.5px, 2.5px 100%, 100% 100% !important;
   background-repeat: no-repeat !important;
@@ -780,6 +1303,12 @@ html[data-focus-shape="classic-ring"] :is([data-tv-pane="categories"], [data-tv-
   border-color: var(--theme-primary, #d4af37) !important;
 }
 
+html[data-focus-glow-enabled="false"] :is([data-tv-pane="categories"], [data-tv-pane="channels"]:not([data-tv-vod-poster="true"]))[data-tv-active-focus="true"],
+html[data-focus-glow-enabled="false"]:not([data-poster-focus-style="gallery-spotlight"]):not([data-poster-focus-style="neon-glow"]) [data-tv-vod-poster="true"][data-tv-active-focus="true"] {
+  box-shadow: 0 0 0 2px var(--theme-primary, #d4af37) !important;
+  background-image: none !important;
+}
+
 [data-season-tab="true"][data-tv-active-focus="true"] {
   background-image: linear-gradient(
     180deg,
@@ -788,7 +1317,7 @@ html[data-focus-shape="classic-ring"] :is([data-tv-pane="categories"], [data-tv-
   ) !important;
   box-shadow:
     inset 0 0 0 2px rgba(255, 255, 255, 0.85),
-    0 0 14px rgba(var(--theme-rgb, 212, 175, 55), 0.78) !important;
+    0 0 var(--focus-glow-drop-px, 14px) rgba(var(--theme-rgb, 212, 175, 55), var(--focus-glow-alpha, 0.78)) !important;
   border-color: var(--theme-primary, #d4af37) !important;
   color: #ffffff !important;
   outline: none !important;
@@ -805,7 +1334,7 @@ html[data-focus-shape="classic-ring"] :is([data-tv-pane="categories"], [data-tv-
   border-color: rgba(255, 255, 255, 0.85) !important;
   box-shadow:
     inset 0 0 0 2px var(--theme-primary, #d4af37),
-    0 0 16px rgba(var(--theme-rgb, 212, 175, 55), 0.75) !important;
+    0 0 var(--focus-glow-outer-px, 16px) rgba(var(--theme-rgb, 212, 175, 55), var(--focus-glow-alpha, 0.75)) !important;
   outline: none !important;
 }
 
@@ -881,7 +1410,7 @@ html.achour-tv-perf .shadow-2xl {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35) !important;
 }
 
-html.achour-tv-perf [data-tv-vod-poster="true"][data-tv-active-focus="true"] {
+html.achour-tv-perf:not([data-poster-focus-style="gallery-spotlight"]):not([data-poster-focus-style="neon-glow"]) [data-tv-vod-poster="true"][data-tv-active-focus="true"] {
   box-shadow: 0 0 0 3px var(--theme-primary, #d4af37) !important;
   border-color: var(--theme-primary, #d4af37) !important;
   z-index: 50 !important;
@@ -1219,7 +1748,15 @@ html.achour-tv-ui [data-achour-window-cat="playlists"] {
     padding: 0.35rem 0.25rem !important;
   }
 
-  [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] button[data-dashboard-kind] svg {
+  [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] button[data-dashboard-kind] .dashboard-frame-wrap {
+    max-width: 50px !important;
+    max-height: 50px !important;
+  }
+
+  [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] button[data-dashboard-kind] .dashboard-icon-wrap svg,
+  [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] button[data-dashboard-kind] .dashboard-icon-wrap img,
+  [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] button[data-dashboard-kind] .dashboard-frame-wrap svg:not(.dashboard-frame-svg),
+  [data-dashboard-layout-stage="true"]:is([data-dashboard-v="top"], [data-dashboard-v="bottom"])[data-dashboard-h="center"] button[data-dashboard-kind] .dashboard-frame-wrap img {
     max-width: 28px !important;
     max-height: 28px !important;
   }
@@ -1293,9 +1830,17 @@ html.achour-tv-ui [data-achour-window-cat="playlists"] {
   padding: 0.45rem 0.75rem !important;
 }
 
-[data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) button[data-dashboard-kind] svg {
-  max-width: 28px !important;
-  max-height: 28px !important;
+[data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) button[data-dashboard-kind] .dashboard-frame-wrap {
+  max-width: 44px !important;
+  max-height: 44px !important;
+}
+
+[data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) button[data-dashboard-kind] .dashboard-icon-wrap svg,
+[data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) button[data-dashboard-kind] .dashboard-icon-wrap img,
+[data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) button[data-dashboard-kind] .dashboard-frame-wrap svg:not(.dashboard-frame-svg),
+[data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) button[data-dashboard-kind] .dashboard-frame-wrap img {
+  max-width: 26px !important;
+  max-height: 26px !important;
 }
 
 [data-dashboard-layout-stage="true"]:is([data-dashboard-h="left"], [data-dashboard-h="right"]) .dashboard-focus-halo {

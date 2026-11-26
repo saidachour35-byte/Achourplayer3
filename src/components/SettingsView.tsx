@@ -30,7 +30,7 @@ import {
   getLastWatchedChannel,
   WatchHistoryType
 } from '../utils/watchHistoryService';
-import { APP_BACKGROUNDS } from '../utils/themeManager';
+import { APP_BACKGROUNDS, ICON_PACKS, normalizeIconPackId } from '../utils/themeManager';
 import {
   pushBackHandler,
   navigateSpatial,
@@ -68,6 +68,7 @@ const DESIGN_SUBVIEW_IDS = new Set<string>([
   'design-glass-blur',
   'design-focus-mode',
   'design-label-color',
+  'poster-focus',
 ]);
 
 type SettingsSubView =
@@ -159,7 +160,7 @@ const SettingsTimePreview = React.memo(({
             } ${isRtl ? 'text-right' : 'text-left'}`}
           >
             <div className="flex items-center justify-between gap-2 w-full">
-              <span className={`text-base font-medium ${active ? 'achour-glossy-text' : 'text-white'}`}>{item.label}</span>
+              <span className="text-base font-medium achour-glossy-text">{item.label}</span>
               {active && (
                 <span className="p-1.5 rounded-lg achour-glossy-pill shrink-0">
                   <Check size={16} />
@@ -893,6 +894,22 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
         { icon: ArrowUpDown, label: t('sort_by'), action: () => navigateToSubView('vod-sort') },
         { icon: Film, label: t('poster_size'), action: () => navigateToSubView('poster-size') },
         { icon: Type, label: t('poster_titles'), action: () => navigateToSubView('poster-titles') },
+        {
+          icon: Sparkles,
+          label: t('poster_focus_settings'),
+          subLabel: `${
+            settings.posterFocusStyle === 'gallery-spotlight'
+              ? 'Spotlight'
+              : settings.posterFocusStyle === 'neon-glow'
+              ? 'Neon'
+              : 'Classic'
+          } · ${
+            typeof settings.posterFocusIntensity === 'number'
+              ? Math.max(10, Math.min(80, Math.round(settings.posterFocusIntensity)))
+              : 35
+          }%`,
+          action: () => navigateToSubView('poster-focus'),
+        },
       ]
     },
     {
@@ -906,7 +923,16 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
         },
         { icon: Palette, label: t('app_theme_colors'), action: () => navigateToSubView('design-colors') },
         { icon: Eye, label: t('icon_display_mode'), action: () => navigateToSubView('design-display') },
-        { icon: Sparkles, label: t('icon_styles_10'), action: () => navigateToSubView('design-icons') },
+        {
+          icon: Sparkles,
+          label: t('icon_styles_10'),
+          subLabel: (() => {
+            const norm = normalizeIconPackId(settings.iconPack);
+            const activePack = ICON_PACKS.find((p) => p.id === norm);
+            return activePack ? (isRtl ? activePack.nameAr : activePack.nameEn) : undefined;
+          })(),
+          action: () => navigateToSubView('design-icons'),
+        },
         { icon: Frame, label: t('frame_shapes_40'), action: () => navigateToSubView('design-frames') },
         { icon: Maximize2, label: t('icon_size_label'), action: () => navigateToSubView('design-icon-size') },
         { icon: Frame, label: t('frame_size_label'), action: () => navigateToSubView('design-frame-size') },
@@ -1147,7 +1173,13 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
   if (DESIGN_SUBVIEW_IDS.has(subView)) {
     return (
       <SubViewContainer
-        title={subView === 'background-opacity' ? t('background_opacity') : ''}
+        title={
+          subView === 'background-opacity'
+            ? t('background_opacity')
+            : subView === 'poster-focus'
+            ? t('poster_focus_settings')
+            : ''
+        }
         onBack={() => setSubView('main')}
         isRtl={isRtl}
         backLabel={t('back')}
@@ -1357,7 +1389,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                     } ${isRtl ? 'text-right' : 'text-left'}`}
                   >
                     <div className="flex items-start justify-between gap-2 w-full">
-                      <span className={`text-sm sm:text-base font-medium leading-snug ${isActive ? 'achour-glossy-text' : 'text-white'}`}>{p.name}</span>
+                      <span className="text-sm sm:text-base font-medium leading-snug achour-glossy-text">{p.name}</span>
                       {isActive && <Check className="text-gold shrink-0" size={16} />}
                     </div>
                     <p className="text-xs text-zinc-400 font-normal mt-1.5 line-clamp-2">{p.desc}</p>
@@ -1398,7 +1430,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                           } ${isRtl ? 'text-right' : 'text-left'}`}
                         >
                           <div className="flex items-start justify-between gap-2 w-full">
-                            <span className={`text-sm sm:text-base font-medium leading-snug ${isActive ? 'achour-glossy-text' : 'text-white'}`}>{displayName}</span>
+                            <span className="text-sm sm:text-base font-medium leading-snug achour-glossy-text">{displayName}</span>
                             {isActive && <Check className="text-gold shrink-0" size={16} />}
                           </div>
                           <div className="mt-1.5 space-y-1">
@@ -1446,7 +1478,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                   <div className="w-12 h-12 rounded-full bg-gold/15 text-gold flex items-center justify-center mx-auto">
                     <Check size={24} />
                   </div>
-                  <h4 className="text-base font-bold text-white">
+                  <h4 className="text-base font-bold achour-glossy-title">
                     {isRtl ? 'تم حذف جميع المشغلات غير المتوافقة مع الدمج' : 'All Non-Embedded Players Removed'}
                   </h4>
                   <p className="text-xs text-zinc-300 max-w-xl mx-auto leading-relaxed">
@@ -1514,7 +1546,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                             isActive ? 'border-gold achour-glossy-surface' : 'border-white/10 bg-white/[0.04] hover:bg-white/[0.09]'
                           }`}
                         >
-                          <span className={`text-sm font-medium truncate ${isActive ? 'achour-glossy-text' : 'text-white'}`}>{name}</span>
+                          <span className="text-sm font-medium truncate achour-glossy-text">{name}</span>
                           {isActive && <Check className="text-gold shrink-0" size={16} />}
                         </button>
                         <button
@@ -1615,7 +1647,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                       </span>
                     )}
                   </div>
-                  <h3 className="text-xs sm:text-sm font-medium text-white truncate mt-2">
+                  <h3 className="text-xs sm:text-sm font-medium achour-glossy-text truncate mt-2">
                     {settings.language === 'ar' ? bg.nameAr : bg.nameEn}
                   </h3>
                 </button>
@@ -1780,7 +1812,7 @@ export default function SettingsView({ onBack, settings, onUpdateSettings, userI
                     } ${isRtl ? 'flex-row-reverse text-right' : 'text-left'}`}
                   >
                     <div className="flex flex-col min-w-0 flex-1">
-                      <span className={`text-xs sm:text-sm font-medium truncate ${isHidden ? 'text-zinc-400 line-through' : 'text-white'}`}>
+                      <span className={`text-xs sm:text-sm font-medium truncate ${isHidden ? 'text-zinc-400 line-through' : 'achour-glossy-text'}`}>
                         {cat.category_name}
                       </span>
                       <span className={`text-[11px] mt-0.5 ${isHidden ? 'text-red-400' : 'text-emerald-400'}`}>
@@ -2111,7 +2143,7 @@ function TileOptionButton({
       } ${isRtl ? 'text-right' : 'text-left'}`}
     >
       <div className="flex items-start justify-between gap-2 w-full">
-        <span className={`text-xs sm:text-sm font-medium leading-snug ${active ? 'achour-glossy-text' : 'text-white'}`}>{title}</span>
+        <span className="text-xs sm:text-sm font-medium leading-snug achour-glossy-text">{title}</span>
         {active && (
           <span className="p-1 rounded-lg achour-glossy-pill shrink-0">
             <Check size={14} />

@@ -14,6 +14,9 @@ import {
   Target,
   Type,
   X,
+  Lightbulb,
+  Minus,
+  Plus,
 } from 'lucide-react';
 import {
   AppSettings,
@@ -32,6 +35,7 @@ import {
   isValidHexColor,
   normalizeHexColor,
   resolveDesignSettings,
+  resolveFocusGlowSettings,
 } from '../utils/themeManager';
 import DashboardLayouts, { IconKind } from './DashboardLayouts';
 import { DashboardSectionIcon, PackIconSvg } from './IconPacks';
@@ -83,7 +87,12 @@ export default function DashboardDesignStudio({
       glassOpacity: typeof src.glassOpacity === 'number' ? src.glassOpacity : 16,
       glassBlur: typeof src.glassBlur === 'number' ? src.glassBlur : 10,
       dashboardFocusMode: src.dashboardFocusMode || 'both',
+      dashboardLabelFocusGlow: src.dashboardLabelFocusGlow !== false,
       focusVisualStyle: src.focusVisualStyle || 'frameless-glow',
+      focusGlowEnabled: src.focusGlowEnabled !== false,
+      focusGlowIntensity: typeof src.focusGlowIntensity === 'number' ? src.focusGlowIntensity : 75,
+      focusGlowSpread: typeof src.focusGlowSpread === 'number' ? src.focusGlowSpread : 55,
+      focusGlowPerStyle: src.focusGlowPerStyle ? { ...src.focusGlowPerStyle } : {},
       dashboardLabelColorMode: src.dashboardLabelColorMode || 'theme',
       dashboardLabelCustomColor: src.dashboardLabelCustomColor ?? null,
     };
@@ -143,7 +152,12 @@ export default function DashboardDesignStudio({
       (draft.glassOpacity ?? 16) !== (base.glassOpacity ?? 16) ||
       (draft.glassBlur ?? 10) !== (base.glassBlur ?? 10) ||
       draft.dashboardFocusMode !== base.dashboardFocusMode ||
+      draft.dashboardLabelFocusGlow !== base.dashboardLabelFocusGlow ||
       draft.focusVisualStyle !== base.focusVisualStyle ||
+      draft.focusGlowEnabled !== base.focusGlowEnabled ||
+      draft.focusGlowIntensity !== base.focusGlowIntensity ||
+      draft.focusGlowSpread !== base.focusGlowSpread ||
+      JSON.stringify(draft.focusGlowPerStyle || {}) !== JSON.stringify(base.focusGlowPerStyle || {}) ||
       draft.dashboardLabelColorMode !== base.dashboardLabelColorMode ||
       (draft.dashboardLabelCustomColor || null) !== (base.dashboardLabelCustomColor || null)
     );
@@ -170,7 +184,12 @@ export default function DashboardDesignStudio({
       glassOpacity: draft.glassOpacity,
       glassBlur: draft.glassBlur,
       dashboardFocusMode: draft.dashboardFocusMode,
+      dashboardLabelFocusGlow: draft.dashboardLabelFocusGlow,
       focusVisualStyle: draft.focusVisualStyle,
+      focusGlowEnabled: draft.focusGlowEnabled,
+      focusGlowIntensity: draft.focusGlowIntensity,
+      focusGlowSpread: draft.focusGlowSpread,
+      focusGlowPerStyle: draft.focusGlowPerStyle,
       dashboardLabelColorMode: draft.dashboardLabelColorMode,
       dashboardLabelCustomColor: draft.dashboardLabelCustomColor ?? null,
     });
@@ -207,7 +226,12 @@ export default function DashboardDesignStudio({
       glassOpacity: 16,
       glassBlur: 10,
       dashboardFocusMode: 'both',
+      dashboardLabelFocusGlow: true,
       focusVisualStyle: 'frameless-glow',
+      focusGlowEnabled: true,
+      focusGlowIntensity: 75,
+      focusGlowSpread: 55,
+      focusGlowPerStyle: {},
       dashboardLabelColorMode: 'theme',
       dashboardLabelCustomColor: null,
     }));
@@ -421,7 +445,14 @@ export default function DashboardDesignStudio({
                   glassOpacity={draft.glassOpacity}
                   glassBlur={draft.glassBlur}
                   dashboardFocusMode={draft.dashboardFocusMode}
+                  dashboardLabelFocusGlow={draft.dashboardLabelFocusGlow}
                   focusVisualStyle={draft.focusVisualStyle}
+                  focusGlowEnabled={draft.focusGlowEnabled}
+                  focusGlowIntensity={draft.focusGlowIntensity}
+                  focusGlowSpread={draft.focusGlowSpread}
+                  focusGlowPerStyle={draft.focusGlowPerStyle}
+                  royalThemeColor={draft.royalThemeColor}
+                  customThemeColor={draft.customThemeColor}
                   dashboardLabelColorMode={draft.dashboardLabelColorMode}
                   dashboardLabelCustomColor={draft.dashboardLabelCustomColor}
                   language={settings.language}
@@ -1138,7 +1169,12 @@ export default function DashboardDesignStudio({
                     <button
                       type="button"
                       data-tv-focusable="true"
-                      onClick={() => updateDraft('dashboardFocusMode', 'frame')}
+                      onClick={() => {
+                        try {
+                          localStorage.setItem('achour_user_set_focus_mode', 'true');
+                        } catch {}
+                        updateDraft('dashboardFocusMode', 'frame');
+                      }}
                       className={`p-3 rounded-2xl border text-right transition-none cursor-pointer flex flex-col gap-1.5 ${
                         draft.dashboardFocusMode === 'frame'
                           ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
@@ -1164,7 +1200,12 @@ export default function DashboardDesignStudio({
                     <button
                       type="button"
                       data-tv-focusable="true"
-                      onClick={() => updateDraft('dashboardFocusMode', 'label')}
+                      onClick={() => {
+                        try {
+                          localStorage.setItem('achour_user_set_focus_mode', 'true');
+                        } catch {}
+                        updateDraft('dashboardFocusMode', 'label');
+                      }}
                       className={`p-3 rounded-2xl border text-right transition-none cursor-pointer flex flex-col gap-1.5 ${
                         draft.dashboardFocusMode === 'label'
                           ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
@@ -1190,7 +1231,12 @@ export default function DashboardDesignStudio({
                     <button
                       type="button"
                       data-tv-focusable="true"
-                      onClick={() => updateDraft('dashboardFocusMode', 'both')}
+                      onClick={() => {
+                        try {
+                          localStorage.setItem('achour_user_set_focus_mode', 'true');
+                        } catch {}
+                        updateDraft('dashboardFocusMode', 'both');
+                      }}
                       className={`p-3 rounded-2xl border text-right transition-none cursor-pointer flex flex-col gap-1.5 ${
                         (draft.dashboardFocusMode || 'both') === 'both'
                           ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
@@ -1216,7 +1262,12 @@ export default function DashboardDesignStudio({
                     <button
                       type="button"
                       data-tv-focusable="true"
-                      onClick={() => updateDraft('dashboardFocusMode', 'icon')}
+                      onClick={() => {
+                        try {
+                          localStorage.setItem('achour_user_set_focus_mode', 'true');
+                        } catch {}
+                        updateDraft('dashboardFocusMode', 'icon');
+                      }}
                       className={`p-3 rounded-2xl border text-right transition-none cursor-pointer flex flex-col gap-1.5 ${
                         draft.dashboardFocusMode === 'icon'
                           ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
@@ -1240,7 +1291,221 @@ export default function DashboardDesignStudio({
                   </div>
                 </div>
 
-                {/* 1B. FOCUS VISUAL GLOW & SHAPES */}
+                {/* 1B. LABEL FOCUS LIGHT & LIGHTING CONTROL PANEL */}
+                {(() => {
+                  const activeStudioFocusStyle: FocusVisualStyle = draft.focusVisualStyle || 'frameless-glow';
+                  const resolvedStudioGlow = resolveFocusGlowSettings(draft, activeStudioFocusStyle);
+                  const setDraftGlowPatch = (
+                    patch: Partial<{ enabled: boolean; intensity: number; spread: number }>
+                  ) => {
+                    if (resolvedStudioGlow.isCustomForStyle) {
+                      const nextMap = { ...(draft.focusGlowPerStyle || {}) };
+                      nextMap[activeStudioFocusStyle] = {
+                        ...(nextMap[activeStudioFocusStyle] || {}),
+                        ...patch,
+                      };
+                      updateDraft('focusGlowPerStyle', nextMap);
+                    } else {
+                      if (typeof patch.enabled === 'boolean') updateDraft('focusGlowEnabled', patch.enabled);
+                      if (typeof patch.intensity === 'number') updateDraft('focusGlowIntensity', patch.intensity);
+                      if (typeof patch.spread === 'number') updateDraft('focusGlowSpread', patch.spread);
+                    }
+                  };
+                  const toggleStudioPerStyle = () => {
+                    const nextMap = { ...(draft.focusGlowPerStyle || {}) };
+                    if (resolvedStudioGlow.isCustomForStyle) {
+                      delete nextMap[activeStudioFocusStyle];
+                    } else {
+                      nextMap[activeStudioFocusStyle] = {
+                        enabled: resolvedStudioGlow.enabled,
+                        intensity: resolvedStudioGlow.intensity,
+                        spread: resolvedStudioGlow.spread,
+                      };
+                    }
+                    updateDraft('focusGlowPerStyle', nextMap);
+                  };
+
+                  return (
+                    <>
+                      <div className="pt-4 border-t border-white/10 space-y-2.5">
+                        <h3 className="text-sm font-semibold achour-glossy-title flex items-center gap-2">
+                          <Type size={16} className="text-gold" />
+                          <span>{t('label_focus_glow_heading')}</span>
+                        </h3>
+                        <p className="text-xs text-zinc-400">{t('label_focus_glow_desc')}</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                          {[
+                            {
+                              val: true,
+                              title: t('label_focus_glow_on_title'),
+                              desc: t('label_focus_glow_on_desc'),
+                            },
+                            {
+                              val: false,
+                              title: t('label_focus_glow_off_title'),
+                              desc: t('label_focus_glow_off_desc'),
+                            },
+                          ].map((opt) => {
+                            const active = (draft.dashboardLabelFocusGlow !== false) === opt.val;
+                            return (
+                              <button
+                                key={String(opt.val)}
+                                type="button"
+                                data-tv-focusable="true"
+                                onClick={() => updateDraft('dashboardLabelFocusGlow', opt.val)}
+                                className={`p-3 rounded-2xl border transition-none cursor-pointer flex flex-col gap-1 ${
+                                  isRtl ? 'text-right' : 'text-left'
+                                } ${
+                                  active
+                                    ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
+                                    : 'border-white/10 bg-white/[0.03] hover:border-white/30'
+                                }`}
+                              >
+                                <div className="flex items-center justify-between w-full">
+                                  <span className="font-medium text-xs text-white">{opt.title}</span>
+                                  {active && (
+                                    <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-semibold text-xs">
+                                      ✓
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="text-[11px] text-zinc-400">{opt.desc}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-white/10 space-y-3">
+                        <div>
+                          <h3 className="text-sm font-semibold achour-glossy-title flex items-center gap-2">
+                            <Lightbulb size={16} className="text-gold" />
+                            <span>{t('focus_lighting_heading')}</span>
+                          </h3>
+                          <p className="text-xs text-zinc-400 mt-1">{t('focus_lighting_desc')}</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                          <button
+                            type="button"
+                            data-tv-focusable="true"
+                            onClick={() => updateDraft('focusGlowEnabled', draft.focusGlowEnabled === false)}
+                            className={`p-3 rounded-2xl border transition-none cursor-pointer flex items-center justify-between ${
+                              draft.focusGlowEnabled !== false
+                                ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow,rgba(212,175,55,0.35))]'
+                                : 'border-white/10 bg-white/[0.03] hover:border-white/30'
+                            }`}
+                          >
+                            <span className="text-xs font-medium text-white">{t('focus_glow_master_label')}</span>
+                            <span
+                              className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold ${
+                                draft.focusGlowEnabled !== false
+                                  ? 'bg-gold text-black'
+                                  : 'bg-white/10 text-zinc-300'
+                              }`}
+                            >
+                              {draft.focusGlowEnabled !== false ? t('focus_glow_on') : t('focus_glow_off')}
+                            </span>
+                          </button>
+
+                          <button
+                            type="button"
+                            data-tv-focusable="true"
+                            onClick={toggleStudioPerStyle}
+                            className={`p-3 rounded-2xl border transition-none cursor-pointer flex items-center justify-between ${
+                              resolvedStudioGlow.isCustomForStyle
+                                ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow,rgba(212,175,55,0.35))]'
+                                : 'border-white/10 bg-white/[0.03] hover:border-white/30'
+                            }`}
+                          >
+                            <span className="text-xs font-medium text-white truncate">{t('focus_glow_per_style_label')}</span>
+                            <span
+                              className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold shrink-0 ${
+                                resolvedStudioGlow.isCustomForStyle
+                                  ? 'bg-gold text-black'
+                                  : 'bg-white/10 text-zinc-300'
+                              }`}
+                            >
+                              {resolvedStudioGlow.isCustomForStyle
+                                ? t('focus_glow_per_style_custom')
+                                : t('focus_glow_per_style_global')}
+                            </span>
+                          </button>
+                        </div>
+
+                        <div className="p-3 rounded-2xl border border-white/10 bg-white/[0.03] space-y-2">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-medium text-white">{t('focus_glow_intensity_label')}</span>
+                            <span className="font-bold text-gold tabular-nums">{resolvedStudioGlow.intensity}%</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              data-tv-focusable="true"
+                              onClick={() => setDraftGlowPatch({ intensity: Math.max(10, resolvedStudioGlow.intensity - 10) })}
+                              className="w-7 h-7 rounded-xl border border-white/15 bg-white/5 hover:border-gold flex items-center justify-center text-white cursor-pointer shrink-0"
+                            >
+                              <Minus size={13} />
+                            </button>
+                            <input
+                              type="range"
+                              min={10}
+                              max={100}
+                              step={5}
+                              value={resolvedStudioGlow.intensity}
+                              onChange={(e) => setDraftGlowPatch({ intensity: Number(e.target.value) })}
+                              className="w-full accent-[var(--theme-primary,#D4AF37)] cursor-pointer"
+                            />
+                            <button
+                              type="button"
+                              data-tv-focusable="true"
+                              onClick={() => setDraftGlowPatch({ intensity: Math.min(100, resolvedStudioGlow.intensity + 10) })}
+                              className="w-7 h-7 rounded-xl border border-white/15 bg-white/5 hover:border-gold flex items-center justify-center text-white cursor-pointer shrink-0"
+                            >
+                              <Plus size={13} />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="p-3 rounded-2xl border border-white/10 bg-white/[0.03] space-y-2">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-medium text-white">{t('focus_glow_spread_label')}</span>
+                            <span className="font-bold text-gold tabular-nums">{resolvedStudioGlow.spread}%</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              data-tv-focusable="true"
+                              onClick={() => setDraftGlowPatch({ spread: Math.max(10, resolvedStudioGlow.spread - 10) })}
+                              className="w-7 h-7 rounded-xl border border-white/15 bg-white/5 hover:border-gold flex items-center justify-center text-white cursor-pointer shrink-0"
+                            >
+                              <Minus size={13} />
+                            </button>
+                            <input
+                              type="range"
+                              min={10}
+                              max={100}
+                              step={5}
+                              value={resolvedStudioGlow.spread}
+                              onChange={(e) => setDraftGlowPatch({ spread: Number(e.target.value) })}
+                              className="w-full accent-[var(--theme-primary,#D4AF37)] cursor-pointer"
+                            />
+                            <button
+                              type="button"
+                              data-tv-focusable="true"
+                              onClick={() => setDraftGlowPatch({ spread: Math.min(100, resolvedStudioGlow.spread + 10) })}
+                              className="w-7 h-7 rounded-xl border border-white/15 bg-white/5 hover:border-gold flex items-center justify-center text-white cursor-pointer shrink-0"
+                            >
+                              <Plus size={13} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
+
+                {/* 1C. FOCUS VISUAL GLOW & SHAPES (All 13 Options) */}
                 <div className="pt-4 border-t border-white/10">
                   <h3 className="text-sm font-semibold achour-glossy-title flex items-center gap-2">
                     <Sparkles size={16} className="text-gold" />
@@ -1253,6 +1518,41 @@ export default function DashboardDesignStudio({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3">
                     {(
                       [
+                        {
+                          id: 'inner-glow' as FocusVisualStyle,
+                          title: t('focus_style_inner_glow_title'),
+                          desc: t('focus_style_inner_glow_desc'),
+                          swatch:
+                            'rounded-xl border border-[var(--theme-accent)] bg-[rgba(var(--theme-rgb),0.12)] shadow-[inset_0_0_12px_rgba(var(--theme-rgb),0.95)]',
+                        },
+                        {
+                          id: 'outer-glow' as FocusVisualStyle,
+                          title: t('focus_style_outer_glow_title'),
+                          desc: t('focus_style_outer_glow_desc'),
+                          swatch:
+                            'rounded-xl border border-white/85 bg-transparent shadow-[0_0_14px_rgba(var(--theme-rgb),0.92)]',
+                        },
+                        {
+                          id: 'combined-glow' as FocusVisualStyle,
+                          title: t('focus_style_combined_glow_title'),
+                          desc: t('focus_style_combined_glow_desc'),
+                          swatch:
+                            'rounded-xl border border-white/90 bg-[rgba(var(--theme-rgb),0.14)] shadow-[inset_0_0_10px_rgba(var(--theme-rgb),0.9),0_0_14px_rgba(var(--theme-rgb),0.92)]',
+                        },
+                        {
+                          id: 'soft-glow' as FocusVisualStyle,
+                          title: t('focus_style_soft_glow_title'),
+                          desc: t('focus_style_soft_glow_desc'),
+                          swatch:
+                            'rounded-full border border-[var(--theme-primary)] bg-[radial-gradient(circle,rgba(var(--theme-rgb),0.32)_0%,transparent_75%)] shadow-[0_0_16px_rgba(var(--theme-rgb),0.72)]',
+                        },
+                        {
+                          id: 'pulse-edge' as FocusVisualStyle,
+                          title: t('focus_style_pulse_edge_title'),
+                          desc: t('focus_style_pulse_edge_desc'),
+                          swatch:
+                            'rounded-xl border-2 border-white bg-transparent shadow-[0_0_0_2px_var(--theme-primary),0_0_12px_rgba(var(--theme-rgb),0.9)]',
+                        },
                         {
                           id: 'frameless-glow' as FocusVisualStyle,
                           title: t('focus_style_frameless_glow_title'),
@@ -1317,7 +1617,18 @@ export default function DashboardDesignStudio({
                           key={opt.id}
                           type="button"
                           data-tv-focusable="true"
-                          onClick={() => updateDraft('focusVisualStyle', opt.id)}
+                          onClick={() => {
+                            if (draft.dashboardFocusMode === 'label') {
+                              setJustApplied(false);
+                              setDraft((prev) => ({
+                                ...prev,
+                                focusVisualStyle: opt.id,
+                                dashboardFocusMode: 'both',
+                              }));
+                            } else {
+                              updateDraft('focusVisualStyle', opt.id);
+                            }
+                          }}
                           className={`p-3 rounded-2xl border transition-none cursor-pointer flex items-center gap-2.5 ${
                             isRtl ? 'text-right' : 'text-left'
                           } ${

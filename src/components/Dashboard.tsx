@@ -73,8 +73,9 @@ const ClockDisplay = React.memo(({ settings, isRtl }: { settings: AppSettings, i
       <div className="flex items-center gap-2 min-w-0">
         <Clock
           size={18}
+          stroke="url(#achour-ui-twotone)"
           className="shrink-0 hidden sm:block drop-shadow-[0_0_8px_var(--theme-glow)]"
-          style={{ color: 'var(--theme-primary, #d4af37)' }}
+          style={{ color: 'var(--theme-split-color, #d4af37)' }}
         />
         <span className="text-lg sm:text-2xl md:text-3xl font-semibold font-sans tabular-nums achour-glossy-title tracking-wider leading-none">
           {formattedClock}
@@ -908,6 +909,17 @@ if (currentView === 'settings') return (
   return (
     <>
       <div className={`relative h-full w-full bg-transparent flex flex-col select-none overflow-hidden ${isRtl ? 'text-right font-cairo' : 'text-left font-sans'}`}>
+        <svg width="0" height="0" className="absolute pointer-events-none" aria-hidden="true">
+          <defs>
+            <linearGradient id="achour-ui-twotone" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="44%" stopColor="#FFFFFF" />
+              <stop offset="52%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+              <stop offset="65%" stopColor="var(--theme-split-color, #D4AF37)" />
+              <stop offset="100%" stopColor="var(--theme-split-deep, #8C6A1D)" />
+            </linearGradient>
+          </defs>
+        </svg>
 
 
       {/* Top Header Bar: Left (Subscription Glass Card), Center (Glowing Brand Title & Beam), Right (Clock & Date Glass Card) */}
@@ -925,11 +937,20 @@ if (currentView === 'settings') return (
               <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                 <CheckCircle2
                   size={16}
+                  stroke={parsedSubscription?.isExpired ? undefined : 'url(#achour-ui-twotone)'}
                   className={`shrink-0 ${
                     parsedSubscription?.isExpired
                       ? 'text-red-400'
-                      : 'text-emerald-400 drop-shadow-[0_0_6px_rgba(52,211,153,0.75)]'
+                      : ''
                   }`}
+                  style={
+                    parsedSubscription?.isExpired
+                      ? undefined
+                      : {
+                          color: 'var(--theme-split-color, #d4af37)',
+                          filter: 'drop-shadow(0 0 6px var(--theme-glow))',
+                        }
+                  }
                 />
                 <span
                   className={`text-[11px] sm:text-sm font-semibold font-sans truncate max-w-[105px] sm:max-w-[190px] inline-block ${
@@ -955,8 +976,9 @@ if (currentView === 'settings') return (
               >
                 <Calendar
                   size={13}
+                  stroke={parsedSubscription?.isExpired ? undefined : 'url(#achour-ui-twotone)'}
                   className="hidden sm:block shrink-0"
-                  style={{ color: parsedSubscription?.isExpired ? '#f87171' : 'var(--theme-primary, #d4af37)' }}
+                  style={{ color: parsedSubscription?.isExpired ? '#f87171' : 'var(--theme-split-color, #d4af37)' }}
                 />
                 <span className={parsedSubscription?.isExpired ? 'text-red-300' : 'achour-glossy-title inline-block'}>
                   {t('expire_short')}:
@@ -1177,7 +1199,14 @@ if (currentView === 'settings') return (
               dashboardAlignment={settings.dashboardAlignment}
               dashboardHorizontalAlignment={settings.dashboardHorizontalAlignment}
               dashboardFocusMode={settings.dashboardFocusMode}
+              dashboardLabelFocusGlow={settings.dashboardLabelFocusGlow}
               focusVisualStyle={settings.focusVisualStyle}
+              focusGlowEnabled={settings.focusGlowEnabled}
+              focusGlowIntensity={settings.focusGlowIntensity}
+              focusGlowSpread={settings.focusGlowSpread}
+              focusGlowPerStyle={settings.focusGlowPerStyle}
+              royalThemeColor={settings.royalThemeColor}
+              customThemeColor={settings.customThemeColor}
               dashboardLabelColorMode={settings.dashboardLabelColorMode}
               dashboardLabelCustomColor={settings.dashboardLabelCustomColor}
               reorderingKind={reorderingKind}
@@ -1482,7 +1511,12 @@ if (currentView === 'settings') return (
               exit={{ opacity: 0, y: -20 }}
               className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 achour-glass-modal border-gold/40 rounded-2xl text-[11px] font-medium"
             >
-              <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+              <CheckCircle2
+                size={14}
+                stroke="url(#achour-ui-twotone)"
+                className="shrink-0"
+                style={{ color: 'var(--theme-split-color, #d4af37)' }}
+              />
               <span className="achour-glossy-text">{t('data_refreshed')}</span>
             </motion.div>
           )}

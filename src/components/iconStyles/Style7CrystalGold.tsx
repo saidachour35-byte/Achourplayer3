@@ -13,19 +13,23 @@ function useCrystalIds() {
 function CrystalDefs({ gBright, gMid, gDeep }: ReturnType<typeof useCrystalIds>) {
   return (
     <defs>
-      <linearGradient id={gBright} x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.88" />
-        <stop offset="42%" stopColor="var(--theme-accent, #F5E6A8)" />
-        <stop offset="100%" stopColor="currentColor" />
+      <linearGradient id={gBright} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#FFFFFF" />
+        <stop offset="52%" stopColor="#FFFFFF" />
+        <stop offset="76%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+        <stop offset="100%" stopColor="var(--theme-split-color, #D4AF37)" />
       </linearGradient>
-      <linearGradient id={gMid} x1="100%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="var(--theme-accent, #F5E6A8)" />
-        <stop offset="50%" stopColor="currentColor" />
-        <stop offset="100%" stopColor="var(--theme-secondary, #8C6A1D)" />
+      <linearGradient id={gMid} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#FFFFFF" />
+        <stop offset="38%" stopColor="#FFFFFF" />
+        <stop offset="52%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+        <stop offset="72%" stopColor="var(--theme-split-color, #D4AF37)" />
+        <stop offset="100%" stopColor="var(--theme-split-deep, #8C6A1D)" />
       </linearGradient>
-      <linearGradient id={gDeep} x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="currentColor" stopOpacity="0.72" />
-        <stop offset="100%" stopColor="var(--theme-secondary, #8C6A1D)" stopOpacity="0.95" />
+      <linearGradient id={gDeep} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+        <stop offset="40%" stopColor="var(--theme-split-color, #D4AF37)" />
+        <stop offset="100%" stopColor="var(--theme-split-deep, #8C6A1D)" />
       </linearGradient>
     </defs>
   );

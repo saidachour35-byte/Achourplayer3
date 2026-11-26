@@ -368,8 +368,8 @@ const LiveChannelRow: React.FC<{
         <div className="flex flex-col flex-1 min-w-0 justify-center py-0.5">
           <div className="flex items-center gap-1.5 min-w-0">
             <span
-              className={`text-sm sm:text-base truncate leading-tight ${
-                isSelected ? 'font-semibold achour-glossy-text' : 'font-medium text-white group-hover:text-gold'
+              className={`text-sm sm:text-base truncate leading-tight achour-glossy-text ${
+                isSelected ? 'font-semibold' : 'font-medium'
               }`}
               title={ch.name}
             >
@@ -465,7 +465,7 @@ const VodListRow: React.FC<{
         </div>
 
         <div className="flex flex-col flex-1 min-w-0 justify-center gap-1">
-          <span className={`text-sm sm:text-base truncate leading-tight ${isSelected ? 'font-semibold achour-glossy-text' : 'font-medium text-white group-hover:text-gold'}`}>
+          <span className={`text-sm sm:text-base truncate leading-tight achour-glossy-text ${isSelected ? 'font-semibold' : 'font-medium'}`}>
             {ch.name}
           </span>
           <div className="flex items-center flex-wrap gap-2 text-[11px] font-normal text-zinc-400">
@@ -552,7 +552,7 @@ const VodPosterCard: React.FC<{
       ) : (
         <Clapperboard size={28} className="text-gold/60 mb-2" />
       )}
-      <span className="text-xs font-semibold text-zinc-300 line-clamp-3 leading-tight px-1">
+      <span className="text-xs font-semibold achour-glossy-text line-clamp-3 leading-tight px-1">
         {ch.name}
       </span>
     </div>
@@ -574,12 +574,13 @@ const VodPosterCard: React.FC<{
         onSelectChannel(ch);
         if (fetchMediaDetails) fetchMediaDetails(ch);
       }}
-      className="relative h-full w-full rounded-2xl overflow-hidden cursor-pointer group outline-none bg-transparent transition-colors flex flex-col"
+      className="relative h-full w-full rounded-2xl overflow-visible cursor-pointer group outline-none bg-transparent transition-colors flex flex-col"
       title={isRtl ? 'انقر لعرض التفاصيل والتشغيل' : 'Click to view details & play'}
     >
+      <div aria-hidden="true" className="achour-poster-lamp-bar" />
       <div
         style={{ height: `${posterHeight}px` }}
-        className="relative w-full shrink-0 flex items-center justify-center overflow-hidden bg-transparent"
+        className={`relative w-full shrink-0 flex items-center justify-center overflow-hidden bg-transparent ${showTitle ? 'rounded-t-2xl' : 'rounded-2xl'}`}
       >
         <CachedMediaImage
           src={imgSrc}
@@ -589,6 +590,10 @@ const VodPosterCard: React.FC<{
           deferLoad={deferImageLoad}
           thumbnailVariant="poster"
         />
+        <div aria-hidden="true" className="achour-poster-lamp-beam">
+          <span className="achour-poster-lamp-cone" />
+          <span className="achour-poster-lamp-spill" />
+        </div>
 
         {Number((ch as any).progressPositionSec || 0) >= 8 && (
           <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-black/75 z-10 pointer-events-none">
@@ -607,8 +612,8 @@ const VodPosterCard: React.FC<{
       </div>
 
       {showTitle && (
-        <div className="h-[40px] w-full shrink-0 px-2 flex items-center justify-center bg-transparent text-center">
-          <span className={`text-[11px] sm:text-xs line-clamp-2 leading-tight w-full ${isSelected ? 'font-semibold achour-glossy-text' : 'font-medium text-zinc-100'}`}>
+        <div className="h-[40px] w-full shrink-0 px-2 flex items-center justify-center bg-transparent text-center overflow-hidden rounded-b-2xl">
+          <span className={`text-[11px] sm:text-xs line-clamp-2 leading-tight w-full achour-glossy-text ${isSelected ? 'font-semibold' : 'font-medium'}`}>
             {ch.name}
           </span>
         </div>

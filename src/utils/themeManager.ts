@@ -1,4 +1,5 @@
 // Achour Player Royal Theme Manager (src/utils/themeManager.ts)
+import type { AppSettings, FocusVisualStyle } from '../types';
 export interface RoyalTheme {
   id: string;
   nameAr: string;
@@ -1458,7 +1459,7 @@ export interface FrameShapeOption {
   descriptionEn: string;
 }
 
-// 10 Distinct Icon Art Packs (Preserving Style 1 pack-3d intact + 9 brand-new independent vector styles 2-10)
+// 20 Distinct Icon Art Packs (Styles 1-10 + Packs 11-20)
 export const ICON_PACKS: IconPackOption[] = [
   { id: 'pack-3d', nameAr: '1. مجسّم 3D الكلاسيكي', nameEn: '1. Classic 3D Volumetric', descriptionAr: 'أيقونات مجسمة بثلاثية الأبعاد وظلال عمق بارزة', descriptionEn: 'Volumetric sculpted shapes with beveled depth' },
   { id: 'pack-sculpted-3d', nameAr: '2. Sculpted 3D — منحوت ثلاثي الأبعاد', nameEn: '2. Sculpted 3D', descriptionAr: 'رسومات ثلاثية الأبعاد بارزة بحواف منحوتة وعمق واضح', descriptionEn: 'Raised 3D sculpted forms with carved bevels and depth' },
@@ -1470,6 +1471,16 @@ export const ICON_PACKS: IconPackOption[] = [
   { id: 'pack-brushed-metal', nameAr: '8. Brushed Metal — معدن مصقول', nameEn: '8. Brushed Metal', descriptionAr: 'رسومات معدنية مصقولة بخطوط وتفاصيل المعدن المشكّل', descriptionEn: 'CNC-machined brushed metallic finish with turned grooves' },
   { id: 'pack-minimal-premium', nameAr: '9. Minimal Premium — بساطة فاخرة', nameEn: '9. Minimal Premium', descriptionAr: 'رسومات بسيطة وأنيقة بخطوط متوازنة وشكل خاص لكل رمز', descriptionEn: 'Ultra-clean balanced luxury strokes with iconic silhouettes' },
   { id: 'pack-futuristic-tech', nameAr: '10. Futuristic Tech — تقني مستقبلي', nameEn: '10. Futuristic Tech', descriptionAr: 'رسومات تقنية مستقبلية بتفاصيل دقيقة وأشكال مميزة', descriptionEn: 'Precision sci-fi hardware silhouettes with circuit HUD details' },
+  { id: 'pack-frosted-gold-3d', nameAr: '11. الزجاج المصنفر والذهب — 3D', nameEn: '11. 3D Frosted Glass & Gold', descriptionAr: 'شاشات زجاجية مصنفرة بحواف لامعة ومتدرجة مع شعار Achour player', descriptionEn: '3D frosted translucent glass panes with luminous beveled rims' },
+  { id: 'pack-crystal-neon-dual', nameAr: '12. نيون مزدوج الخطوط', nameEn: '12. Crystal Neon Dual-Line', descriptionAr: 'إطارات كريستال نيون مزدوجة الخطوط بوهج نقي حاد', descriptionEn: 'Dual-contour crystal neon outlines with luminous inner track' },
+  { id: 'pack-bold-isometric', nameAr: '13. مجسمات هندسية بارزة', nameEn: '13. Bold Isometric Blocks', descriptionAr: 'كتل هندسية بارزة بسمك قوي ووضوح عالٍ للشاشات الكبيرة', descriptionEn: 'Heavy sculptural isometric slabs with bold foreground depth' },
+  { id: 'pack-floating-blades', nameAr: '14. شفرات زجاجية عائمة', nameEn: '14. Minimalist Floating Glass Blades', descriptionAr: 'ألواح زجاجية عائمة بخطوط علوية وسفلية عصرية نقية', descriptionEn: 'Floating frosted glass blades with crisp top/bottom rails' },
+  { id: 'pack-cinema-emblems', nameAr: '15. شارات سينمائية حديثة', nameEn: '15. Cinema Badge Emblems', descriptionAr: 'شارات عرض سينمائية متوازنة بحواف دائرية وتفاصيل دقيقة', descriptionEn: 'Modern theatrical emblem badges with clean rounded frames' },
+  { id: 'pack-hologram-wire', nameAr: '16. هولوغرام شفاف', nameEn: '16. Hologram Translucent Wireframe', descriptionAr: 'خطوط هولوغرام متقطعة بإحساس تقني مستقبلي شفاف', descriptionEn: 'Dashed translucent holographic HUD wireframes with bright nodes' },
+  { id: 'pack-soft-capsules', nameAr: '17. كبسولات عصرية ناعمة', nameEn: '17. Soft Pill Capsules', descriptionAr: 'كبسولات ناعمة مملوءة بتظليل زجاجي ناعم وانحناءات مريحة', descriptionEn: 'Rounded pill capsules with silky frosted interiors' },
+  { id: 'pack-smoked-monolith', nameAr: '18. الزجاج المدخن الداكن', nameEn: '18. Smoked Glass Monolith', descriptionAr: 'ألواح زجاج مدخن متراكبة بعمق أنيق ولمسة سينمائية هادئة', descriptionEn: 'Layered smoked monolith panes with solid foreground glyphs' },
+  { id: 'pack-diamond-cut', nameAr: '19. القطع الماسي الهندسي', nameEn: '19. Diamond Geometric Cut', descriptionAr: 'مضلعات ماسية مقطوعة الحواف بلمعة هندسية حادة', descriptionEn: 'Faceted diamond and octagonal crystal-cut polygons' },
+  { id: 'pack-architectural-wire', nameAr: '20. الخطوط المعمارية الدقيقة', nameEn: '20. Ultra-Thin Architectural Wire', descriptionAr: 'تصميم هندسي فائق الدقة بخطوط معمارية رفيعة ومتزنة', descriptionEn: 'Ultra-thin precision architectural drafting wirelines' },
 ];
 
 // 40 Distinct Independent Frame Shapes (Freely combinable with any of the 40 Icon Packs)
@@ -1648,6 +1659,59 @@ export function computePaletteFromHex(hexColor: string) {
   };
 }
 
+function parseHexRgb(hex: string): { r: number; g: number; b: number } {
+  const clean = (normalizeHexColor(hex) || '#D4AF37').slice(1);
+  return {
+    r: parseInt(clean.slice(0, 2), 16),
+    g: parseInt(clean.slice(2, 4), 16),
+    b: parseInt(clean.slice(4, 6), 16),
+  };
+}
+
+function mixHex(hexA: string, hexB: string, weightB: number): string {
+  const a = parseHexRgb(hexA);
+  const b = parseHexRgb(hexB);
+  const w = Math.max(0, Math.min(1, weightB));
+  return rgbToHex(
+    a.r + (b.r - a.r) * w,
+    a.g + (b.g - a.g) * w,
+    a.b + (b.b - a.b) * w
+  );
+}
+
+function getHexLuminance(hex: string): number {
+  const { r, g, b } = parseHexRgb(hex);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+}
+
+export function computeTwoToneSplitColors(primaryHex: string, secondaryHex: string) {
+  const primary = normalizeHexColor(primaryHex) || '#D4AF37';
+  const secondary = normalizeHexColor(secondaryHex) || '#8C6A1D';
+  const lum = getHexLuminance(primary);
+  const secLum = getHexLuminance(secondary);
+
+  let splitColor = primary;
+  if (lum > 0.72) {
+    // Pale / near-white / ultra-bright themes: deepen with theme hue so bottom half contrasts crisply against #FFFFFF
+    const targetAnchor = secLum > 0.62 ? mixHex(secondary, '#475569', 0.55) : secondary;
+    splitColor = mixHex(primary, targetAnchor, lum > 0.84 ? 0.62 : 0.38);
+  } else if (lum < 0.22) {
+    // Very dark themes: lift slightly so the lower half stays vibrant against dark wallpapers
+    splitColor = mixHex(primary, '#FFFFFF', 0.26);
+  }
+
+  const splitDeep =
+    secLum < 0.08
+      ? mixHex(splitColor, '#0A0D16', 0.36)
+      : lum > 0.72
+      ? mixHex(splitColor, secLum > 0.62 ? '#475569' : secondary, 0.55)
+      : mixHex(splitColor, secondary, 0.72);
+
+  const splitMid = mixHex('#FFFFFF', splitColor, 0.44);
+
+  return { splitMid, splitColor, splitDeep };
+}
+
 let lastAppliedRoyalThemeKey = '';
 
 // Apply CSS variables & comprehensive theme rules across the entire Achour Player app
@@ -1683,10 +1747,12 @@ export function applyRoyalTheme(
   const onPrimary = luminance > 0.52 ? '#090b10' : '#ffffff';
   const softWhiteTint = rgbToHex(Math.round(r + (255 - r) * 0.76), Math.round(g + (255 - g) * 0.76), Math.round(b + (255 - b) * 0.76));
   const luminousPrimary = rgbToHex(Math.round(r + (255 - r) * 0.36), Math.round(g + (255 - g) * 0.36), Math.round(b + (255 - b) * 0.36));
+  const { splitMid, splitColor, splitDeep } = computeTwoToneSplitColors(primary, secondary);
+  const twoToneGrad = `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 45%, ${splitMid} 52%, ${splitColor} 61%, ${splitDeep} 100%)`;
   const metallicGrad = `linear-gradient(135deg, ${secondary} 0%, ${primary} 34%, ${accent} 58%, ${mid} 82%, ${secondary} 100%)`;
-  const glossyHeadingGrad = `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 22%, ${accent} 52%, ${primary} 84%, ${secondary} 100%)`;
-  const glossyTextGrad = `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 18%, ${accent} 48%, ${primary} 82%, ${secondary} 100%)`;
-  const glossyInfoGrad = `linear-gradient(180deg, #FFFFFF 0%, ${softWhiteTint} 44%, ${accent} 78%, ${primary} 100%)`;
+  const glossyHeadingGrad = twoToneGrad;
+  const glossyTextGrad = `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 46%, ${splitMid} 53%, ${splitColor} 62%, ${splitDeep} 100%)`;
+  const glossyInfoGrad = `linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 46%, ${splitMid} 54%, ${splitColor} 66%, ${splitDeep} 100%)`;
   const glossyBtnGrad = `linear-gradient(180deg, rgba(255,255,255,0.48) 0%, rgba(255,255,255,0.16) 38%, rgba(${r},${g},${b},0.94) 52%, ${primary} 78%, ${secondary} 100%)`;
   const glossySurfaceGrad = `linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(${r},${g},${b},0.20) 50%, rgba(${r},${g},${b},0.08) 100%)`;
 
@@ -1699,9 +1765,14 @@ export function applyRoyalTheme(
   root.style.setProperty('--theme-mid', mid);
   root.style.setProperty('--theme-glow', glow);
   root.style.setProperty('--theme-rgb', `${r}, ${g}, ${b}`);
+  root.style.setProperty('--theme-rgb-space', `${r} ${g} ${b}`);
   root.style.setProperty('--theme-on-primary', onPrimary);
   root.style.setProperty('--theme-soft-white', softWhiteTint);
   root.style.setProperty('--theme-luminous', luminousPrimary);
+  root.style.setProperty('--theme-split-mid', splitMid);
+  root.style.setProperty('--theme-split-color', splitColor);
+  root.style.setProperty('--theme-split-deep', splitDeep);
+  root.style.setProperty('--theme-two-tone-grad', twoToneGrad);
   root.style.setProperty('--theme-metallic-grad', metallicGrad);
   root.style.setProperty('--theme-glossy-heading-grad', glossyHeadingGrad);
   root.style.setProperty('--theme-glossy-text-grad', glossyTextGrad);
@@ -1754,9 +1825,14 @@ export function applyRoyalTheme(
       --theme-mid: ${mid} !important;
       --theme-glow: ${glow} !important;
       --theme-rgb: ${r}, ${g}, ${b} !important;
+      --theme-rgb-space: ${r} ${g} ${b} !important;
       --theme-on-primary: ${onPrimary} !important;
       --theme-soft-white: ${softWhiteTint} !important;
       --theme-luminous: ${luminousPrimary} !important;
+      --theme-split-mid: ${splitMid} !important;
+      --theme-split-color: ${splitColor} !important;
+      --theme-split-deep: ${splitDeep} !important;
+      --theme-two-tone-grad: ${twoToneGrad} !important;
       --theme-metallic-grad: ${metallicGrad} !important;
       --theme-glossy-heading-grad: ${glossyHeadingGrad} !important;
       --theme-glossy-text-grad: ${glossyTextGrad} !important;
@@ -1844,6 +1920,119 @@ export function applyRoyalTheme(
     }
   `;
 }
+
+export interface ResolvedFocusGlow {
+  enabled: boolean;
+  intensity: number;
+  spread: number;
+  isCustomForStyle: boolean;
+}
+
+export function resolveFocusGlowSettings(
+  settings: Partial<AppSettings> | undefined,
+  style: FocusVisualStyle = 'frameless-glow'
+): ResolvedFocusGlow {
+  const globalEnabled = settings?.focusGlowEnabled !== false;
+  const globalIntensity = Math.max(
+    10,
+    Math.min(100, typeof settings?.focusGlowIntensity === 'number' ? settings.focusGlowIntensity : 75)
+  );
+  const globalSpread = Math.max(
+    10,
+    Math.min(100, typeof settings?.focusGlowSpread === 'number' ? settings.focusGlowSpread : 55)
+  );
+  const perStyle = settings?.focusGlowPerStyle?.[style];
+  const isCustomForStyle = Boolean(
+    perStyle &&
+      (typeof perStyle.enabled === 'boolean' ||
+        typeof perStyle.intensity === 'number' ||
+        typeof perStyle.spread === 'number')
+  );
+  const enabled = globalEnabled && perStyle?.enabled !== false;
+  const intensity = Math.max(
+    10,
+    Math.min(100, typeof perStyle?.intensity === 'number' ? perStyle.intensity : globalIntensity)
+  );
+  const spread = Math.max(
+    10,
+    Math.min(100, typeof perStyle?.spread === 'number' ? perStyle.spread : globalSpread)
+  );
+  return { enabled, intensity, spread, isCustomForStyle };
+}
+
+export function resolveThemeRgb(
+  themeId?: string,
+  customHex?: string | null
+): { r: number; g: number; b: number } {
+  const validCustom = normalizeHexColor(customHex);
+  if (validCustom) {
+    const p = computePaletteFromHex(validCustom);
+    return { r: p.r, g: p.g, b: p.b };
+  }
+  const preset = ROYAL_THEMES.find((t) => t.id === themeId) || ROYAL_THEMES[0];
+  const p = computePaletteFromHex(preset.primary);
+  return { r: p.r, g: p.g, b: p.b };
+}
+
+export function getFocusGlowCssVars(
+  resolved: ResolvedFocusGlow,
+  rgb: { r: number; g: number; b: number } = { r: 212, g: 175, b: 55 }
+): Record<string, string> {
+  const { r, g, b } = rgb;
+  const i = resolved.intensity / 100;
+  const s = resolved.spread / 100;
+  const clampA = (v: number) => Number(Math.max(0, Math.min(1, v)).toFixed(3));
+
+  if (!resolved.enabled) {
+    return {
+      '--focus-glow-alpha': '0',
+      '--focus-glow-inner-alpha': '0',
+      '--focus-glow-outer-px': '0px',
+      '--focus-glow-wide-px': '0px',
+      '--focus-glow-inner-px': '0px',
+      '--focus-glow-drop-px': '0px',
+      '--focus-glow-drop-sm-px': '0px',
+      '--focus-lamp-scale': '0.94',
+      '--focus-glow-color-strong': `rgba(${r}, ${g}, ${b}, 0)`,
+      '--focus-glow-color-mid': `rgba(${r}, ${g}, ${b}, 0)`,
+      '--focus-glow-color-soft': `rgba(${r}, ${g}, ${b}, 0)`,
+      '--focus-glow-color-inner': `rgba(${r}, ${g}, ${b}, 0)`,
+      '--focus-glow-color-inner-strong': `rgba(${r}, ${g}, ${b}, 0)`,
+      '--focus-glow-color-rim': `rgba(${r}, ${g}, ${b}, 0.92)`,
+      '--focus-glow-white-strong': 'rgba(255, 255, 255, 0)',
+      '--focus-glow-white-soft': 'rgba(255, 255, 255, 0)',
+    };
+  }
+
+  const outerPx = Math.round(8 + s * 28);
+  const widePx = Math.round(16 + s * 42);
+  const innerPx = Math.round(7 + s * 20);
+  const dropPx = Math.round(6 + s * 20);
+  const dropSmPx = Math.max(3, Math.round(dropPx * 0.45));
+  const alpha = clampA(0.35 + i * 0.65);
+  const innerAlpha = clampA(0.28 + i * 0.72);
+  const lampScale = Number((0.94 + s * 0.34).toFixed(2));
+
+  return {
+    '--focus-glow-alpha': String(alpha),
+    '--focus-glow-inner-alpha': String(innerAlpha),
+    '--focus-glow-outer-px': `${outerPx}px`,
+    '--focus-glow-wide-px': `${widePx}px`,
+    '--focus-glow-inner-px': `${innerPx}px`,
+    '--focus-glow-drop-px': `${dropPx}px`,
+    '--focus-glow-drop-sm-px': `${dropSmPx}px`,
+    '--focus-lamp-scale': String(lampScale),
+    '--focus-glow-color-strong': `rgba(${r}, ${g}, ${b}, ${clampA(0.95 * alpha)})`,
+    '--focus-glow-color-mid': `rgba(${r}, ${g}, ${b}, ${clampA(0.68 * alpha)})`,
+    '--focus-glow-color-soft': `rgba(${r}, ${g}, ${b}, ${clampA(0.36 * alpha)})`,
+    '--focus-glow-color-inner': `rgba(${r}, ${g}, ${b}, ${clampA(0.45 * innerAlpha)})`,
+    '--focus-glow-color-inner-strong': `rgba(${r}, ${g}, ${b}, ${clampA(0.88 * innerAlpha)})`,
+    '--focus-glow-color-rim': `rgba(${r}, ${g}, ${b}, ${clampA(Math.max(0.55, alpha))})`,
+    '--focus-glow-white-strong': `rgba(255, 255, 255, ${clampA(0.88 * alpha)})`,
+    '--focus-glow-white-soft': `rgba(255, 255, 255, ${clampA(0.34 * alpha)})`,
+  };
+}
+
 
 
 

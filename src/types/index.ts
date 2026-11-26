@@ -6,6 +6,7 @@ export type ViewMode = 'list' | 'grid';
 export type PlaylistType = 'm3u' | 'xtream' | 'stalker' | 'portal';
 export type VodSortBy = 'newest' | 'oldest' | 'alpha' | 'rating';
 export type PosterSize = 'small' | 'medium' | 'large';
+export type PosterFocusStyle = 'classic' | 'gallery-spotlight' | 'neon-glow';
 export type LiveBarSize = 'default' | 'full' | 'compact';
 
 export interface Channel {
@@ -120,10 +121,23 @@ export interface AppSettings {
   vodSortBy?: VodSortBy;
   posterSize?: PosterSize;
   showPosterTitles?: boolean;
+  posterFocusStyle?: PosterFocusStyle;
+  posterFocusIntensity?: number;
   dashboardFocusMode?: 'frame' | 'label' | 'both' | 'icon';
+  dashboardLabelFocusGlow?: boolean;
   focusVisualStyle?: FocusVisualStyle;
+  focusGlowEnabled?: boolean;
+  focusGlowIntensity?: number;
+  focusGlowSpread?: number;
+  focusGlowPerStyle?: Partial<Record<FocusVisualStyle, FocusGlowConfig>>;
   dashboardLabelColorMode?: 'theme' | 'white' | 'gold' | 'custom';
   dashboardLabelCustomColor?: string | null;
+}
+
+export interface FocusGlowConfig {
+  enabled?: boolean;
+  intensity?: number;
+  spread?: number;
 }
 
 export type FocusVisualStyle =
@@ -134,7 +148,12 @@ export type FocusVisualStyle =
   | 'diamond-prism'
   | 'cyber-brackets'
   | 'aurora-capsule'
-  | 'classic-ring';
+  | 'classic-ring'
+  | 'inner-glow'
+  | 'outer-glow'
+  | 'combined-glow'
+  | 'soft-glow'
+  | 'pulse-edge';
 
 
 export interface VodItem extends Channel {

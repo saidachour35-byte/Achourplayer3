@@ -13,6 +13,10 @@ import {
   Target,
   Type,
   ArrowUpDown,
+  Lightbulb,
+  Minus,
+  Plus,
+  Film,
 } from 'lucide-react';
 import {
   AppSettings,
@@ -20,6 +24,7 @@ import {
   FrameShapeId,
   IconDisplayMode,
   IconPackId,
+  PosterFocusStyle,
   WindowSizeScales,
 } from '../types';
 import {
@@ -30,8 +35,9 @@ import {
   isValidHexColor,
   normalizeHexColor,
   normalizeIconPackId,
+  resolveFocusGlowSettings,
 } from '../utils/themeManager';
-import { IconKind } from './DashboardLayouts';
+import DashboardLayouts, { IconKind } from './DashboardLayouts';
 import { DashboardSectionIcon, PackIconSvg } from './IconPacks';
 
 export const DEFAULT_DASHBOARD_ORDER: IconKind[] = ['live', 'movies', 'series', 'add', 'settings'];
@@ -52,7 +58,8 @@ export type DesignSubViewId =
   | 'design-glass-opacity'
   | 'design-glass-blur'
   | 'design-focus-mode'
-  | 'design-label-color';
+  | 'design-label-color'
+  | 'poster-focus';
 
 interface DesignSubViewProps {
   subView: DesignSubViewId;
@@ -87,7 +94,7 @@ const MemoIconPackCard = React.memo(({
     } ${isRtl ? 'text-right' : 'text-left'}`}
   >
     <div className="flex items-center justify-between w-full gap-2">
-      <span className="text-sm font-bold text-white truncate">
+      <span className="text-sm font-bold achour-glossy-text truncate">
         {isRtl ? pack.nameAr : pack.nameEn}
       </span>
       {active && (
@@ -136,7 +143,7 @@ const MemoFrameShapeCard = React.memo(({
     }`}
   >
     <div className="flex items-center justify-between w-full">
-      <span className="text-xs font-bold text-white truncate">
+      <span className="text-xs font-bold achour-glossy-text truncate">
         {isRtl ? shape.nameAr : shape.nameEn}
       </span>
       {active && (
@@ -192,11 +199,19 @@ export default function DesignSubViewContent({
   );
 
   const handleSelectFrameShape = useCallback((id: FrameShapeId) => {
-    patchFields({
+    const patch: Partial<AppSettings> = {
       frameShape: id,
       iconDisplayMode: 'with-frames',
-    });
-  }, [patchFields]);
+    };
+    if (
+      (settings.dashboardFocusMode === 'label' || !settings.dashboardFocusMode) &&
+      typeof localStorage !== 'undefined' &&
+      !localStorage.getItem('achour_user_set_focus_mode')
+    ) {
+      patch.dashboardFocusMode = 'both';
+    }
+    patchFields(patch);
+  }, [patchFields, settings.dashboardFocusMode]);
 
   const activePalette = useMemo(() => {
     const validCustom = normalizeHexColor(settings.customThemeColor);
@@ -322,7 +337,7 @@ export default function DesignSubViewContent({
 
           <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/10">
             <div className="space-y-1">
-              <p className="text-xs sm:text-sm font-semibold text-white">{statusText}</p>
+              <p className="text-xs sm:text-sm font-semibold achour-glossy-text">{statusText}</p>
               <p className="text-[11px] text-zinc-300">
                 {t('bg_opacity_remote_hint')}
               </p>
@@ -393,7 +408,7 @@ export default function DesignSubViewContent({
                 } ${isRtl ? 'text-right' : 'text-left'}`}
               >
                 <div className="flex items-center justify-between w-full">
-                  <span className="text-sm font-medium text-white">
+                  <span className="text-sm font-medium achour-glossy-text">
                     {opt.title}
                   </span>
                   {active && (
@@ -741,7 +756,7 @@ export default function DesignSubViewContent({
                 key={kind}
                 className="flex items-center justify-between px-4 py-2.5 rounded-2xl bg-black/35 border border-white/10"
               >
-                <span className="text-sm font-medium text-white">
+                <span className="text-sm font-medium achour-glossy-text">
                   {idx + 1}. {nameMap[kind] || kind}
                 </span>
                 <div className="flex items-center gap-2">
@@ -863,7 +878,7 @@ export default function DesignSubViewContent({
                     {theme.primary}
                   </span>
                 </div>
-                <span className="text-xs font-medium text-white truncate w-full">
+                <span className="text-xs font-medium achour-glossy-text truncate w-full">
                   {isRtl ? theme.nameAr : theme.nameEn}
                 </span>
               </button>
@@ -965,7 +980,7 @@ export default function DesignSubViewContent({
               <Sliders size={18} />
               <span>{t('glass_opacity_heading')}</span>
             </span>
-            <span className="text-lg font-sans tabular-nums font-semibold text-white">{val}%</span>
+            <span className="text-lg font-sans tabular-nums font-semibold achour-glossy-text">{val}%</span>
           </div>
           <div dir="ltr" className="flex items-center gap-3">
             <button
@@ -1031,7 +1046,7 @@ export default function DesignSubViewContent({
               <Layers size={18} />
               <span>{t('frosted_glass_blur_heading')}</span>
             </span>
-            <span className="text-lg font-sans tabular-nums font-semibold text-white">{val}px</span>
+            <span className="text-lg font-sans tabular-nums font-semibold achour-glossy-text">{val}px</span>
           </div>
           <div dir="ltr" className="flex items-center gap-3">
             <button
@@ -1086,16 +1101,99 @@ export default function DesignSubViewContent({
     );
   }
 
-  // 15. DASHBOARD TV FOCUS MODE & GLOBAL FOCUS SHAPES
+  // 15. DASHBOARD TV FOCUS MODE, LIGHTING CONTROLS & GLOBAL FOCUS SHAPES
   if (subView === 'design-focus-mode') {
     const mode = settings.dashboardFocusMode || 'both';
     const focusStyle: FocusVisualStyle = settings.focusVisualStyle || 'frameless-glow';
+    const resolvedGlow = resolveFocusGlowSettings(settings, focusStyle);
+    const labelGlowOn = settings.dashboardLabelFocusGlow !== false;
+    const currentShapeId = settings.frameShape || 'rounded-square';
+    const currentShapeIdx = Math.max(
+      0,
+      FRAME_SHAPES.findIndex((f) => f.id === currentShapeId)
+    );
+    const currentShapeMeta = FRAME_SHAPES[currentShapeIdx] || FRAME_SHAPES[0];
+
+    const setStyleGlowPatch = (
+      patch: Partial<{ enabled: boolean; intensity: number; spread: number }>
+    ) => {
+      if (resolvedGlow.isCustomForStyle) {
+        const nextMap = { ...(settings.focusGlowPerStyle || {}) };
+        nextMap[focusStyle] = {
+          ...(nextMap[focusStyle] || {}),
+          ...patch,
+        };
+        updateField('focusGlowPerStyle', nextMap);
+      } else {
+        if (typeof patch.enabled === 'boolean') updateField('focusGlowEnabled', patch.enabled);
+        if (typeof patch.intensity === 'number') updateField('focusGlowIntensity', patch.intensity);
+        if (typeof patch.spread === 'number') updateField('focusGlowSpread', patch.spread);
+      }
+    };
+
+    const togglePerStyleMode = () => {
+      const nextMap = { ...(settings.focusGlowPerStyle || {}) };
+      if (resolvedGlow.isCustomForStyle) {
+        delete nextMap[focusStyle];
+      } else {
+        nextMap[focusStyle] = {
+          enabled: resolvedGlow.enabled,
+          intensity: resolvedGlow.intensity,
+          spread: resolvedGlow.spread,
+        };
+      }
+      updateField('focusGlowPerStyle', nextMap);
+    };
+
+    const cyclePreviewFrameShape = () => {
+      const next = FRAME_SHAPES[(currentShapeIdx + 1) % FRAME_SHAPES.length];
+      if (settings.iconDisplayMode !== 'with-frames') {
+        updateField('iconDisplayMode', 'with-frames');
+      }
+      updateField('frameShape', next.id);
+    };
+
     const shapeOptions: Array<{
       id: FocusVisualStyle;
       title: string;
       desc: string;
       previewClass: string;
     }> = [
+      {
+        id: 'inner-glow',
+        title: t('focus_style_inner_glow_title'),
+        desc: t('focus_style_inner_glow_desc'),
+        previewClass:
+          'rounded-2xl border border-[var(--theme-accent)] bg-[rgba(var(--theme-rgb),0.12)] shadow-[inset_0_0_14px_rgba(var(--theme-rgb),0.95)]',
+      },
+      {
+        id: 'outer-glow',
+        title: t('focus_style_outer_glow_title'),
+        desc: t('focus_style_outer_glow_desc'),
+        previewClass:
+          'rounded-2xl border border-white/85 bg-transparent shadow-[0_0_16px_rgba(var(--theme-rgb),0.92)]',
+      },
+      {
+        id: 'combined-glow',
+        title: t('focus_style_combined_glow_title'),
+        desc: t('focus_style_combined_glow_desc'),
+        previewClass:
+          'rounded-2xl border border-white/90 bg-[rgba(var(--theme-rgb),0.14)] shadow-[inset_0_0_12px_rgba(var(--theme-rgb),0.9),0_0_16px_rgba(var(--theme-rgb),0.92)]',
+      },
+      {
+        id: 'soft-glow',
+        title: t('focus_style_soft_glow_title'),
+        desc: t('focus_style_soft_glow_desc'),
+        previewClass:
+          'rounded-full border border-[var(--theme-primary)] bg-[radial-gradient(circle,rgba(var(--theme-rgb),0.32)_0%,transparent_75%)] shadow-[0_0_20px_rgba(var(--theme-rgb),0.72)]',
+      },
+      {
+        id: 'pulse-edge',
+        title: t('focus_style_pulse_edge_title'),
+        desc: t('focus_style_pulse_edge_desc'),
+        previewClass:
+          'rounded-xl border-2 border-white bg-transparent shadow-[0_0_0_2px_var(--theme-primary),0_0_14px_rgba(var(--theme-rgb),0.9)]',
+      },
       {
         id: 'frameless-glow',
         title: t('focus_style_frameless_glow_title'),
@@ -1156,6 +1254,82 @@ export default function DesignSubViewContent({
 
     return (
       <div className="space-y-6 pb-4">
+        {/* Live Interactive Focus & 40-Shape Preview */}
+        <div className="p-3.5 sm:p-4 rounded-2xl border border-white/15 bg-black/45 space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-xs font-semibold achour-glossy-title flex items-center gap-1.5">
+              <Eye size={15} className="text-gold" />
+              <span>{t('focus_live_preview_title')}</span>
+            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                data-tv-focusable="true"
+                tabIndex={0}
+                onClick={() =>
+                  updateField(
+                    'iconDisplayMode',
+                    (settings.iconDisplayMode || 'icons-only') === 'with-frames'
+                      ? 'icons-only'
+                      : 'with-frames'
+                  )
+                }
+                className="px-3 py-1 rounded-xl border border-white/20 bg-white/5 hover:border-gold text-[11px] font-medium text-white cursor-pointer flex items-center gap-1.5"
+              >
+                <Eye size={13} className="text-gold" />
+                <span>
+                  {(settings.iconDisplayMode || 'icons-only') === 'with-frames'
+                    ? t('icons_with_frames_title')
+                    : t('icons_only_title')}
+                </span>
+              </button>
+              <button
+                type="button"
+                data-tv-focusable="true"
+                tabIndex={0}
+                onClick={cyclePreviewFrameShape}
+                className="px-3 py-1 rounded-xl border border-white/20 bg-white/5 hover:border-gold text-[11px] font-medium text-white cursor-pointer flex items-center gap-1.5"
+              >
+                <Frame size={13} className="text-gold" />
+                <span>
+                  {t('focus_live_preview_cycle_frame')} ({currentShapeIdx + 1}/40:{' '}
+                  {isRtl ? currentShapeMeta.nameAr : currentShapeMeta.nameEn})
+                </span>
+              </button>
+            </div>
+          </div>
+          <div className="rounded-xl bg-[#070910]/90 border border-white/10 p-3">
+            <DashboardLayouts
+              previewMode
+              dashboardOrder={settings.dashboardOrder}
+              iconDisplayMode={settings.iconDisplayMode || 'icons-only'}
+              iconPack={settings.iconPack}
+              frameShape={settings.frameShape}
+              iconSize={settings.iconScale}
+              frameScale={settings.frameScale}
+              tileSpacing={settings.tileSpacing}
+              glassOpacity={settings.glassOpacity}
+              glassBlur={settings.glassBlur}
+              dashboardFocusMode={mode}
+              dashboardLabelFocusGlow={labelGlowOn}
+              focusVisualStyle={focusStyle}
+              focusGlowEnabled={settings.focusGlowEnabled}
+              focusGlowIntensity={settings.focusGlowIntensity}
+              focusGlowSpread={settings.focusGlowSpread}
+              focusGlowPerStyle={settings.focusGlowPerStyle}
+              royalThemeColor={settings.royalThemeColor}
+              customThemeColor={settings.customThemeColor}
+              dashboardLabelColorMode={settings.dashboardLabelColorMode}
+              dashboardLabelCustomColor={settings.dashboardLabelCustomColor}
+              language={settings.language}
+              isRtl={isRtl}
+              t={t}
+              onNavigate={() => {}}
+            />
+          </div>
+        </div>
+
+        {/* 1. Focus Target Mode */}
         <div>
           <h3 className="text-sm sm:text-base font-semibold achour-glossy-title flex items-center gap-2">
             <Target size={18} className="text-gold" />
@@ -1198,7 +1372,12 @@ export default function DesignSubViewContent({
                 type="button"
                 data-tv-focusable="true"
                 tabIndex={0}
-                onClick={() => updateField('dashboardFocusMode', opt.id)}
+                onClick={() => {
+                  try {
+                    localStorage.setItem('achour_user_set_focus_mode', 'true');
+                  } catch {}
+                  updateField('dashboardFocusMode', opt.id);
+                }}
                 className={`p-4 rounded-2xl border transition-none cursor-pointer flex flex-col gap-1.5 ${
                   isRtl ? 'text-right' : 'text-left'
                 } ${
@@ -1208,7 +1387,7 @@ export default function DesignSubViewContent({
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
-                  <span className="font-semibold text-xs sm:text-sm text-white">
+                  <span className="font-semibold text-xs sm:text-sm achour-glossy-text">
                     {opt.title}
                   </span>
                   {active && (
@@ -1225,6 +1404,207 @@ export default function DesignSubViewContent({
           })}
         </div>
 
+        {/* 2. Label Focus Small Inner Glow Toggle (Transparent Word-Fitted) */}
+        <div className="pt-4 border-t border-white/10 space-y-3">
+          <div>
+            <h3 className="text-sm sm:text-base font-semibold achour-glossy-title flex items-center gap-2">
+              <Type size={17} className="text-gold" />
+              <span>{t('label_focus_glow_heading')}</span>
+            </h3>
+            <p className="text-xs text-zinc-400 mt-1">
+              {t('label_focus_glow_desc')}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              {
+                val: true,
+                title: t('label_focus_glow_on_title'),
+                desc: t('label_focus_glow_on_desc'),
+              },
+              {
+                val: false,
+                title: t('label_focus_glow_off_title'),
+                desc: t('label_focus_glow_off_desc'),
+              },
+            ].map((opt) => {
+              const active = labelGlowOn === opt.val;
+              return (
+                <button
+                  key={String(opt.val)}
+                  type="button"
+                  data-tv-focusable="true"
+                  tabIndex={0}
+                  onClick={() => updateField('dashboardLabelFocusGlow', opt.val)}
+                  className={`p-3.5 rounded-2xl border transition-none cursor-pointer flex flex-col gap-1 ${
+                    isRtl ? 'text-right' : 'text-left'
+                  } ${
+                    active
+                      ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.4))]'
+                      : 'border-white/10 bg-white/[0.03] hover:border-white/30'
+                  }`}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span className="font-semibold text-xs sm:text-sm achour-glossy-text">
+                      {opt.title}
+                    </span>
+                    {active && (
+                      <span className="w-5 h-5 rounded-full bg-gold text-black flex items-center justify-center font-semibold text-xs shrink-0">
+                        ✓
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-xs text-zinc-400">{opt.desc}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 3. Full Lighting Control System (ON/OFF, Intensity, Spread, Per-Style) */}
+        <div className="pt-4 border-t border-white/10 space-y-4">
+          <div>
+            <h3 className="text-sm sm:text-base font-semibold achour-glossy-title flex items-center gap-2">
+              <Lightbulb size={18} className="text-gold" />
+              <span>{t('focus_lighting_heading')}</span>
+            </h3>
+            <p className="text-xs text-zinc-400 mt-1">
+              {t('focus_lighting_desc')}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Master Lighting ON/OFF */}
+            <button
+              type="button"
+              data-tv-focusable="true"
+              tabIndex={0}
+              onClick={() => updateField('focusGlowEnabled', settings.focusGlowEnabled === false)}
+              className={`p-3.5 rounded-2xl border transition-none cursor-pointer flex items-center justify-between ${
+                settings.focusGlowEnabled !== false
+                  ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow,rgba(212,175,55,0.35))]'
+                  : 'border-white/10 bg-white/[0.03] hover:border-white/30'
+              }`}
+            >
+              <span className="text-xs sm:text-sm font-semibold achour-glossy-text">
+                {t('focus_glow_master_label')}
+              </span>
+              <span
+                className={`px-2.5 py-0.5 rounded-lg text-xs font-semibold ${
+                  settings.focusGlowEnabled !== false
+                    ? 'bg-gold text-black'
+                    : 'bg-white/10 text-zinc-300'
+                }`}
+              >
+                {settings.focusGlowEnabled !== false ? t('focus_glow_on') : t('focus_glow_off')}
+              </span>
+            </button>
+
+            {/* Independent Per-Style Lighting Toggle */}
+            <button
+              type="button"
+              data-tv-focusable="true"
+              tabIndex={0}
+              onClick={togglePerStyleMode}
+              className={`p-3.5 rounded-2xl border transition-none cursor-pointer flex items-center justify-between ${
+                resolvedGlow.isCustomForStyle
+                  ? 'border-gold bg-gold/15 shadow-[0_0_16px_var(--theme-glow,rgba(212,175,55,0.35))]'
+                  : 'border-white/10 bg-white/[0.03] hover:border-white/30'
+              }`}
+            >
+              <span className="text-xs sm:text-sm font-semibold achour-glossy-text truncate">
+                {t('focus_glow_per_style_label')}
+              </span>
+              <span
+                className={`px-2.5 py-0.5 rounded-lg text-[11px] font-semibold shrink-0 ${
+                  resolvedGlow.isCustomForStyle
+                    ? 'bg-gold text-black'
+                    : 'bg-white/10 text-zinc-300'
+                }`}
+              >
+                {resolvedGlow.isCustomForStyle
+                  ? t('focus_glow_per_style_custom')
+                  : t('focus_glow_per_style_global')}
+              </span>
+            </button>
+          </div>
+
+          {/* Intensity Slider + D-pad step buttons */}
+          <div className="p-3.5 rounded-2xl border border-white/10 bg-white/[0.03] space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-semibold achour-glossy-text">{t('focus_glow_intensity_label')}</span>
+              <span className="font-bold achour-glossy-text tabular-nums">{resolvedGlow.intensity}%</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                data-tv-focusable="true"
+                tabIndex={0}
+                onClick={() => setStyleGlowPatch({ intensity: Math.max(10, resolvedGlow.intensity - 10) })}
+                className="w-8 h-8 rounded-xl border border-white/15 bg-white/5 hover:border-gold flex items-center justify-center text-white cursor-pointer shrink-0"
+              >
+                <Minus size={14} />
+              </button>
+              <input
+                type="range"
+                min={10}
+                max={100}
+                step={5}
+                value={resolvedGlow.intensity}
+                onChange={(e) => setStyleGlowPatch({ intensity: Number(e.target.value) })}
+                className="w-full accent-[var(--theme-primary,#D4AF37)] cursor-pointer"
+              />
+              <button
+                type="button"
+                data-tv-focusable="true"
+                tabIndex={0}
+                onClick={() => setStyleGlowPatch({ intensity: Math.min(100, resolvedGlow.intensity + 10) })}
+                className="w-8 h-8 rounded-xl border border-white/15 bg-white/5 hover:border-gold flex items-center justify-center text-white cursor-pointer shrink-0"
+              >
+                <Plus size={14} />
+              </button>
+            </div>
+          </div>
+
+          {/* Spread Slider + D-pad step buttons */}
+          <div className="p-3.5 rounded-2xl border border-white/10 bg-white/[0.03] space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-semibold achour-glossy-text">{t('focus_glow_spread_label')}</span>
+              <span className="font-bold achour-glossy-text tabular-nums">{resolvedGlow.spread}%</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                data-tv-focusable="true"
+                tabIndex={0}
+                onClick={() => setStyleGlowPatch({ spread: Math.max(10, resolvedGlow.spread - 10) })}
+                className="w-8 h-8 rounded-xl border border-white/15 bg-white/5 hover:border-gold flex items-center justify-center text-white cursor-pointer shrink-0"
+              >
+                <Minus size={14} />
+              </button>
+              <input
+                type="range"
+                min={10}
+                max={100}
+                step={5}
+                value={resolvedGlow.spread}
+                onChange={(e) => setStyleGlowPatch({ spread: Number(e.target.value) })}
+                className="w-full accent-[var(--theme-primary,#D4AF37)] cursor-pointer"
+              />
+              <button
+                type="button"
+                data-tv-focusable="true"
+                tabIndex={0}
+                onClick={() => setStyleGlowPatch({ spread: Math.min(100, resolvedGlow.spread + 10) })}
+                className="w-8 h-8 rounded-xl border border-white/15 bg-white/5 hover:border-gold flex items-center justify-center text-white cursor-pointer shrink-0"
+              >
+                <Plus size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* 4. All 13 Focus Visual Styles (5 New + 8 Existing Preserved) */}
         <div className="pt-4 border-t border-white/10 space-y-3">
           <div>
             <h3 className="text-sm sm:text-base font-semibold achour-glossy-title flex items-center gap-2">
@@ -1245,7 +1625,13 @@ export default function DesignSubViewContent({
                   type="button"
                   data-tv-focusable="true"
                   tabIndex={0}
-                  onClick={() => updateField('focusVisualStyle', opt.id)}
+                  onClick={() => {
+                    if (mode === 'label') {
+                      patchFields({ focusVisualStyle: opt.id, dashboardFocusMode: 'both' });
+                    } else {
+                      updateField('focusVisualStyle', opt.id);
+                    }
+                  }}
                   className={`p-3.5 rounded-2xl border transition-none cursor-pointer flex items-center gap-3 ${
                     isRtl ? 'text-right' : 'text-left'
                   } ${
@@ -1260,7 +1646,7 @@ export default function DesignSubViewContent({
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="font-semibold text-xs sm:text-sm text-white truncate">
+                      <span className="font-semibold text-xs sm:text-sm achour-glossy-text truncate">
                         {opt.title}
                       </span>
                       {active && (
@@ -1346,7 +1732,7 @@ export default function DesignSubViewContent({
                   className="w-6 h-6 rounded-full border border-white/30"
                   style={{ backgroundColor: opt.swatch }}
                 />
-                <span className="text-xs sm:text-sm font-medium text-white mt-1">
+                <span className="text-xs sm:text-sm font-medium achour-glossy-text mt-1">
                   {opt.title}
                 </span>
                 <span className="text-[11px] text-zinc-400">
@@ -1574,7 +1960,7 @@ export default function DesignSubViewContent({
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="min-w-0">
-                    <h4 className="text-xs sm:text-sm font-medium text-white">
+                    <h4 className="text-xs sm:text-sm font-medium achour-glossy-title">
                       {cat.title}
                     </h4>
                     <p className="text-[11px] text-zinc-400 truncate">
@@ -1648,6 +2034,314 @@ export default function DesignSubViewContent({
               </div>
             );
           })}
+        </div>
+      </div>
+    );
+  }
+
+  // 18. POSTER FOCUS SETTINGS (Movies & Series Posters Only)
+  if (subView === 'poster-focus') {
+    const posterStyle: PosterFocusStyle =
+      settings.posterFocusStyle === 'gallery-spotlight' || settings.posterFocusStyle === 'neon-glow'
+        ? settings.posterFocusStyle
+        : 'classic';
+    const posterIntensity =
+      typeof settings.posterFocusIntensity === 'number' && !Number.isNaN(settings.posterFocusIntensity)
+        ? Math.max(10, Math.min(80, Math.round(settings.posterFocusIntensity)))
+        : 35;
+
+    const setPosterIntensityClamped = (val: number) => {
+      updateField('posterFocusIntensity', Math.max(10, Math.min(80, Math.round(val))));
+    };
+
+    const styleOptions: Array<{
+      id: PosterFocusStyle;
+      title: string;
+      desc: string;
+      badge: string;
+    }> = [
+      {
+        id: 'classic',
+        title: t('poster_focus_classic_title'),
+        desc: t('poster_focus_classic_desc'),
+        badge: 'Classic',
+      },
+      {
+        id: 'gallery-spotlight',
+        title: t('poster_focus_spotlight_title'),
+        desc: t('poster_focus_spotlight_desc'),
+        badge: 'Spotlight',
+      },
+      {
+        id: 'neon-glow',
+        title: t('poster_focus_neon_title'),
+        desc: t('poster_focus_neon_desc'),
+        badge: 'Neon',
+      },
+    ];
+
+    return (
+      <div className="max-w-5xl mx-auto py-2 space-y-4 pb-6">
+        <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="p-2 rounded-xl bg-gold/15 text-gold shrink-0">
+              <Film size={18} />
+            </div>
+            <p className="text-xs sm:text-sm text-zinc-200 leading-snug">
+              {t('poster_focus_desc')}
+            </p>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/40 border border-white/15 shrink-0">
+            <span
+              className="w-3.5 h-3.5 rounded-full border border-white/40 shrink-0"
+              style={{
+                backgroundColor: activePalette.primary,
+                boxShadow: '0 0 8px var(--theme-glow)',
+              }}
+            />
+            <span className="text-[11px] font-medium achour-glossy-text whitespace-nowrap">
+              {t('poster_focus_theme_linked')}
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+          {/* Controls Column */}
+          <div className="lg:col-span-8 space-y-4">
+            {/* Focus Style Selector (3 Styles) */}
+            <div className="p-4 rounded-3xl bg-white/[0.04] border border-white/10 space-y-3">
+              <h3 className="text-sm sm:text-base font-semibold achour-glossy-title flex items-center gap-2">
+                <Sparkles size={17} className="text-gold" />
+                <span>{t('poster_focus_style_heading')}</span>
+              </h3>
+
+              <div className="grid grid-cols-1 gap-2.5">
+                {styleOptions.map((opt) => {
+                  const active = posterStyle === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      data-tv-focusable="true"
+                      tabIndex={0}
+                      onClick={() => updateField('posterFocusStyle', opt.id)}
+                      className={`p-3.5 rounded-2xl border transition-none cursor-pointer flex items-center justify-between gap-3 ${
+                        isRtl ? 'text-right' : 'text-left'
+                      } ${
+                        active
+                          ? 'border-gold bg-gold/15 shadow-[0_0_18px_var(--theme-glow,rgba(212,175,55,0.35))]'
+                          : 'border-white/10 bg-white/[0.03] hover:border-gold/45 hover:bg-white/[0.06]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span
+                          aria-hidden="true"
+                          className={`w-10 h-12 rounded-lg shrink-0 relative overflow-hidden bg-zinc-900/90 ${
+                            opt.id === 'classic'
+                              ? 'border-2 border-white shadow-[0_0_0_1.5px_var(--theme-primary)]'
+                              : opt.id === 'gallery-spotlight'
+                              ? 'border border-[var(--theme-primary)]/60'
+                              : 'border-2 border-white shadow-[0_0_12px_var(--theme-glow)]'
+                          }`}
+                        >
+                          {opt.id === 'gallery-spotlight' && (
+                            <>
+                              <span
+                                className="absolute top-0 left-1.5 right-1.5 h-1 rounded-full"
+                                style={{
+                                  backgroundColor: '#fff',
+                                  boxShadow: '0 2px 6px var(--theme-primary)',
+                                }}
+                              />
+                              <span
+                                className="absolute inset-x-0 top-0 h-8 opacity-65"
+                                style={{
+                                  background:
+                                    'radial-gradient(ellipse at 50% 0%, var(--theme-primary) 0%, transparent 80%)',
+                                }}
+                              />
+                            </>
+                          )}
+                        </span>
+                        <div className="min-w-0">
+                          <div className="text-xs sm:text-sm font-semibold achour-glossy-text truncate">
+                            {opt.title}
+                          </div>
+                          <p className="text-[11px] sm:text-xs text-zinc-400 mt-0.5 line-clamp-2">
+                            {opt.desc}
+                          </p>
+                        </div>
+                      </div>
+
+                      {active && (
+                        <span className="p-1.5 rounded-lg achour-glossy-pill shrink-0">
+                          <Check size={14} />
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Light Intensity Slider (10% - 80%, Default 35%) */}
+            <div className="p-4 rounded-3xl bg-white/[0.04] border border-white/10 space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h3 className="text-sm font-semibold achour-glossy-title flex items-center gap-2">
+                    <Lightbulb size={17} className="text-gold" />
+                    <span>{t('poster_focus_intensity_label')}</span>
+                  </h3>
+                  <p className="text-[11px] text-zinc-400 mt-0.5">
+                    {t('poster_focus_intensity_hint')}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-lg font-sans tabular-nums font-bold achour-glossy-text px-2.5 py-0.5 rounded-xl bg-black/40 border border-gold/30">
+                    {posterIntensity}%
+                  </span>
+                  {posterIntensity !== 35 && (
+                    <button
+                      type="button"
+                      data-tv-focusable="true"
+                      tabIndex={0}
+                      onClick={() => setPosterIntensityClamped(35)}
+                      className="px-2.5 py-1 rounded-xl bg-white/10 hover:bg-gold hover:text-black text-[11px] font-medium text-zinc-200 border border-white/15 flex items-center gap-1 cursor-pointer transition-none"
+                    >
+                      <RotateCcw size={12} />
+                      <span>{t('poster_focus_reset_35')}</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div dir="ltr" className="flex items-center gap-2.5">
+                <button
+                  type="button"
+                  data-tv-focusable="true"
+                  tabIndex={0}
+                  disabled={posterIntensity <= 10}
+                  onClick={() => setPosterIntensityClamped(posterIntensity - 5)}
+                  className="w-10 h-10 rounded-xl border border-white/15 bg-white/5 hover:border-gold disabled:opacity-35 flex items-center justify-center text-white cursor-pointer shrink-0"
+                >
+                  <Minus size={16} />
+                </button>
+                <input
+                  type="range"
+                  dir="ltr"
+                  min={10}
+                  max={80}
+                  step={1}
+                  value={posterIntensity}
+                  onChange={(e) => setPosterIntensityClamped(Number(e.target.value))}
+                  className="flex-1 accent-[var(--theme-primary,#D4AF37)] cursor-pointer"
+                />
+                <button
+                  type="button"
+                  data-tv-focusable="true"
+                  tabIndex={0}
+                  disabled={posterIntensity >= 80}
+                  onClick={() => setPosterIntensityClamped(posterIntensity + 5)}
+                  className="w-10 h-10 rounded-xl border border-white/15 bg-white/5 hover:border-gold disabled:opacity-35 flex items-center justify-center text-white cursor-pointer shrink-0"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+
+              <div dir="ltr" className="flex items-center justify-between text-[11px] font-sans tabular-nums text-zinc-400 px-12">
+                <span>10%</span>
+                <span className="text-gold/90 font-semibold">35%</span>
+                <span>80%</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Live Preview Poster Column */}
+          <div className="lg:col-span-4 p-4 rounded-3xl bg-black/45 border border-white/10 flex flex-col items-center justify-center gap-3.5">
+            <div className="flex items-center justify-between w-full">
+              <span className="text-xs sm:text-sm font-semibold achour-glossy-title flex items-center gap-1.5">
+                <Eye size={15} className="text-gold" />
+                <span>{t('poster_focus_live_preview')}</span>
+              </span>
+              <span className="text-[11px] font-sans tabular-nums px-2 py-0.5 rounded-lg bg-white/10 text-zinc-200">
+                {posterStyle === 'gallery-spotlight'
+                  ? 'Spotlight'
+                  : posterStyle === 'neon-glow'
+                  ? 'Neon'
+                  : 'Classic'}{' '}
+                · {posterIntensity}%
+              </span>
+            </div>
+
+            <div className="py-5 px-4 flex items-center justify-center w-full">
+              <div
+                data-preview-style={posterStyle}
+                style={
+                  {
+                    '--poster-focus-intensity': (posterIntensity / 100).toFixed(2),
+                  } as React.CSSProperties
+                }
+                className="achour-poster-preview-card isolate relative w-[150px] sm:w-[166px] aspect-[2/3] rounded-2xl overflow-visible select-none"
+              >
+                <div aria-hidden="true" className="achour-poster-lamp-bar" />
+                <div className="relative w-full h-full rounded-2xl overflow-hidden bg-gradient-to-b from-[#6e1620] via-[#2b0b14] to-[#0b0e17] flex flex-col justify-between p-2.5">
+                  {/* Sample Cinema Artwork (actors/atmosphere silhouette + crisp badges to verify clarity) */}
+                  <svg
+                    viewBox="0 0 200 300"
+                    className="absolute inset-0 w-full h-full pointer-events-none"
+                    preserveAspectRatio="xMidYMid slice"
+                    aria-hidden="true"
+                  >
+                    <defs>
+                      <radialGradient id="previewPosterBg" cx="50%" cy="32%" r="70%">
+                        <stop offset="0%" stopColor="#9d202b" />
+                        <stop offset="55%" stopColor="#3d0e1a" />
+                        <stop offset="100%" stopColor="#090c14" />
+                      </radialGradient>
+                      <linearGradient id="previewActorSkin" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#f3c6a5" />
+                        <stop offset="100%" stopColor="#c68b67" />
+                      </linearGradient>
+                    </defs>
+                    <rect width="200" height="300" fill="url(#previewPosterBg)" />
+                    {/* Subtle dual cinematic silhouettes */}
+                    <ellipse cx="78" cy="112" rx="18" ry="22" fill="url(#previewActorSkin)" />
+                    <path d="M48 182 C48 148, 108 148, 108 182 L108 245 L48 245 Z" fill="#1b2234" />
+                    <ellipse cx="122" cy="94" rx="19" ry="23" fill="url(#previewActorSkin)" />
+                    <path d="M90 176 C90 138, 154 138, 154 176 L154 245 L90 245 Z" fill="#131926" />
+                    <rect y="185" width="200" height="115" fill="url(#previewPosterBg)" opacity="0.65" />
+                  </svg>
+
+                  {/* Top 4K UltraHD Badge */}
+                  <div className="relative z-10 flex justify-center pt-1">
+                    <span className="px-2 py-0.5 rounded bg-black/85 border border-white/30 text-[10px] font-sans font-extrabold tracking-wider text-white shadow">
+                      4K <span className="text-zinc-300 font-semibold">ULTRAHD</span>
+                    </span>
+                  </div>
+
+                  {/* Center-Bottom Title & Rating Pill */}
+                  <div className="relative z-10 flex flex-col items-center text-center gap-1.5 pb-1">
+                    <div className="text-sm font-serif font-bold tracking-wide text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] leading-tight">
+                      MIDNIGHT
+                      <span className="block text-[11px] font-semibold tracking-widest text-zinc-200">
+                        HORIZON
+                      </span>
+                    </div>
+                    <div className="px-2 py-0.5 rounded-full bg-black/75 border border-white/20 text-[9px] font-sans font-semibold text-zinc-100 flex items-center gap-1">
+                      <span className="text-amber-400">★</span>
+                      <span>8.4 · 2h 15m · 4K</span>
+                    </div>
+                  </div>
+
+                  {/* Gallery Spotlight Volumetric Cone */}
+                  <div aria-hidden="true" className="achour-poster-lamp-beam">
+                    <span className="achour-poster-lamp-cone" />
+                    <span className="achour-poster-lamp-spill" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

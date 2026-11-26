@@ -11,7 +11,7 @@ import SplashScreen from './components/SplashScreen';
 import AnimatedBackground from './components/AnimatedBackground';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AppSettings, Language } from './types';
-import { applyRoyalTheme, APP_BACKGROUNDS, resolveDesignSettings } from './utils/themeManager';
+import { applyRoyalTheme, APP_BACKGROUNDS, getFocusGlowCssVars, resolveDesignSettings, resolveFocusGlowSettings, resolveThemeRgb } from './utils/themeManager';
 import { DEFAULT_PLAYERS } from './components/SettingsView';
 import { runStorageCleanup } from './utils/storageCleanup';
 import { parseTVKeyEvent, executeBackHandler, isTextInput, initGlobalFocusSync, isNativeCapacitorApp, isTVOrLowEndDevice } from './utils/tvNavigation';
@@ -31,6 +31,8 @@ const DEFAULT_SETTINGS: AppSettings = {
   vodSortBy: 'newest',
   posterSize: 'medium',
   showPosterTitles: false,
+  posterFocusStyle: 'classic',
+  posterFocusIntensity: 35,
   useExternalPlayer: false,
   externalPlayers: DEFAULT_PLAYERS,
   selectedPlayer: 'Achour Player (مدمج - Native)',
@@ -70,8 +72,13 @@ const DEFAULT_SETTINGS: AppSettings = {
   multiViewFullSplit: false,
   liveBarSize: 'default',
   seekStep: 10,
-  dashboardFocusMode: 'label',
+  dashboardFocusMode: 'both',
+  dashboardLabelFocusGlow: true,
   focusVisualStyle: 'frameless-glow',
+  focusGlowEnabled: true,
+  focusGlowIntensity: 75,
+  focusGlowSpread: 55,
+  focusGlowPerStyle: {},
   dashboardLabelColorMode: 'theme',
   dashboardLabelCustomColor: null,
 };
@@ -162,9 +169,11 @@ export default function App() {
           migratedFocusVisualStyle = 'frameless-glow';
         }
       }
-      if (!localStorage.getItem('achour_focus_label_mode_v2')) {
-        localStorage.setItem('achour_focus_label_mode_v2', 'true');
-        migratedFocusMode = 'label';
+      if (!localStorage.getItem('achour_focus_contour_v3')) {
+        localStorage.setItem('achour_focus_contour_v3', 'true');
+        if (!localStorage.getItem('achour_user_set_focus_mode') && migratedFocusMode === 'label') {
+          migratedFocusMode = 'both';
+        }
       }
       const rawSelectedPlayer = String(parsed.selectedPlayer || DEFAULT_SETTINGS.selectedPlayer);
       const isLegacyLibVlcSelected = /libvlc/i.test(rawSelectedPlayer);
@@ -198,6 +207,16 @@ export default function App() {
           typeof parsed.backgroundOpacity === 'number' && !Number.isNaN(parsed.backgroundOpacity)
             ? Math.max(0, Math.min(100, Math.round(parsed.backgroundOpacity)))
             : DEFAULT_SETTINGS.backgroundOpacity,
+        posterFocusStyle:
+          parsed.posterFocusStyle === 'gallery-spotlight' ||
+          parsed.posterFocusStyle === 'neon-glow' ||
+          parsed.posterFocusStyle === 'classic'
+            ? parsed.posterFocusStyle
+            : DEFAULT_SETTINGS.posterFocusStyle,
+        posterFocusIntensity:
+          typeof parsed.posterFocusIntensity === 'number' && !Number.isNaN(parsed.posterFocusIntensity)
+            ? Math.max(10, Math.min(80, Math.round(parsed.posterFocusIntensity)))
+            : DEFAULT_SETTINGS.posterFocusIntensity,
         searchHistory: {
           ...DEFAULT_SETTINGS.searchHistory,
           ...(parsed.searchHistory || {})
@@ -393,6 +412,33 @@ export default function App() {
     if (document.documentElement.getAttribute('data-focus-shape') !== nextFocusShape) {
       document.documentElement.setAttribute('data-focus-shape', nextFocusShape);
     }
+    const resolvedGlow = resolveFocusGlowSettings(settings, nextFocusShape);
+    const nextGlowEnabled = resolvedGlow.enabled ? 'true' : 'false';
+    if (document.documentElement.getAttribute('data-focus-glow-enabled') !== nextGlowEnabled) {
+      document.documentElement.setAttribute('data-focus-glow-enabled', nextGlowEnabled);
+    }
+    const activeRgb = resolveThemeRgb(
+      settings.royalThemeColor || 'pure-metallic-gold',
+      settings.customThemeColor
+    );
+    const glowVars = getFocusGlowCssVars(resolvedGlow, activeRgb);
+    for (const [k, v] of Object.entries(glowVars)) {
+      setVarIfChanged(k, v);
+    }
+
+    const nextPosterStyle =
+      settings.posterFocusStyle === 'gallery-spotlight' || settings.posterFocusStyle === 'neon-glow'
+        ? settings.posterFocusStyle
+        : 'classic';
+    if (document.documentElement.getAttribute('data-poster-focus-style') !== nextPosterStyle) {
+      document.documentElement.setAttribute('data-poster-focus-style', nextPosterStyle);
+    }
+    const clampedPosterIntensity =
+      typeof settings.posterFocusIntensity === 'number' && !Number.isNaN(settings.posterFocusIntensity)
+        ? Math.max(10, Math.min(80, Math.round(settings.posterFocusIntensity)))
+        : 35;
+    setVarIfChanged('--poster-focus-intensity', (clampedPosterIntensity / 100).toFixed(2));
+    setVarIfChanged('--poster-focus-intensity-pct', `${clampedPosterIntensity}%`);
   }, [settings]);
 
   useEffect(() => {

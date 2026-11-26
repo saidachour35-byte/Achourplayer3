@@ -730,8 +730,8 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
             exit={{ opacity: 0, y: -20 }}
             className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-5 py-3 achour-glass-modal border-gold/45 text-gold rounded-2xl text-xs font-bold"
           >
-            <CheckCircle2 size={18} className="text-emerald-400" />
-            <span>{uploadSuccessToast}</span>
+            <CheckCircle2 size={18} style={{ color: 'var(--theme-split-color, #d4af37)' }} />
+            <span className="achour-glossy-text">{uploadSuccessToast}</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -783,7 +783,7 @@ export default function PlaylistManager({ userId, settings, onUpdateSettings, on
                         </div>
                         <div className="flex flex-col min-w-0 flex-1">
                           <div className={`flex items-center gap-2 ${isRtl ? 'flex-row-reverse' : ''}`}>
-                            <span className={`font-medium text-sm sm:text-base truncate ${isActive ? 'text-gold' : 'text-zinc-100'}`}>
+                            <span className={`font-medium text-sm sm:text-base truncate achour-glossy-text`}>
                               {p.name}
                             </span>
                             {p.isProtected && <Lock size={12} className="text-gold shrink-0" />}

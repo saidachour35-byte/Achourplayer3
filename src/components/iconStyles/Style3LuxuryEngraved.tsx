@@ -12,15 +12,18 @@ function useEngravedIds() {
 function EngravedDefs({ gMetal, gLine }: ReturnType<typeof useEngravedIds>) {
   return (
     <defs>
-      <linearGradient id={gMetal} x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="var(--theme-accent, #F5E6A8)" />
-        <stop offset="50%" stopColor="currentColor" />
-        <stop offset="100%" stopColor="var(--theme-secondary, #8C6A1D)" />
+      <linearGradient id={gMetal} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#FFFFFF" />
+        <stop offset="42%" stopColor="#FFFFFF" />
+        <stop offset="52%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+        <stop offset="65%" stopColor="var(--theme-split-color, #D4AF37)" />
+        <stop offset="100%" stopColor="var(--theme-split-deep, #8C6A1D)" />
       </linearGradient>
-      <linearGradient id={gLine} x1="0%" y1="100%" x2="100%" y2="0%">
-        <stop offset="0%" stopColor="var(--theme-secondary, #8C6A1D)" />
-        <stop offset="50%" stopColor="var(--theme-accent, #F5E6A8)" />
-        <stop offset="100%" stopColor="currentColor" />
+      <linearGradient id={gLine} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#FFFFFF" />
+        <stop offset="44%" stopColor="#FFFFFF" />
+        <stop offset="56%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+        <stop offset="100%" stopColor="var(--theme-split-color, #D4AF37)" />
       </linearGradient>
     </defs>
   );

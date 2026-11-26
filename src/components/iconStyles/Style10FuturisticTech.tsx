@@ -9,10 +9,12 @@ function useTechIds() {
 function TechDefs({ gTech }: { gTech: string }) {
   return (
     <defs>
-      <linearGradient id={gTech} x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="var(--theme-accent, #F5E6A8)" />
-        <stop offset="55%" stopColor="currentColor" />
-        <stop offset="100%" stopColor="var(--theme-secondary, #8C6A1D)" />
+      <linearGradient id={gTech} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#FFFFFF" />
+        <stop offset="42%" stopColor="#FFFFFF" />
+        <stop offset="52%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+        <stop offset="65%" stopColor="var(--theme-split-color, #D4AF37)" />
+        <stop offset="100%" stopColor="var(--theme-split-deep, #8C6A1D)" />
       </linearGradient>
     </defs>
   );

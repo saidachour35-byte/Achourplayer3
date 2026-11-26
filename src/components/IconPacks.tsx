@@ -50,6 +50,56 @@ import {
   SeriesIconStyle10,
   PlaylistIconStyle10,
   SettingsIconStyle10,
+  LiveTVIconPack11,
+  MoviesIconPack11,
+  SeriesIconPack11,
+  PlaylistIconPack11,
+  SettingsIconPack11,
+  LiveTVIconPack12,
+  MoviesIconPack12,
+  SeriesIconPack12,
+  PlaylistIconPack12,
+  SettingsIconPack12,
+  LiveTVIconPack13,
+  MoviesIconPack13,
+  SeriesIconPack13,
+  PlaylistIconPack13,
+  SettingsIconPack13,
+  LiveTVIconPack14,
+  MoviesIconPack14,
+  SeriesIconPack14,
+  PlaylistIconPack14,
+  SettingsIconPack14,
+  LiveTVIconPack15,
+  MoviesIconPack15,
+  SeriesIconPack15,
+  PlaylistIconPack15,
+  SettingsIconPack15,
+  LiveTVIconPack16,
+  MoviesIconPack16,
+  SeriesIconPack16,
+  PlaylistIconPack16,
+  SettingsIconPack16,
+  LiveTVIconPack17,
+  MoviesIconPack17,
+  SeriesIconPack17,
+  PlaylistIconPack17,
+  SettingsIconPack17,
+  LiveTVIconPack18,
+  MoviesIconPack18,
+  SeriesIconPack18,
+  PlaylistIconPack18,
+  SettingsIconPack18,
+  LiveTVIconPack19,
+  MoviesIconPack19,
+  SeriesIconPack19,
+  PlaylistIconPack19,
+  SettingsIconPack19,
+  LiveTVIconPack20,
+  MoviesIconPack20,
+  SeriesIconPack20,
+  PlaylistIconPack20,
+  SettingsIconPack20,
 } from './iconStyles';
 
 export type SectionIconKind = 'live' | 'movies' | 'series' | 'add' | 'settings';
@@ -137,6 +187,76 @@ const STYLE_2_TO_10_MAP: Record<string, Record<SectionIconKind, React.ComponentT
     series: SeriesIconStyle10,
     add: PlaylistIconStyle10,
     settings: SettingsIconStyle10,
+  },
+  'pack-frosted-gold-3d': {
+    live: LiveTVIconPack11,
+    movies: MoviesIconPack11,
+    series: SeriesIconPack11,
+    add: PlaylistIconPack11,
+    settings: SettingsIconPack11,
+  },
+  'pack-crystal-neon-dual': {
+    live: LiveTVIconPack12,
+    movies: MoviesIconPack12,
+    series: SeriesIconPack12,
+    add: PlaylistIconPack12,
+    settings: SettingsIconPack12,
+  },
+  'pack-bold-isometric': {
+    live: LiveTVIconPack13,
+    movies: MoviesIconPack13,
+    series: SeriesIconPack13,
+    add: PlaylistIconPack13,
+    settings: SettingsIconPack13,
+  },
+  'pack-floating-blades': {
+    live: LiveTVIconPack14,
+    movies: MoviesIconPack14,
+    series: SeriesIconPack14,
+    add: PlaylistIconPack14,
+    settings: SettingsIconPack14,
+  },
+  'pack-cinema-emblems': {
+    live: LiveTVIconPack15,
+    movies: MoviesIconPack15,
+    series: SeriesIconPack15,
+    add: PlaylistIconPack15,
+    settings: SettingsIconPack15,
+  },
+  'pack-hologram-wire': {
+    live: LiveTVIconPack16,
+    movies: MoviesIconPack16,
+    series: SeriesIconPack16,
+    add: PlaylistIconPack16,
+    settings: SettingsIconPack16,
+  },
+  'pack-soft-capsules': {
+    live: LiveTVIconPack17,
+    movies: MoviesIconPack17,
+    series: SeriesIconPack17,
+    add: PlaylistIconPack17,
+    settings: SettingsIconPack17,
+  },
+  'pack-smoked-monolith': {
+    live: LiveTVIconPack18,
+    movies: MoviesIconPack18,
+    series: SeriesIconPack18,
+    add: PlaylistIconPack18,
+    settings: SettingsIconPack18,
+  },
+  'pack-diamond-cut': {
+    live: LiveTVIconPack19,
+    movies: MoviesIconPack19,
+    series: SeriesIconPack19,
+    add: PlaylistIconPack19,
+    settings: SettingsIconPack19,
+  },
+  'pack-architectural-wire': {
+    live: LiveTVIconPack20,
+    movies: MoviesIconPack20,
+    series: SeriesIconPack20,
+    add: PlaylistIconPack20,
+    settings: SettingsIconPack20,
   },
 };
 
@@ -327,21 +447,21 @@ function Style1Classic3DIcon({
       <defs>
         <linearGradient id={gMetal} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="38%" stopColor="#FFFFFF" />
-          <stop offset="48%" stopColor="var(--theme-accent, #F5E6A8)" />
-          <stop offset="72%" stopColor="var(--theme-primary, #D4AF37)" />
-          <stop offset="100%" stopColor="var(--theme-secondary, #8C6A1D)" />
+          <stop offset="42%" stopColor="#FFFFFF" />
+          <stop offset="52%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+          <stop offset="65%" stopColor="var(--theme-split-color, #D4AF37)" />
+          <stop offset="100%" stopColor="var(--theme-split-deep, #8C6A1D)" />
         </linearGradient>
-        <linearGradient id={gBevel} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="var(--theme-primary, #D4AF37)" />
-          <stop offset="55%" stopColor="var(--theme-secondary, #8C6A1D)" />
+        <linearGradient id={gBevel} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="var(--theme-split-color, #D4AF37)" />
+          <stop offset="58%" stopColor="var(--theme-split-deep, #8C6A1D)" />
           <stop offset="100%" stopColor="#07090F" />
         </linearGradient>
         <linearGradient id={gRim} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="42%" stopColor="#FFFFFF" />
-          <stop offset="55%" stopColor="var(--theme-accent, #F5E6A8)" />
-          <stop offset="100%" stopColor="var(--theme-primary, #D4AF37)" />
+          <stop offset="44%" stopColor="#FFFFFF" />
+          <stop offset="54%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+          <stop offset="100%" stopColor="var(--theme-split-color, #D4AF37)" />
         </linearGradient>
         <linearGradient id={gGlass} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.34" />
@@ -355,8 +475,9 @@ function Style1Classic3DIcon({
         </linearGradient>
         <linearGradient id={gPlay} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="65%" stopColor="var(--theme-soft-white, #FFF6D6)" />
-          <stop offset="100%" stopColor="var(--theme-accent, #F5E6A8)" />
+          <stop offset="44%" stopColor="#FFFFFF" />
+          <stop offset="56%" stopColor="var(--theme-split-mid, #FFF6D6)" />
+          <stop offset="100%" stopColor="var(--theme-split-color, #D4AF37)" />
         </linearGradient>
       </defs>
       <g>{renderGlyph()}</g>
@@ -450,66 +571,115 @@ export function DashboardSectionIcon({
       : {}),
   };
 
-  const renderSvgFrame = (
-    children: React.ReactNode,
-    scaleInner = 0.6
-  ) => (
-    <div
-      data-frame-kind="svg"
-      className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 transition-transform duration-150 group-hover:scale-105"
-      style={{ width: framePx, height: framePx }}
-    >
-      <svg viewBox="0 0 100 100" className="dashboard-frame-svg absolute inset-0 w-full h-full pointer-events-none overflow-visible">
-        <defs>
-          <linearGradient id={frameMetalId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="var(--theme-secondary, #8C6A1D)" />
-            <stop offset="35%" stopColor="var(--theme-primary, #D4AF37)" />
-            <stop offset="60%" stopColor="var(--theme-accent, #F5E6A8)" />
-            <stop offset="100%" stopColor="var(--theme-secondary, #8C6A1D)" />
-          </linearGradient>
-        </defs>
-        {children}
-      </svg>
-      <div className="relative z-10 flex items-center justify-center">
-        <PackIconSvg
-          kind={kind}
-          pack={resolvedPack}
-          sizePx={Math.min(iconPx, Math.round(framePx * scaleInner))}
-        />
-      </div>
-    </div>
-  );
+  const frameClipId = `${frameMetalId}_clip`;
+  const frameInnerGlowId = `${frameMetalId}_iglow`;
+  const frameSplitId = `${frameMetalId}_split`;
 
-  // SVG Geometric Frames (All crisp and responsive)
+  const renderSvgFrame = (
+    silhouette: React.ReactElement<any>,
+    details?: React.ReactNode,
+    scaleInner = 0.6,
+    contourStrokeWidth = 9
+  ) => {
+    const hasExplicitStroke = silhouette.props?.stroke && silhouette.props.stroke !== 'none';
+    const primaryContour = React.cloneElement(silhouette, {
+      ...(hasExplicitStroke ? { stroke: `url(#${frameSplitId})` } : {}),
+      className: [silhouette.props?.className, 'dashboard-frame-primary-stroke'].filter(Boolean).join(' '),
+    });
+    const innerRimGlow = React.cloneElement(silhouette, {
+      fill: 'none',
+      stroke: `url(#${frameSplitId})`,
+      strokeWidth: contourStrokeWidth,
+      strokeOpacity: 0.52,
+      strokeDasharray: undefined,
+      className: undefined,
+    });
+
+    return (
+      <div
+        data-frame-kind="svg"
+        data-frame-shape={resolvedShape}
+        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 transition-transform duration-150 group-hover:scale-105"
+        style={{ width: framePx, height: framePx }}
+      >
+        <svg viewBox="0 0 100 100" className="dashboard-frame-svg absolute inset-0 w-full h-full pointer-events-none overflow-visible">
+          <defs>
+            <linearGradient id={frameSplitId} x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="44%" stopColor="#FFFFFF" />
+              <stop offset="52%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+              <stop offset="65%" stopColor="var(--theme-split-color, #D4AF37)" />
+              <stop offset="100%" stopColor="var(--theme-split-deep, #8C6A1D)" />
+            </linearGradient>
+            <linearGradient id={frameMetalId} x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="44%" stopColor="#FFFFFF" />
+              <stop offset="53%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+              <stop offset="66%" stopColor="var(--theme-split-color, #D4AF37)" />
+              <stop offset="100%" stopColor="var(--theme-split-deep, #8C6A1D)" />
+            </linearGradient>
+            <clipPath id={frameClipId}>
+              {React.cloneElement(silhouette, {
+                stroke: 'none',
+                strokeWidth: 0,
+                strokeDasharray: undefined,
+                fill: '#FFFFFF',
+                className: undefined,
+              })}
+            </clipPath>
+            <radialGradient id={frameInnerGlowId} cx="50%" cy="50%" r="54%">
+              <stop offset="0%" stopColor="var(--theme-split-color, #D4AF37)" stopOpacity="0.16" />
+              <stop offset="56%" stopColor="var(--theme-split-color, #D4AF37)" stopOpacity="0.36" />
+              <stop offset="84%" stopColor="var(--theme-split-mid, #F5E6A8)" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.92" />
+            </radialGradient>
+          </defs>
+          {primaryContour}
+          {details}
+          <g clipPath={`url(#${frameClipId})`} className="dashboard-svg-inner-glow">
+            <rect x="0" y="0" width="100" height="100" fill={`url(#${frameInnerGlowId})`} />
+            {innerRimGlow}
+          </g>
+        </svg>
+        <div className="relative z-10 flex items-center justify-center">
+          <PackIconSvg
+            kind={kind}
+            pack={resolvedPack}
+            sizePx={Math.min(iconPx, Math.round(framePx * scaleInner))}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  // SVG Geometric Frames (22 distinct shapes, all contour-clipped)
   switch (resolvedShape) {
     case 'hexagon':
       return renderSvgFrame(
-        <>
-          <polygon
-            points="50,3 93,26 93,74 50,97 7,74 7,26"
-            fill={`rgba(14, 18, 28, ${alpha})`}
-            stroke="var(--theme-primary, #D4AF37)"
-            strokeWidth="3.2"
-          />
-          <polygon
-            points="50,9 87,29 87,71 50,91 13,71 13,29"
-            fill="none"
-            stroke="var(--theme-accent, #F5E6A8)"
-            strokeOpacity="0.35"
-            strokeWidth="1.2"
-          />
-        </>
+        <polygon
+          points="50,3 93,26 93,74 50,97 7,74 7,26"
+          fill={`rgba(14, 18, 28, ${alpha})`}
+          stroke="var(--theme-primary, #D4AF37)"
+          strokeWidth="3.2"
+        />,
+        <polygon
+          points="50,9 87,29 87,71 50,91 13,71 13,29"
+          fill="none"
+          stroke="var(--theme-accent, #F5E6A8)"
+          strokeOpacity="0.35"
+          strokeWidth="1.2"
+        />
       );
 
     case 'geometric':
       return renderSvgFrame(
+        <polygon
+          points="24,4 76,4 96,24 96,76 76,96 24,96 4,76 4,24"
+          fill={`rgba(14, 18, 28, ${alpha})`}
+          stroke="var(--theme-primary, #D4AF37)"
+          strokeWidth="3.2"
+        />,
         <>
-          <polygon
-            points="24,4 76,4 96,24 96,76 76,96 24,96 4,76 4,24"
-            fill={`rgba(14, 18, 28, ${alpha})`}
-            stroke="var(--theme-primary, #D4AF37)"
-            strokeWidth="3.2"
-          />
           <polyline points="14,32 14,14 32,14" fill="none" stroke="var(--theme-accent, #F5E6A8)" strokeWidth="2.2" />
           <polyline points="86,68 86,86 68,86" fill="none" stroke="var(--theme-accent, #F5E6A8)" strokeWidth="2.2" />
         </>
@@ -517,10 +687,8 @@ export function DashboardSectionIcon({
 
     case 'frame-07': // Double Orbital Ring
       return renderSvgFrame(
-        <>
-          <circle cx="50" cy="50" r="46" fill={`rgba(12,16,26,${alpha})`} stroke="var(--theme-primary, #D4AF37)" strokeWidth="2.8" />
-          <circle cx="50" cy="50" r="39" fill="none" stroke="var(--theme-accent, #F5E6A8)" strokeOpacity="0.65" strokeWidth="1.4" />
-        </>,
+        <circle cx="50" cy="50" r="46" fill={`rgba(12,16,26,${alpha})`} stroke="var(--theme-primary, #D4AF37)" strokeWidth="2.8" />,
+        <circle cx="50" cy="50" r="39" fill="none" stroke="var(--theme-accent, #F5E6A8)" strokeOpacity="0.65" strokeWidth="1.4" />,
         0.56
       );
 
@@ -536,31 +704,27 @@ export function DashboardSectionIcon({
 
     case 'frame-09': // Diamond Rhombus
       return renderSvgFrame(
-        <>
-          <polygon points="50,3 97,50 50,97 3,50" fill={`rgba(14,18,28,${alpha})`} stroke="var(--theme-primary, #D4AF37)" strokeWidth="3.2" />
-          <polygon points="50,11 89,50 50,89 11,50" fill="none" stroke="var(--theme-accent, #F5E6A8)" strokeOpacity="0.4" strokeWidth="1.2" />
-        </>,
+        <polygon points="50,3 97,50 50,97 3,50" fill={`rgba(14,18,28,${alpha})`} stroke="var(--theme-primary, #D4AF37)" strokeWidth="3.2" />,
+        <polygon points="50,11 89,50 50,89 11,50" fill="none" stroke="var(--theme-accent, #F5E6A8)" strokeOpacity="0.4" strokeWidth="1.2" />,
         0.52
       );
 
     case 'frame-10': // Heraldic Shield
       return renderSvgFrame(
-        <>
-          <path
-            d="M12 8 H88 V47 C88 73 67 88 50 95 C33 88 12 73 12 47 Z"
-            fill={`rgba(14,18,28,${alpha})`}
-            stroke="var(--theme-primary, #D4AF37)"
-            strokeWidth="3.2"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M18 14 H82 V47 C82 69 64 81 50 88 C36 81 18 69 18 47 Z"
-            fill="none"
-            stroke="var(--theme-accent, #F5E6A8)"
-            strokeOpacity="0.32"
-            strokeWidth="1.2"
-          />
-        </>,
+        <path
+          d="M12 8 H88 V47 C88 73 67 88 50 95 C33 88 12 73 12 47 Z"
+          fill={`rgba(14,18,28,${alpha})`}
+          stroke="var(--theme-primary, #D4AF37)"
+          strokeWidth="3.2"
+          strokeLinejoin="round"
+        />,
+        <path
+          d="M18 14 H82 V47 C82 69 64 81 50 88 C36 81 18 69 18 47 Z"
+          fill="none"
+          stroke="var(--theme-accent, #F5E6A8)"
+          strokeOpacity="0.32"
+          strokeWidth="1.2"
+        />,
         0.55
       );
 
@@ -573,6 +737,7 @@ export function DashboardSectionIcon({
           strokeWidth="3.2"
           strokeLinejoin="round"
         />,
+        undefined,
         0.56
       );
 
@@ -585,21 +750,20 @@ export function DashboardSectionIcon({
           strokeWidth="3.2"
           strokeLinejoin="round"
         />,
+        undefined,
         0.56
       );
 
     case 'frame-16': // Starburst 12-Point Seal
       return renderSvgFrame(
-        <>
-          <polygon
-            points="50,3 61,13 76,9 80,24 94,30 89,45 97,57 86,69 87,84 72,87 63,97 50,91 37,97 28,87 13,84 14,69 3,57 11,45 6,30 20,24 24,9 39,13"
-            fill={`rgba(14,18,28,${alpha})`}
-            stroke="var(--theme-primary, #D4AF37)"
-            strokeWidth="2.8"
-            strokeLinejoin="round"
-          />
-          <circle cx="50" cy="50" r="34" fill="none" stroke="var(--theme-accent, #F5E6A8)" strokeOpacity="0.35" strokeWidth="1.2" />
-        </>,
+        <polygon
+          points="50,3 61,13 76,9 80,24 94,30 89,45 97,57 86,69 87,84 72,87 63,97 50,91 37,97 28,87 13,84 14,69 3,57 11,45 6,30 20,24 24,9 39,13"
+          fill={`rgba(14,18,28,${alpha})`}
+          stroke="var(--theme-primary, #D4AF37)"
+          strokeWidth="2.8"
+          strokeLinejoin="round"
+        />,
+        <circle cx="50" cy="50" r="34" fill="none" stroke="var(--theme-accent, #F5E6A8)" strokeOpacity="0.35" strokeWidth="1.2" />,
         0.52
       );
 
@@ -611,6 +775,7 @@ export function DashboardSectionIcon({
           stroke="var(--theme-primary, #D4AF37)"
           strokeWidth="3"
         />,
+        undefined,
         0.56
       );
 
@@ -623,100 +788,85 @@ export function DashboardSectionIcon({
           strokeWidth="3.2"
           strokeLinejoin="round"
         />,
+        undefined,
         0.56
       );
 
     case 'frame-19': // Telemetry Radar Ring
       return renderSvgFrame(
-        <>
-          <circle cx="50" cy="50" r="46" fill="none" stroke="var(--theme-primary, #D4AF37)" strokeWidth="3.2" strokeDasharray="18 8" />
-          <circle cx="50" cy="50" r="38" fill={`rgba(14,18,28,${alpha})`} stroke="var(--theme-accent, #F5E6A8)" strokeOpacity="0.55" strokeWidth="1.5" />
-        </>,
+        <circle cx="50" cy="50" r="38" fill={`rgba(14,18,28,${alpha})`} stroke="var(--theme-accent, #F5E6A8)" strokeOpacity="0.55" strokeWidth="1.5" />,
+        <circle cx="50" cy="50" r="46" fill="none" stroke={`url(#${frameSplitId})`} strokeWidth="3.2" strokeDasharray="18 8" className="dashboard-frame-primary-stroke" />,
         0.56
       );
 
     case 'frame-21': // Side Caliper Bracket Arcs
       return renderSvgFrame(
+        <rect x="14" y="10" width="72" height="80" rx="18" fill={`rgba(14,18,28,${alpha})`} />,
         <>
-          <rect x="14" y="10" width="72" height="80" rx="18" fill={`rgba(14,18,28,${alpha})`} />
-          <path d="M24 10 C8 16 4 32 4 50 C4 68 8 84 24 90" fill="none" stroke="var(--theme-primary, #D4AF37)" strokeWidth="4" strokeLinecap="round" />
-          <path d="M76 10 C92 16 96 32 96 50 C96 68 92 84 76 90" fill="none" stroke="var(--theme-primary, #D4AF37)" strokeWidth="4" strokeLinecap="round" />
+          <path d="M24 10 C8 16 4 32 4 50 C4 68 8 84 24 90" fill="none" stroke={`url(#${frameSplitId})`} strokeWidth="4" strokeLinecap="round" className="dashboard-frame-primary-stroke" />
+          <path d="M76 10 C92 16 96 32 96 50 C96 68 92 84 76 90" fill="none" stroke={`url(#${frameSplitId})`} strokeWidth="4" strokeLinecap="round" className="dashboard-frame-primary-stroke" />
         </>,
         0.58
       );
 
     case 'frame-25': // Blueprint Twin Line Square
       return renderSvgFrame(
-        <>
-          <rect x="6" y="6" width="88" height="88" rx="10" fill={`rgba(14,18,28,${alpha})`} stroke="var(--theme-primary, #D4AF37)" strokeWidth="2.2" />
-          <rect x="13" y="13" width="74" height="74" rx="6" fill="none" stroke="var(--theme-accent, #F5E6A8)" strokeWidth="1.4" strokeDasharray="6 4" />
-        </>,
+        <rect x="6" y="6" width="88" height="88" rx="10" fill={`rgba(14,18,28,${alpha})`} stroke="var(--theme-primary, #D4AF37)" strokeWidth="2.2" />,
+        <rect x="13" y="13" width="74" height="74" rx="6" fill="none" stroke="var(--theme-accent, #F5E6A8)" strokeWidth="1.4" strokeDasharray="6 4" />,
         0.56
       );
 
     case 'frame-26': // Viewfinder L-Corners Only
       return renderSvgFrame(
+        <rect x="8" y="8" width="84" height="84" rx="12" fill={`rgba(14,18,28,${Math.max(0.04, alpha * 0.6)})`} />,
         <>
-          <rect x="8" y="8" width="84" height="84" rx="12" fill={`rgba(14,18,28,${Math.max(0.04, alpha * 0.6)})`} />
-          <polyline points="6,28 6,6 28,6" fill="none" stroke="var(--theme-primary, #D4AF37)" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round" />
-          <polyline points="72,6 94,6 94,28" fill="none" stroke="var(--theme-primary, #D4AF37)" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round" />
-          <polyline points="6,72 6,94 28,94" fill="none" stroke="var(--theme-primary, #D4AF37)" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round" />
-          <polyline points="72,94 94,94 94,72" fill="none" stroke="var(--theme-primary, #D4AF37)" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round" />
+          <polyline points="6,28 6,6 28,6" fill="none" stroke="#FFFFFF" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round" className="dashboard-frame-primary-stroke" />
+          <polyline points="72,6 94,6 94,28" fill="none" stroke="#FFFFFF" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round" className="dashboard-frame-primary-stroke" />
+          <polyline points="6,72 6,94 28,94" fill="none" stroke="var(--theme-split-color, #D4AF37)" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round" className="dashboard-frame-primary-stroke" />
+          <polyline points="72,94 94,94 94,72" fill="none" stroke="var(--theme-split-color, #D4AF37)" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round" className="dashboard-frame-primary-stroke" />
         </>
       );
 
     case 'frame-27': // Frosted Glass Hexagon
-      return (
-        <div
-          data-frame-kind="svg"
-          className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 transition-transform duration-150 group-hover:scale-105"
-          style={{ width: framePx, height: framePx }}
-        >
-          <svg viewBox="0 0 100 100" className="dashboard-frame-svg absolute inset-0 w-full h-full pointer-events-none overflow-visible">
-            <polygon
-              points="50,3 93,26 93,74 50,97 7,74 7,26"
-              fill={`rgba(255,255,255,${Math.min(0.32, alpha + 0.08)})`}
-              stroke="rgba(255,255,255,0.55)"
-              strokeWidth="2.8"
-            />
-            <line x1="18" y1="30" x2="48" y2="12" stroke="#FFFFFF" strokeOpacity="0.6" strokeWidth="2.2" strokeLinecap="round" />
-          </svg>
-          <div className="relative z-10 flex items-center justify-center">
-            <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
-          </div>
-        </div>
+      return renderSvgFrame(
+        <polygon
+          points="50,3 93,26 93,74 50,97 7,74 7,26"
+          fill={`rgba(255,255,255,${Math.min(0.32, alpha + 0.08)})`}
+          stroke="rgba(255,255,255,0.55)"
+          strokeWidth="2.8"
+        />,
+        <line x1="18" y1="30" x2="48" y2="12" stroke="#FFFFFF" strokeOpacity="0.6" strokeWidth="2.2" strokeLinecap="round" />,
+        Math.min(0.6, innerIconPx / Math.max(1, framePx))
       );
 
     case 'frame-29': // Metallic Coin Circle
       return renderSvgFrame(
-        <>
-          <circle cx="50" cy="50" r="46" fill={`rgba(14,18,28,${Math.max(0.55, alpha)})`} stroke={`url(#${frameMetalId})`} strokeWidth="6" />
-          <circle cx="50" cy="50" r="39" fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="1.2" strokeDasharray="3 2" />
-        </>,
-        0.58
+        <circle cx="50" cy="50" r="46" fill={`rgba(14,18,28,${Math.max(0.55, alpha)})`} stroke={`url(#${frameMetalId})`} strokeWidth="6" />,
+        <circle cx="50" cy="50" r="39" fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="1.2" strokeDasharray="3 2" />,
+        0.58,
+        12
       );
 
     case 'frame-30': // Metallic Hex Crest
       return renderSvgFrame(
-        <>
-          <polygon points="50,3 93,26 93,74 50,97 7,74 7,26" fill={`rgba(12,15,24,${Math.max(0.55, alpha)})`} stroke={`url(#${frameMetalId})`} strokeWidth="5.2" />
-          <polygon points="50,11 86,30 86,70 50,89 14,70 14,30" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.2" />
-        </>,
-        0.58
+        <polygon points="50,3 93,26 93,74 50,97 7,74 7,26" fill={`rgba(12,15,24,${Math.max(0.55, alpha)})`} stroke={`url(#${frameMetalId})`} strokeWidth="5.2" />,
+        <polygon points="50,11 86,30 86,70 50,89 14,70 14,30" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.2" />,
+        0.58,
+        11
       );
 
     case 'frame-31': // Metallic Armor Shield
       return renderSvgFrame(
-        <>
-          <path
-            d="M11 8 H89 V47 C89 74 68 89 50 96 C32 89 11 74 11 47 Z"
-            fill={`rgba(12,14,22,${Math.max(0.55, alpha)})`}
-            stroke={`url(#${frameMetalId})`}
-            strokeWidth="5"
-            strokeLinejoin="round"
-          />
-        </>,
-        0.55
+        <path
+          d="M11 8 H89 V47 C89 74 68 89 50 96 C32 89 11 74 11 47 Z"
+          fill={`rgba(12,14,22,${Math.max(0.55, alpha)})`}
+          stroke={`url(#${frameMetalId})`}
+          strokeWidth="5"
+          strokeLinejoin="round"
+        />,
+        undefined,
+        0.55,
+        11
       );
 
     case 'frame-34': // Crown Notched Slate
@@ -728,26 +878,25 @@ export function DashboardSectionIcon({
           strokeWidth="3.2"
           strokeLinejoin="round"
         />,
+        undefined,
         0.58
       );
 
     case 'frame-37': // 10-Sided Decagon Jewel Cut
       return renderSvgFrame(
-        <>
-          <polygon
-            points="50,4 78,13 95,36 95,64 78,87 50,96 22,87 5,64 5,36 22,13"
-            fill={`rgba(14,18,28,${alpha})`}
-            stroke="var(--theme-primary, #D4AF37)"
-            strokeWidth="3.2"
-          />
-          <polygon
-            points="50,12 74,20 87,39 87,61 74,80 50,88 26,80 13,61 13,39 26,20"
-            fill="none"
-            stroke="var(--theme-accent, #F5E6A8)"
-            strokeOpacity="0.4"
-            strokeWidth="1.2"
-          />
-        </>,
+        <polygon
+          points="50,4 78,13 95,36 95,64 78,87 50,96 22,87 5,64 5,36 22,13"
+          fill={`rgba(14,18,28,${alpha})`}
+          stroke="var(--theme-primary, #D4AF37)"
+          strokeWidth="3.2"
+        />,
+        <polygon
+          points="50,12 74,20 87,39 87,61 74,80 50,88 26,80 13,61 13,39 26,20"
+          fill="none"
+          stroke="var(--theme-accent, #F5E6A8)"
+          strokeOpacity="0.4"
+          strokeWidth="1.2"
+        />,
         0.56
       );
 
@@ -760,20 +909,22 @@ export function DashboardSectionIcon({
           strokeWidth="3.2"
           strokeLinejoin="round"
         />,
+        undefined,
         0.54
       );
   }
 
-  // CSS / Box Architectural Frames
+  // CSS / Box Architectural Frames (18 distinct shapes, each tagged with dashboard-frame-focus-surface)
   if (resolvedShape === 'metallic') {
     return (
       <div
         data-frame-kind="box"
-        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 rounded-2xl p-[2.5px] transition-transform duration-150 group-hover:scale-105 shadow-[0_10px_24px_rgba(0,0,0,0.45)]"
+        data-frame-shape={resolvedShape}
+        className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 rounded-2xl p-[2.5px] transition-transform duration-150 group-hover:scale-105 shadow-[0_10px_24px_rgba(0,0,0,0.45)]"
         style={{
           width: framePx,
           height: framePx,
-          background: 'var(--theme-metallic-grad, linear-gradient(135deg, #8C6A1D 0%, #D4AF37 35%, #F5E6A8 58%, #B8860B 84%, #8C6A1D 100%))',
+          background: 'var(--theme-two-tone-grad, linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 45%, #F5E6A8 52%, #D4AF37 61%, #8C6A1D 100%))',
         }}
       >
         <div
@@ -782,7 +933,9 @@ export function DashboardSectionIcon({
             background: `linear-gradient(160deg, rgba(24,26,34,${Math.max(0.45, alpha)}) 0%, rgba(10,12,18,${Math.max(0.6, alpha + 0.12)}) 100%)`,
           }}
         >
-          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+          <div className="relative z-10 flex items-center justify-center">
+            <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+          </div>
         </div>
       </div>
     );
@@ -793,8 +946,9 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
+        data-frame-shape={resolvedShape}
         data-achour-glass="true"
-        className={`dashboard-frame-wrap relative flex items-center justify-center shrink-0 border border-white/30 transition-transform duration-150 group-hover:scale-105 shadow-[0_10px_28px_rgba(0,0,0,0.28),inset_0_1px_1px_rgba(255,255,255,0.45)] overflow-hidden ${
+        className={`dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 border border-white/30 transition-transform duration-150 group-hover:scale-105 shadow-[0_10px_28px_rgba(0,0,0,0.28),inset_0_1px_1px_rgba(255,255,255,0.45)] overflow-hidden ${
           isSphere ? 'rounded-full' : 'rounded-[26%]'
         }`}
         style={{
@@ -821,8 +975,9 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
+        data-frame-shape={resolvedShape}
         data-achour-glass="true"
-        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 rounded-full border-2 transition-transform duration-150 group-hover:scale-105 shadow-[0_8px_22px_rgba(0,0,0,0.35)]"
+        className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 rounded-full border-2 transition-transform duration-150 group-hover:scale-105 shadow-[0_8px_22px_rgba(0,0,0,0.35)]"
         style={{
           width: framePx,
           height: framePx,
@@ -831,7 +986,9 @@ export function DashboardSectionIcon({
           ...interiorGlassStyle,
         }}
       >
-        <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        <div className="relative z-10 flex items-center justify-center">
+          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        </div>
       </div>
     );
   }
@@ -841,8 +998,9 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
+        data-frame-shape={resolvedShape}
         data-achour-glass="true"
-        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 rounded-full border-2 transition-transform duration-150 group-hover:scale-105"
+        className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 rounded-full border-2 transition-transform duration-150 group-hover:scale-105"
         style={{
           width: Math.round(framePx * 1.18),
           height: Math.round(framePx * 0.88),
@@ -850,7 +1008,9 @@ export function DashboardSectionIcon({
           ...interiorGlassStyle,
         }}
       >
-        <PackIconSvg kind={kind} pack={resolvedPack} sizePx={Math.min(innerIconPx, Math.round(framePx * 0.56))} />
+        <div className="relative z-10 flex items-center justify-center">
+          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={Math.min(innerIconPx, Math.round(framePx * 0.56))} />
+        </div>
       </div>
     );
   }
@@ -860,8 +1020,9 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
+        data-frame-shape={resolvedShape}
         data-achour-glass="true"
-        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 border-2 transition-transform duration-150 group-hover:scale-105 shadow-[0_8px_22px_rgba(0,0,0,0.35)]"
+        className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 border-2 transition-transform duration-150 group-hover:scale-105 shadow-[0_8px_22px_rgba(0,0,0,0.35)]"
         style={{
           width: framePx,
           height: framePx,
@@ -870,7 +1031,9 @@ export function DashboardSectionIcon({
           ...interiorGlassStyle,
         }}
       >
-        <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        <div className="relative z-10 flex items-center justify-center">
+          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        </div>
       </div>
     );
   }
@@ -880,8 +1043,9 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
+        data-frame-shape={resolvedShape}
         data-achour-glass="true"
-        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 border-y-[3px] border-x-0 rounded-xl transition-transform duration-150 group-hover:scale-105"
+        className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 border-y-[3px] border-x-0 rounded-xl transition-transform duration-150 group-hover:scale-105"
         style={{
           width: framePx,
           height: framePx,
@@ -889,7 +1053,9 @@ export function DashboardSectionIcon({
           ...interiorGlassStyle,
         }}
       >
-        <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        <div className="relative z-10 flex items-center justify-center">
+          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        </div>
       </div>
     );
   }
@@ -900,7 +1066,8 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
-        className={`dashboard-frame-wrap relative flex items-center justify-center shrink-0 border-2 transition-transform duration-150 group-hover:scale-105 ${
+        data-frame-shape={resolvedShape}
+        className={`dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 border-2 transition-transform duration-150 group-hover:scale-105 ${
           isCircle ? 'rounded-full' : 'rounded-[28%]'
         }`}
         style={{
@@ -911,7 +1078,9 @@ export function DashboardSectionIcon({
           backgroundColor: `rgba(8, 10, 16, ${Math.max(0.45, alpha)})`,
         }}
       >
-        <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        <div className="relative z-10 flex items-center justify-center">
+          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        </div>
       </div>
     );
   }
@@ -921,8 +1090,9 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
+        data-frame-shape={resolvedShape}
         data-achour-glass="true"
-        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 rounded-xl border-2 -skew-x-12 transition-transform duration-150 group-hover:scale-105"
+        className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 rounded-xl border-2 -skew-x-12 transition-transform duration-150 group-hover:scale-105"
         style={{
           width: framePx,
           height: framePx,
@@ -931,7 +1101,7 @@ export function DashboardSectionIcon({
           ...interiorGlassStyle,
         }}
       >
-        <div className="skew-x-12 flex items-center justify-center">
+        <div className="relative z-10 skew-x-12 flex items-center justify-center">
           <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
         </div>
       </div>
@@ -943,8 +1113,9 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
+        data-frame-shape={resolvedShape}
         data-achour-glass="true"
-        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 rounded-[26%] border-2 border-b-[6px] transition-transform duration-150 group-hover:scale-105"
+        className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 rounded-[26%] border-2 border-b-[6px] transition-transform duration-150 group-hover:scale-105"
         style={{
           width: framePx,
           height: framePx,
@@ -953,7 +1124,9 @@ export function DashboardSectionIcon({
           ...interiorGlassStyle,
         }}
       >
-        <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        <div className="relative z-10 flex items-center justify-center">
+          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        </div>
       </div>
     );
   }
@@ -963,7 +1136,8 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
-        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 rounded-2xl border-2 transition-transform duration-150 group-hover:scale-105"
+        data-frame-shape={resolvedShape}
+        className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 rounded-2xl border-2 transition-transform duration-150 group-hover:scale-105"
         style={{
           width: framePx,
           height: framePx,
@@ -974,7 +1148,9 @@ export function DashboardSectionIcon({
           backgroundSize: '6px 6px',
         }}
       >
-        <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        <div className="relative z-10 flex items-center justify-center">
+          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        </div>
       </div>
     );
   }
@@ -984,7 +1160,8 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
-        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 rounded-2xl border transition-transform duration-150 group-hover:scale-105"
+        data-frame-shape={resolvedShape}
+        className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 rounded-2xl border transition-transform duration-150 group-hover:scale-105"
         style={{
           width: framePx,
           height: framePx,
@@ -993,16 +1170,19 @@ export function DashboardSectionIcon({
           boxShadow: 'inset 0 8px 18px rgba(0,0,0,0.85), inset 0 -1px 0 var(--theme-primary, #D4AF37)',
         }}
       >
-        <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        <div className="relative z-10 flex items-center justify-center">
+          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        </div>
       </div>
     );
   }
 
   if (resolvedShape === 'frame-35') {
-    // Stacked Triple Deck Cards
+    // Stacked Triple Deck Cards — focus surface attaches directly to front card contour!
     return (
       <div
         data-frame-kind="box"
+        data-frame-shape={resolvedShape}
         data-achour-glass="true"
         className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 transition-transform duration-150 group-hover:scale-105"
         style={{ width: framePx, height: framePx }}
@@ -1014,10 +1194,13 @@ export function DashboardSectionIcon({
           className="absolute inset-0 rounded-[22%] border border-white/20 bg-black/60 -translate-x-1 translate-y-1 -rotate-3"
         />
         <div
-          className="relative w-full h-full rounded-[22%] border-2 flex items-center justify-center"
+          data-frame-shape={resolvedShape}
+          className="dashboard-frame-focus-surface relative w-full h-full rounded-[22%] border-2 flex items-center justify-center"
           style={{ borderColor: 'var(--theme-primary, #D4AF37)', ...interiorGlassStyle }}
         >
-          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+          <div className="relative z-10 flex items-center justify-center">
+            <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+          </div>
         </div>
       </div>
     );
@@ -1028,12 +1211,13 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
+        data-frame-shape={resolvedShape}
         data-achour-glass="true"
-        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 rounded-full p-[3px] transition-transform duration-150 group-hover:scale-105"
+        className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 rounded-full p-[3px] transition-transform duration-150 group-hover:scale-105"
         style={{
           width: framePx,
           height: framePx,
-          background: 'conic-gradient(from 0deg, var(--theme-primary, #D4AF37), var(--theme-accent, #F5E6A8), var(--theme-secondary, #8C6A1D), var(--theme-primary, #D4AF37))',
+          background: 'var(--theme-two-tone-grad, linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 45%, #F5E6A8 52%, #D4AF37 61%, #8C6A1D 100%))',
           boxShadow: isTvPerf ? 'none' : '0 0 18px var(--theme-glow, rgba(212,175,55,0.5))',
         }}
       >
@@ -1041,7 +1225,9 @@ export function DashboardSectionIcon({
           className="w-full h-full rounded-full flex items-center justify-center"
           style={interiorGlassStyle}
         >
-          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+          <div className="relative z-10 flex items-center justify-center">
+            <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+          </div>
         </div>
       </div>
     );
@@ -1052,8 +1238,9 @@ export function DashboardSectionIcon({
     return (
       <div
         data-frame-kind="box"
+        data-frame-shape={resolvedShape}
         data-achour-glass="true"
-        className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 rounded-[26%] border-2 transition-transform duration-150 group-hover:scale-105"
+        className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 rounded-[26%] border-2 transition-transform duration-150 group-hover:scale-105"
         style={{
           width: framePx,
           height: framePx,
@@ -1062,7 +1249,9 @@ export function DashboardSectionIcon({
           ...interiorGlassStyle,
         }}
       >
-        <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        <div className="relative z-10 flex items-center justify-center">
+          <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+        </div>
       </div>
     );
   }
@@ -1071,8 +1260,9 @@ export function DashboardSectionIcon({
   return (
     <div
       data-frame-kind="box"
+      data-frame-shape={resolvedShape}
       data-achour-glass="true"
-      className="dashboard-frame-wrap relative flex items-center justify-center shrink-0 rounded-[24%] border-2 transition-transform duration-150 group-hover:scale-105 shadow-[0_8px_22px_rgba(0,0,0,0.35)]"
+      className="dashboard-frame-wrap dashboard-frame-focus-surface relative flex items-center justify-center shrink-0 rounded-[24%] border-2 transition-transform duration-150 group-hover:scale-105 shadow-[0_8px_22px_rgba(0,0,0,0.35)]"
       style={{
         width: framePx,
         height: framePx,
@@ -1080,7 +1270,9 @@ export function DashboardSectionIcon({
         ...interiorGlassStyle,
       }}
     >
-      <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+      <div className="relative z-10 flex items-center justify-center">
+        <PackIconSvg kind={kind} pack={resolvedPack} sizePx={innerIconPx} />
+      </div>
     </div>
   );
 }

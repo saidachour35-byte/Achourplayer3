@@ -3,7 +3,10 @@ import React from 'react';
 import { ChevronRight, ChevronLeft, Move } from 'lucide-react';
 import {
   Icon3DStyle,
+  getFocusGlowCssVars,
   resolveDesignSettings,
+  resolveFocusGlowSettings,
+  resolveThemeRgb,
 } from '../utils/themeManager';
 import {
   AppSettings,
@@ -36,7 +39,14 @@ export interface DashboardLayoutsProps {
   dashboardAlignment?: AppSettings['dashboardAlignment'];
   dashboardHorizontalAlignment?: AppSettings['dashboardHorizontalAlignment'];
   dashboardFocusMode?: AppSettings['dashboardFocusMode'];
+  dashboardLabelFocusGlow?: AppSettings['dashboardLabelFocusGlow'];
   focusVisualStyle?: AppSettings['focusVisualStyle'];
+  focusGlowEnabled?: AppSettings['focusGlowEnabled'];
+  focusGlowIntensity?: AppSettings['focusGlowIntensity'];
+  focusGlowSpread?: AppSettings['focusGlowSpread'];
+  focusGlowPerStyle?: AppSettings['focusGlowPerStyle'];
+  royalThemeColor?: string;
+  customThemeColor?: string | null;
   dashboardLabelColorMode?: AppSettings['dashboardLabelColorMode'];
   dashboardLabelCustomColor?: AppSettings['dashboardLabelCustomColor'];
   reorderingKind?: IconKind | null;
@@ -125,8 +135,15 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
   tileSpacing = 'md',
   glassOpacity = 16,
   glassBlur = 10,
-  dashboardFocusMode = 'label',
+  dashboardFocusMode = 'both',
+  dashboardLabelFocusGlow = true,
   focusVisualStyle = 'frameless-glow',
+  focusGlowEnabled = true,
+  focusGlowIntensity = 75,
+  focusGlowSpread = 55,
+  focusGlowPerStyle,
+  royalThemeColor,
+  customThemeColor,
   dashboardLabelColorMode = 'theme',
   dashboardLabelCustomColor = null,
   reorderingKind = null,
@@ -136,6 +153,30 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
   t,
   onNavigate,
 }) => {
+  const effectiveFocusStyle = focusVisualStyle || 'frameless-glow';
+  const resolvedGlow = resolveFocusGlowSettings(
+    {
+      focusGlowEnabled,
+      focusGlowIntensity,
+      focusGlowSpread,
+      focusGlowPerStyle,
+    },
+    effectiveFocusStyle
+  );
+  const activeRgb = React.useMemo(() => {
+    if (royalThemeColor || customThemeColor) {
+      return resolveThemeRgb(royalThemeColor, customThemeColor);
+    }
+    if (typeof document !== 'undefined') {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue('--theme-rgb').trim();
+      const parts = raw.split(',').map((n) => parseInt(n.trim(), 10));
+      if (parts.length === 3 && parts.every((n) => !Number.isNaN(n))) {
+        return { r: parts[0], g: parts[1], b: parts[2] };
+      }
+    }
+    return resolveThemeRgb('pure-metallic-gold', null);
+  }, [royalThemeColor, customThemeColor]);
+  const glowCssVars = getFocusGlowCssVars(resolvedGlow, activeRgb);
   const resolved = resolveDesignSettings({
     iconDisplayMode,
     iconPack,
@@ -244,7 +285,7 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
   ) => {
     const isReorderingThis = !previewMode && reorderingKind === item.kind;
     const isIconsOnly = resolved.iconDisplayMode === 'icons-only';
-    const effectiveFocusMode = dashboardFocusMode || 'label';
+    const effectiveFocusMode = dashboardFocusMode || 'both';
     const iconMultiplier = isHero
       ? 1.15
       : mode === 'row' || mode === 'pill'
@@ -269,6 +310,8 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
           'data-dashboard-kind': item.kind,
           'data-dashboard-icons-only': isIconsOnly ? 'true' : 'false',
           'data-dashboard-focus-mode': effectiveFocusMode,
+          'data-label-focus-glow': dashboardLabelFocusGlow === false ? 'false' : 'true',
+          'data-focus-glow-enabled': resolvedGlow.enabled ? 'true' : 'false',
           'data-dashboard-mode-pill': mode === 'open' ? 'true' : 'false',
           'data-preview-focused': item.kind === slot0?.kind ? 'true' : undefined,
           onClick: () => onNavigate(item.kind),
@@ -279,6 +322,8 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
           'data-dashboard-kind': item.kind,
           'data-dashboard-icons-only': isIconsOnly ? 'true' : 'false',
           'data-dashboard-focus-mode': effectiveFocusMode,
+          'data-label-focus-glow': dashboardLabelFocusGlow === false ? 'false' : 'true',
+          'data-focus-glow-enabled': resolvedGlow.enabled ? 'true' : 'false',
           'data-dashboard-mode-pill': mode === 'open' ? 'true' : 'false',
           tabIndex: 0,
           onClick: () => onNavigate(item.kind),
@@ -318,6 +363,7 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
         >
           {iconNode}
           <span
+            data-dashboard-label-custom={!isThemeGlossyLabel ? 'true' : 'false'}
             className={`dashboard-tile-label font-medium font-sans transition-all truncate ${
               isThemeGlossyLabel ? 'achour-glossy-text' : ''
             } ${previewMode ? 'text-[10px]' : 'text-xs sm:text-sm'}`}
@@ -357,6 +403,7 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
             {iconNode}
             <div className={`min-w-0 ${isRtl ? 'text-right' : 'text-left'}`}>
               <span
+                data-dashboard-label-custom={!isThemeGlossyLabel ? 'true' : 'false'}
                 className={`dashboard-tile-label block font-medium font-sans tracking-wide transition-all truncate ${
                   isThemeGlossyLabel ? 'achour-glossy-text' : ''
                 } ${
@@ -388,7 +435,20 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
     }
 
     const useCardChrome = mode === 'card' && !isIconsOnly;
-    const effectiveFocusStyle = focusVisualStyle || 'frameless-glow';
+    const isHaloBoxStyle =
+      effectiveFocusStyle === 'lamp-halo' ||
+      effectiveFocusStyle === 'double-neon' ||
+      effectiveFocusStyle === 'spotlight-pillar' ||
+      effectiveFocusStyle === 'diamond-prism' ||
+      effectiveFocusStyle === 'cyber-brackets' ||
+      effectiveFocusStyle === 'aurora-capsule' ||
+      effectiveFocusStyle === 'classic-ring';
+    const isOrbStyle =
+      effectiveFocusStyle === 'frameless-glow' ||
+      effectiveFocusStyle === 'lamp-halo' ||
+      effectiveFocusStyle === 'outer-glow' ||
+      effectiveFocusStyle === 'combined-glow' ||
+      effectiveFocusStyle === 'soft-glow';
 
     return (
       <button
@@ -405,10 +465,12 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
               }`
         } ${reorderRing} ${extraClass}`}
       >
-        {mode === 'open' && effectiveFocusMode !== 'label' && effectiveFocusStyle !== 'frameless-glow' && (
+        {mode === 'open' && isIconsOnly && effectiveFocusMode !== 'label' && isHaloBoxStyle && (
           <span className="dashboard-focus-halo" aria-hidden="true" />
         )}
-        {mode === 'open' && effectiveFocusMode !== 'label' && <span className="dashboard-lamp-orb" aria-hidden="true" />}
+        {mode === 'open' && isIconsOnly && resolvedGlow.enabled && effectiveFocusMode !== 'label' && isOrbStyle && (
+          <span className="dashboard-lamp-orb" aria-hidden="true" />
+        )}
 
         {isReorderingThis && (
           <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 z-30 px-2 py-0.5 rounded-full bg-emerald-400 text-black text-[9px] font-semibold flex items-center gap-1 shadow whitespace-nowrap">
@@ -424,6 +486,7 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
         <div className="flex flex-col items-center text-center min-w-0 max-w-full">
           <div className={mode === 'open' ? 'dashboard-pill-btn' : ''}>
             <span
+              data-dashboard-label-custom={!isThemeGlossyLabel ? 'true' : 'false'}
               className={`dashboard-tile-label font-medium font-sans tracking-wide truncate max-w-full ${
                 isThemeGlossyLabel
                   ? 'achour-glossy-text'
@@ -453,12 +516,13 @@ const DashboardLayouts: React.FC<DashboardLayoutsProps> = ({
 
   const containerMax = previewMode ? 'w-full' : 'w-full max-w-6xl mx-auto py-1 sm:py-2';
 
-  // Balanced Dock Row (5 columns) with clean frameless/framed lighting
+  // Balanced Dock Row (5 columns) with clean contour-matched / frameless lighting
   return (
     <div
-      data-focus-shape={focusVisualStyle || 'frameless-glow'}
+      data-focus-shape={effectiveFocusStyle}
+      data-focus-glow-enabled={resolvedGlow.enabled ? 'true' : 'false'}
       className={`${containerMax} grid grid-cols-5 items-center justify-items-center`}
-      style={{ gap: `${gapPx}px` }}
+      style={{ gap: `${gapPx}px`, ...(glowCssVars as React.CSSProperties) }}
     >
       {slots.map((item) => renderSectionTile(item, { mode: 'open', extraClass: 'w-full' }))}
     </div>

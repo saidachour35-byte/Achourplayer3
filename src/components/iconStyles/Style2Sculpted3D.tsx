@@ -14,23 +14,26 @@ function useSculptedIds() {
 function SculptedDefs({ gFace, gSide, gTop, gRecess }: ReturnType<typeof useSculptedIds>) {
   return (
     <defs>
-      <linearGradient id={gFace} x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="var(--theme-accent, #F5E6A8)" />
-        <stop offset="45%" stopColor="currentColor" />
-        <stop offset="100%" stopColor="var(--theme-secondary, #8C6A1D)" />
+      <linearGradient id={gFace} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#FFFFFF" />
+        <stop offset="42%" stopColor="#FFFFFF" />
+        <stop offset="52%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+        <stop offset="65%" stopColor="var(--theme-split-color, #D4AF37)" />
+        <stop offset="100%" stopColor="var(--theme-split-deep, #8C6A1D)" />
       </linearGradient>
-      <linearGradient id={gSide} x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="currentColor" stopOpacity="0.65" />
-        <stop offset="100%" stopColor="var(--theme-secondary, #8C6A1D)" stopOpacity="0.95" />
+      <linearGradient id={gSide} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="var(--theme-split-color, #D4AF37)" stopOpacity="0.82" />
+        <stop offset="100%" stopColor="var(--theme-split-deep, #8C6A1D)" stopOpacity="0.98" />
       </linearGradient>
       <linearGradient id={gTop} x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.7" />
-        <stop offset="40%" stopColor="var(--theme-accent, #F5E6A8)" />
-        <stop offset="100%" stopColor="currentColor" />
+        <stop offset="0%" stopColor="#FFFFFF" />
+        <stop offset="44%" stopColor="#FFFFFF" />
+        <stop offset="56%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+        <stop offset="100%" stopColor="var(--theme-split-color, #D4AF37)" />
       </linearGradient>
       <linearGradient id={gRecess} x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="var(--theme-secondary, #8C6A1D)" stopOpacity="0.45" />
-        <stop offset="100%" stopColor="currentColor" stopOpacity="0.16" />
+        <stop offset="0%" stopColor="var(--theme-split-deep, #8C6A1D)" stopOpacity="0.45" />
+        <stop offset="100%" stopColor="var(--theme-split-color, #D4AF37)" stopOpacity="0.16" />
       </linearGradient>
     </defs>
   );

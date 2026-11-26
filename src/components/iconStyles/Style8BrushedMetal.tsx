@@ -12,12 +12,12 @@ function useBrushedIds() {
 function BrushedDefs({ gBrushed, pBrush }: ReturnType<typeof useBrushedIds>) {
   return (
     <defs>
-      <linearGradient id={gBrushed} x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stopColor="var(--theme-secondary, #8C6A1D)" />
-        <stop offset="22%" stopColor="currentColor" />
-        <stop offset="48%" stopColor="var(--theme-accent, #F5E6A8)" />
-        <stop offset="72%" stopColor="currentColor" />
-        <stop offset="100%" stopColor="var(--theme-secondary, #8C6A1D)" />
+      <linearGradient id={gBrushed} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#FFFFFF" />
+        <stop offset="42%" stopColor="#FFFFFF" />
+        <stop offset="52%" stopColor="var(--theme-split-mid, #F5E6A8)" />
+        <stop offset="65%" stopColor="var(--theme-split-color, #D4AF37)" />
+        <stop offset="100%" stopColor="var(--theme-split-deep, #8C6A1D)" />
       </linearGradient>
       <pattern id={pBrush} width="8" height="3" patternUnits="userSpaceOnUse">
         <line x1="0" y1="0.8" x2="8" y2="0.8" stroke="#FFFFFF" strokeOpacity="0.16" strokeWidth="0.7" />
