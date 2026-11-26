@@ -368,7 +368,7 @@ const LiveChannelRow: React.FC<{
         <div className="flex flex-col flex-1 min-w-0 justify-center py-0.5">
           <div className="flex items-center gap-1.5 min-w-0">
             <span
-              className={`text-sm sm:text-base truncate leading-tight achour-glossy-text ${
+              className={`text-sm sm:text-base truncate leading-tight text-white ${
                 isSelected ? 'font-semibold' : 'font-medium'
               }`}
               title={ch.name}
