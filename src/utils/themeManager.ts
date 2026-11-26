@@ -1919,6 +1919,16 @@ export function applyRoyalTheme(
       outline-color: ${primary} !important;
     }
   `;
+
+  if (typeof window !== 'undefined') {
+    try {
+      window.dispatchEvent(
+        new CustomEvent('achour_theme_changed', {
+          detail: { primary, secondary, accent, r, g, b }
+        })
+      );
+    } catch {}
+  }
 }
 
 export interface ResolvedFocusGlow {

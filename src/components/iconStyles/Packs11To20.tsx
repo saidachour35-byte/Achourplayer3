@@ -30,8 +30,9 @@ function computePack11Filter(colorStr: string): string | undefined {
   const l = (max + min) / 2;
   const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
 
-  if (s < 0.14) {
-    return 'saturate(0.08) brightness(1.12) contrast(1.04)';
+  // Pure white/silver/monochrome themes (e.g. pearl, platinum)
+  if (d < 0.08 || s < 0.16) {
+    return 'saturate(0.06) brightness(1.18) contrast(1.04)';
   }
 
   let h = 0;
@@ -43,15 +44,16 @@ function computePack11Filter(colorStr: string): string | undefined {
     if (h < 0) h += 360;
   }
 
-  // Keep pure/warm Gold presets 100% untouched in original 3D Frosted Glass & Gold look
-  if (h >= 24 && h <= 56) {
+  // Pure/warm Gold presets (hue ~26..54 with high saturation) remain 100% natural
+  if (h >= 26 && h <= 54 && s >= 0.35) {
     return undefined;
   }
 
+  // Original icon gold is centered around 38-40deg
   let shift = h - 38;
   if (shift > 180) shift -= 360;
   if (shift < -180) shift += 360;
-  const satBoost = s > 0.65 ? 1.42 : 1.18;
+  const satBoost = s > 0.6 ? 1.45 : 1.25;
   return `hue-rotate(${Math.round(shift)}deg) saturate(${satBoost})`;
 }
 
@@ -73,9 +75,19 @@ function usePack11ThemeFilter(): string | undefined {
       setFilterVal(computePack11Filter(raw));
     };
     read();
+
     const obs = new MutationObserver(read);
     obs.observe(document.documentElement, { attributes: true, attributeFilter: ['style', 'class'] });
-    return () => obs.disconnect();
+
+    window.addEventListener('achour_theme_changed', read);
+
+    const interval = setInterval(read, 800);
+
+    return () => {
+      obs.disconnect();
+      window.removeEventListener('achour_theme_changed', read);
+      clearInterval(interval);
+    };
   }, []);
 
   return filterVal;
@@ -98,11 +110,10 @@ function FrostedGoldImgIcon({
       draggable={false}
       width={sizePx}
       height={sizePx}
-      className={`shrink-0 select-none object-contain pointer-events-none ${className}`}
+      className={`shrink-0 select-none object-contain pointer-events-none transition-all duration-300 ${className}`}
       style={{
         width: sizePx,
         height: sizePx,
-        transform: 'scale(1.12)',
         filter,
       }}
     />
@@ -185,11 +196,11 @@ function PackSvgShell({
 // =============================================================================
 
 export function LiveTVIconPack11({ sizePx = 42, className = '' }: StyledIconProps) {
-  return <FrostedGoldImgIcon src="/assets/pack11/settings.png" sizePx={sizePx} className={className} />;
+  return <FrostedGoldImgIcon src="/assets/pack11/live.png" sizePx={sizePx} className={className} />;
 }
 
 export function MoviesIconPack11({ sizePx = 42, className = '' }: StyledIconProps) {
-  return <FrostedGoldImgIcon src="/assets/pack11/playlist.png" sizePx={sizePx} className={className} />;
+  return <FrostedGoldImgIcon src="/assets/pack11/movies.png" sizePx={sizePx} className={className} />;
 }
 
 export function SeriesIconPack11({ sizePx = 42, className = '' }: StyledIconProps) {
@@ -197,11 +208,11 @@ export function SeriesIconPack11({ sizePx = 42, className = '' }: StyledIconProp
 }
 
 export function PlaylistIconPack11({ sizePx = 42, className = '' }: StyledIconProps) {
-  return <FrostedGoldImgIcon src="/assets/pack11/movies.png" sizePx={sizePx} className={className} />;
+  return <FrostedGoldImgIcon src="/assets/pack11/playlist.png" sizePx={sizePx} className={className} />;
 }
 
 export function SettingsIconPack11({ sizePx = 42, className = '' }: StyledIconProps) {
-  return <FrostedGoldImgIcon src="/assets/pack11/live.png" sizePx={sizePx} className={className} />;
+  return <FrostedGoldImgIcon src="/assets/pack11/settings.png" sizePx={sizePx} className={className} />;
 }
 
 // =============================================================================
